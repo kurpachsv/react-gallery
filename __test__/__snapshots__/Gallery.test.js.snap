@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Gallery should render correctly 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="row"
+    key="0"
+  >
+    <div
+      className="column"
+      key="column-https://dummyimage.com/100x100/eee/eee-0-0"
+      style={
+        Object {
+          "margin": "0 0 0.5% 0",
+          "maxWidth": "25%",
+          "width": "250px",
+        }
+      }
+    />
+  </div>
+</div>
+`;
