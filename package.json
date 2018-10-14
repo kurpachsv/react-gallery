@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --mode development --open",
     "build": "webpack --mode production",
-    "lint": "./node_modules/.bin/eslint -c .eslintrc.json ./src",
+    "lint": "./node_modules/.bin/eslint -c ./.eslintrc.json ./src",
     "eslint-check": "./node_modules/.bin/eslint --print-config ./.eslintrc.json"
   },
   "author": "Sergei Kurpach <kurpachsv@gmail.com>",
