@@ -49,60 +49,58 @@ class Gallery extends Component {
     }
 
     componentWillMount() {
+        const {containerWidth, className, columnClassName, rowClassName} = this.props;
+        const {images} = this.props;
         this.setState({
-            rows: this.engine.buildRows(
-                this.props.images,
-            ),
-            containerWidth: this.props.containerWidth,
-            maxHeight: this.props.maxHeight,
-            minHeight: this.props.minHeight,
-            gutterInPercent: this.props.gutterInPercent,
-            className: this.props.className,
-            columnClassName: this.props.columnClassName,
-            rowClassName: this.props.rowClassName,
+            rows: this.engine.buildRows(images),
+            containerWidth,
+            className,
+            columnClassName,
+            rowClassName,
         });
     }
 
     componentWillReceiveProps(nextProps) {
         if (!_.isEqual(this.props, nextProps)) {
             this.engine.setContainerWidth(nextProps.containerWidth);
-            this.engine.setGutterInPercent(nextProps.gutterInPercent)
-            this.engine.setMinHeight(nextProps.minHeight)
-            this.engine.setMaxHeight(nextProps.maxHeight)
+            this.engine.setGutterInPercent(nextProps.gutterInPercent);
+            this.engine.setMinHeight(nextProps.minHeight);
+            this.engine.setMaxHeight(nextProps.maxHeight);
             this.setState({
                 containerWidth: nextProps.containerWidth,
-                maxHeight: nextProps.maxHeight,
-                minHeight: nextProps.minHeight,
                 gutterInPercent: nextProps.gutterInPercent,
                 className: nextProps.className,
                 columnClassName: nextProps.columnClassName,
                 rowClassName: nextProps.rowClassName,
                 rows: this.engine.buildRows(
                     nextProps.images,
-                ), 
+                ),
             });
         }
     }
 
     render() {
-        const {className, rowClassName, columnClassName} = this.state;
+        const {imageRenderer} = this.props;
+        const {rows, containerWidth, gutterInPercent, className, rowClassName, columnClassName} = this.state;
         return (
             <div className={cs(style.container, className)}>
-                {this.state.rows.map((el, rowIndex) => {
+                {rows.map((el, rowIndex) => {
                     const row = el.row;
                     return (
+                        /* eslint-disable-next-line react/no-array-index-key */
                         <div key={rowIndex} className={cs(style.row, rowClassName)}>
                             {row.map((column, columnIndex) => {
                                 const newWidth = this.engine.calculateWidth(
-                                    this.state.containerWidth, column, row, el.isIncomplete
+                                    containerWidth, column, row, el.isIncomplete
                                 );
                                 const newHeight = this.engine.calculateHeight(
-                                    this.state.containerWidth, column, row, el.isIncomplete
+                                    containerWidth, column, row, el.isIncomplete
                                 );
-                                const newWidthInPercent = 100 * newWidth / this.state.containerWidth;
+                                const newWidthInPercent = 100 * newWidth / containerWidth;
                                 const placeholderHeight = 100 * newHeight / newWidth;
                                 return (
                                     <div
+                                        /* eslint-disable-next-line react/no-array-index-key */
                                         key={`column-${column.src}-${rowIndex}-${columnIndex}`}
                                         className={cs(style.column, columnClassName)}
                                         style={{
@@ -112,13 +110,13 @@ class Gallery extends Component {
                                             maxWidth: el.isIncomplete
                                                 ? `${newWidthInPercent}%`
                                                 : 'auto',
-                                            margin: row.length === columnIndex + 1 
-                                                ? `0 0 ${this.state.gutterInPercent}% 0`
-                                                : `0 ${this.state.gutterInPercent}% ${this.state.gutterInPercent}% 0`
-                                                
+                                            margin: row.length === columnIndex + 1
+                                                ? `0 0 ${gutterInPercent}% 0`
+                                                : `0 ${gutterInPercent}% ${gutterInPercent}% 0`,
+
                                         }}
                                     >
-                                        {this.props.imageRenderer({
+                                        {imageRenderer({
                                             ...column,
                                             newWidth,
                                             newHeight,

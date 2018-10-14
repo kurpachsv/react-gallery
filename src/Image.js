@@ -5,13 +5,18 @@ import style from './image.css';
 class Image extends Component {
     static propTypes = {
         src: PropTypes.string.isRequired,
+        alt: PropTypes.string,
+    };
+
+    static defaultProps = {
+        alt: '',
     };
 
     render() {
-        const {src, alt = ""} = this.props;
+        const {src, alt} = this.props;
         return (
             <img
-                className={style['image']}
+                className={style.image}
                 src={src}
                 alt={alt}
             />

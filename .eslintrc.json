@@ -1,0 +1,116 @@
+{
+    "extends": "airbnb",
+    "plugins": [
+        "react",
+        "import",
+        "flowtype"
+    ],
+    "env": {
+        "browser": true,
+        "node": true,
+        "mocha": true
+    },
+    "globals": {
+        "__DEVELOPMENT__": true,
+        "__PRODUCTION__": true,
+        "__INSPECT__": true,
+        "__USE_MOCK__": true,
+        "__NODE__": true,
+        "__BROWSER__": true,
+        "__TESTS__": true,
+        "__RECAPTCA_KEY__": true,
+        "__USE_MOCKS__": true,
+        "BUILD_DIR": true
+    },
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true
+        }
+    },
+    "rules": {
+        "react/forbid-prop-types": 0,
+        "react/jsx-tag-spacing": 0,
+        "react/jsx-filename-extension": 0,
+        "react/jsx-indent": [
+            "error",
+            4
+        ],
+        "react/jsx-indent-props": [
+            "error",
+            4
+        ],
+        "react/jsx-no-bind": 0,
+        "react/no-multi-comp": 0,
+        "react/prefer-stateless-function": 0,
+        "react/sort-comp": 0,
+        "jsx-a11y/anchor-is-valid": 0,
+        "jsx-a11y/click-events-have-key-events": 0,
+        "jsx-a11y/no-static-element-interactions": 0,
+        "jsx-a11y/href-no-hash": "off",
+        "import/extensions": 0,
+        "import/no-extraneous-dependencies": 0,
+        "import/no-unresolved": 0,
+        "import/no-webpack-loader-syntax": 0,
+        "import/prefer-default-export": 0,
+        "arrow-body-style": 0,
+        "arrow-parens": 0,
+        "class-methods-use-this": 0,
+        "comma-dangle": [
+            "error",
+            "always-multiline"
+        ],
+        "consistent-return": 0,
+        "curly": [
+            "error",
+            "all"
+        ],
+        "default-case": 0,
+        "func-names": 0,
+        "function-paren-newline": 0,
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "max-len": [
+            "error",
+            120
+        ],
+        "no-await-in-loop": 0,
+        "no-bitwise": 0,
+        "no-confusing-arrow": 0,
+        "no-else-return": 0,
+        "no-empty": 0,
+        "no-implicit-coercion": 0,
+        "no-loop-func": 0,
+        "no-mixed-operators": 0,
+        "no-multi-spaces": [
+            "error",
+            {
+                "ignoreEOLComments": true
+            }
+        ],
+        "no-plusplus": 0,
+        "no-redeclare": 0,
+        "no-restricted-syntax": [
+            0,
+            "ForOfStatement"
+        ],
+        "no-shadow": 0,
+        "no-unused-expressions": 0,
+        "no-underscore-dangle": 0,
+        "object-curly-spacing": 0,
+        "object-curly-newline": 0,
+        "no-case-declarations": 0,
+        "no-param-reassign": 0,
+        "no-restricted-globals": 0,
+        "no-return-assign": 0,
+        "no-use-before-define": 0,
+        "padded-blocks": 0,
+        "prefer-const": 0,
+        "prefer-destructuring": 0
+    }
+}
