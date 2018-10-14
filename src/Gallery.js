@@ -49,11 +49,11 @@ class Gallery extends Component {
     }
 
     componentWillMount() {
-        const {containerWidth, className, columnClassName, rowClassName} = this.props;
-        const {images} = this.props;
+        const {images, containerWidth, gutterInPercent, className, columnClassName, rowClassName} = this.props;
         this.setState({
             rows: this.engine.buildRows(images),
             containerWidth,
+            gutterInPercent,
             className,
             columnClassName,
             rowClassName,

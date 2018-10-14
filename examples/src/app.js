@@ -1,10 +1,9 @@
 import React, {Component, Fragment} from 'react';
 import ReactDOM from 'react-dom';
-import Image from  './../../src/Image';
-import Gallery from './../../src/Gallery';
+import {getImages} from '../../__mocks__/images';
+import Image from '../../src/Image';
+import Gallery from '../../src/Gallery';
 import style from './app.css';
-
-import {getImages} from './../__mocks__/images';
 
 const imageRenderer = image => {
     return (
@@ -32,13 +31,13 @@ class Example extends Component {
         }, () => {
             this.updateWidth();
         });
-    };
+    }
 
     updateWidth = () => {
-        const width = window.innerWidth ||
-            document.documentElement.clientWidth|| 
-            document.body.clientWidth;
-        
+        const width = window.innerWidth
+            || document.documentElement.clientWidth
+            || document.body.clientWidth;
+
         if (width < 640) {
             this.setState({
                 containerWidth: 500,
@@ -52,20 +51,21 @@ class Example extends Component {
 
     componentDidMount() {
         window.addEventListener('resize', this.updateWidth);
-    };
+    }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateWidth);
-    };
+    }
 
     render() {
+        const {containerWidth, images} = this.state;
         return (
             <Gallery
-                containerWidth={this.state.containerWidth}
+                containerWidth={containerWidth}
                 imageRenderer={imageRenderer}
-                images={this.state.images}
+                images={images}
             />
-        )
+        );
     }
 }
 
