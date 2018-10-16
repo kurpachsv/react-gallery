@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {getImages} from '../../__mocks__/images';
 import Image from '../../src/Image';
 import Gallery from '../../src/Gallery';
-import style from './example.css';
+import style from './examples.css';
 
 const imageRenderer = image => {
     return (
