@@ -1,8 +1,8 @@
 {
-  "name": "react-gallery",
+  "name": "@kurpachsv/react-gallery",
   "version": "0.0.1",
-  "description": "React Gallery",
-  "main": "app.js",
+  "description": "React images gallery",
+  "main": "dist/index.js",
   "scripts": {
     "build": "webpack --mode production",
     "lint": "./node_modules/.bin/eslint -c ./.eslintrc.json ./src",

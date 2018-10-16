@@ -2,18 +2,17 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-    devtool: 'source-map',
     plugins: [
         new ExtractTextPlugin({
             filename: 'style.css',
         }),
     ],
     entry: {
-        app: './src/app.js',
+        app: './src/index.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'app.js',
+        filename: 'index.js',
     },
     module: {
         rules: [
