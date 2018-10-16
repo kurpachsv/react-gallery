@@ -1,7 +1,2 @@
-import Image from './Image';
-import Gallery from './Gallery';
-
-export {
-    Image,
-    Gallery,
-};
+export {default as Image} from './Image';
+export {default as Gallery} from './Gallery';
