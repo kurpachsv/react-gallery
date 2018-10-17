@@ -1,10 +1,10 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React images gallery",
   "main": "dist/index.js",
   "scripts": {
-    "build": "webpack --mode production",
+    "build": "./node_modules/.bin/webpack",
     "lint": "./node_modules/.bin/eslint -c ./.eslintrc.json ./src",
     "eslint-check": "./node_modules/.bin/eslint --print-config ./.eslintrc.json",
     "test": "jest --config ./jest.config.js",
@@ -12,7 +12,8 @@
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "deploy-storybook": "storybook-to-ghpages"
+    "deploy-storybook": "storybook-to-ghpages",
+    "prepublish": "rm -rf ./dist && npm run build"
   },
   "author": "Sergei Kurpach <kurpachsv@gmail.com>",
   "license": "MIT",
@@ -60,7 +61,6 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-loader": "^0.5.5",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^23.6.0",
