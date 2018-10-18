@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/kurpachsv/react-gallery.svg?branch=master)](https://travis-ci.org/kurpachsv/react-gallery)
 [![Coverage Status](https://coveralls.io/repos/github/kurpachsv/react-gallery/badge.svg?branch=master)](https://coveralls.io/github/kurpachsv/react-gallery?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0cdc600293ec5b061fc0/maintainability)](https://codeclimate.com/github/kurpachsv/react-gallery/maintainability)
+[![Dependency Status](https://david-dm.org/kurpachsv/react-gallery.svg)](https://david-dm.org/kurpachsv/react-gallery)
 
 # react-gallery
 
@@ -9,7 +10,7 @@ A simple, fast and flexibility images gallery.
 
 ## Preview
 
-![preview](https://github.com/kurpachsv/react-gallery/raw/master/preview.png "Previw")
+<img src="https://github.com/kurpachsv/react-gallery/raw/master/preview.png" alt="Preview" />
 
 See [storybook](https://kurpachsv.github.io/react-gallery/?selectedKind=Examples&selectedStory=Basic%20Example&full=0&addons=1&stories=1&panelRight=0) for live demonstration.
 
