@@ -9,7 +9,7 @@ A simple, fast and flexibility images gallery.
 
 ## Preview
 
-![preview](preview.png "Previw")
+![preview](https://github.com/kurpachsv/react-gallery/blob/master/preview.png "Previw")
 
 See [storybook](https://kurpachsv.github.io/react-gallery/?selectedKind=Examples&selectedStory=Basic%20Example&full=0&addons=1&stories=1&panelRight=0) for live demonstration.
 
