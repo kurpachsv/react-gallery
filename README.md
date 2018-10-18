@@ -53,6 +53,6 @@ class Example extends Component {
 
 For more details see [examples](https://github.com/kurpachsv/react-gallery/blob/master/examples/src/Examples.js).
 
-License
+## License
 
 MIT, Copyright (c) 2018, Sergei Kurpach
