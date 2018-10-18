@@ -1,7 +1,7 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.0.4",
-  "description": "React images gallery",
+  "version": "0.0.5",
+  "description": "A simple, fast and flexibility images gallery.",
   "main": "dist/index.js",
   "scripts": {
     "build": "./node_modules/.bin/webpack",

@@ -9,15 +9,17 @@ A simple, fast and flexibility images gallery.
 
 ## Preview
 
-![preview](https://github.com/kurpachsv/react-gallery/blob/master/preview.png "Previw")
+![preview](https://github.com/kurpachsv/react-gallery/raw/master/preview.png "Previw")
 
 See [storybook](https://kurpachsv.github.io/react-gallery/?selectedKind=Examples&selectedStory=Basic%20Example&full=0&addons=1&stories=1&panelRight=0) for live demonstration.
 
 ## Usage
 
-`npm i --save @kurpachsv/react-gallery`
-
+```bash
+npm i --save @kurpachsv/react-gallery
 ```
+
+```javascript
 import {Gallery} from '@kurpachsv/react-gallery';
 ```
 
@@ -55,4 +57,4 @@ For more details see [examples](https://github.com/kurpachsv/react-gallery/blob/
 
 ## License
 
-MIT, Copyright (c) 2018, Sergei Kurpach
+MIT, Copyright (c) 2018 Sergei Kurpach
