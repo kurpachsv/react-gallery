@@ -2,14 +2,14 @@
 
 exports[`Gallery should render correctly 1`] = `
 <div
-  className="container"
+  className="container "
 >
   <div
-    className="row"
+    className="row "
     key="0"
   >
     <div
-      className="column"
+      className="column "
       key="column-https://dummyimage.com/100x100/eee/eee-0-0"
       style={
         Object {
