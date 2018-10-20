@@ -3,7 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/kurpachsv/react-gallery/badge.svg?branch=master)](https://coveralls.io/github/kurpachsv/react-gallery?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0cdc600293ec5b061fc0/maintainability)](https://codeclimate.com/github/kurpachsv/react-gallery/maintainability)
 [![Dependency Status](https://david-dm.org/kurpachsv/react-gallery.svg)](https://david-dm.org/kurpachsv/react-gallery)
-
+![Bundle size + gzip](https://img.shields.io/bundlephobia/minzip/@kurpachsv/react-gallery.svg)
 # react-gallery
 
 A simple, fast and flexibility images gallery.

@@ -1,27 +1,24 @@
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
+import React from 'react';
 import style from './image.css';
 
-class Image extends Component {
-    static propTypes = {
-        src: PropTypes.string.isRequired,
-        alt: PropTypes.string,
-    };
+const Image = ({src, alt}) => {
+    return (
+        <img
+            className={style.image}
+            src={src}
+            alt={alt}
+        />
+    );
+};
 
-    static defaultProps = {
-        alt: '',
-    };
+Image.propTypes = {
+    src: PropTypes.string.isRequired,
+    alt: PropTypes.string,
+};
 
-    render() {
-        const {src, alt} = this.props;
-        return (
-            <img
-                className={style.image}
-                src={src}
-                alt={alt}
-            />
-        );
-    }
-}
+Image.defaultProps = {
+    alt: '',
+};
 
 export default Image;

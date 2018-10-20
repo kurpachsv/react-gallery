@@ -1,6 +1,6 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A simple, fast and flexibility images gallery.",
   "main": "dist/index.js",
   "scripts": {
@@ -26,10 +26,9 @@
     "url": "https://github.com/kurpachsv/react-gallery/issues"
   },
   "dependencies": {
-    "classnames": "^2.2.6",
-    "lodash": "^4.17.10",
+    "lodash.isequal": "^4.5.0",
     "prop-types": "^15.6.2",
-    "react": "^16.4.1",
+    "react": "^16.4.2",
     "react-dom": "^16.4.2"
   },
   "devDependencies": {

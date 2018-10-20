@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import _ from 'lodash';
-import cs from 'classnames';
+import * as isEqual from 'lodash.isequal';
 import Engine from './Engine';
 import style from './gallery.css';
 
@@ -61,7 +60,7 @@ class Gallery extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!_.isEqual(this.props, nextProps)) {
+        if (!isEqual(this.props, nextProps)) {
             this.engine.setContainerWidth(nextProps.containerWidth);
             this.engine.setGutterInPercent(nextProps.gutterInPercent);
             this.engine.setMinHeight(nextProps.minHeight);
@@ -83,12 +82,12 @@ class Gallery extends Component {
         const {imageRenderer} = this.props;
         const {rows, containerWidth, gutterInPercent, className, rowClassName, columnClassName} = this.state;
         return (
-            <div className={cs(style.container, className)}>
+            <div className={`${style.container} ${className}`}>
                 {rows.map((el, rowIndex) => {
                     const row = el.row;
                     return (
                         /* eslint-disable-next-line react/no-array-index-key */
-                        <div key={rowIndex} className={cs(style.row, rowClassName)}>
+                        <div key={rowIndex} className={`${style.row} ${rowClassName}`}>
                             {row.map((column, columnIndex) => {
                                 const newWidth = this.engine.calculateWidth(
                                     containerWidth, column, row, el.isIncomplete
@@ -102,7 +101,7 @@ class Gallery extends Component {
                                     <div
                                         /* eslint-disable-next-line react/no-array-index-key */
                                         key={`column-${column.src}-${rowIndex}-${columnIndex}`}
-                                        className={cs(style.column, columnClassName)}
+                                        className={`${style.column} ${columnClassName}`}
                                         style={{
                                             width: el.isIncomplete
                                                 ? `${newWidth}px`
