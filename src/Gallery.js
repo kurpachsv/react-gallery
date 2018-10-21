@@ -7,6 +7,7 @@ import style from './gallery.css';
 const CONTAINER_WIDTH = 1000;
 const MAX_HEIGHT = 250;
 const MIN_HEIGHT = 200;
+const MAX_WIDTH = 250;
 const GUTTER_IN_PERCENT = 0.5;
 
 class Gallery extends Component {
@@ -16,6 +17,7 @@ class Gallery extends Component {
         containerWidth: PropTypes.number,
         maxHeight: PropTypes.number,
         minHeight: PropTypes.number,
+        maxWidth: PropTypes.number,
         gutterInPercent: PropTypes.number,
         className: PropTypes.string,
         columnClassName: PropTypes.string,
@@ -26,6 +28,7 @@ class Gallery extends Component {
         containerWidth: CONTAINER_WIDTH,
         maxHeight: MAX_HEIGHT,
         minHeight: MIN_HEIGHT,
+        maxWidth: MAX_WIDTH,
         gutterInPercent: GUTTER_IN_PERCENT,
         className: '',
         columnClassName: '',
@@ -48,7 +51,7 @@ class Gallery extends Component {
     }
 
     componentWillMount() {
-        const {images, containerWidth, gutterInPercent, className, columnClassName, rowClassName} = this.props;
+        const {images, containerWidth, maxWidth, gutterInPercent, className, columnClassName, rowClassName} = this.props;
         this.setState({
             rows: this.engine.buildRows(images),
             containerWidth,
@@ -56,6 +59,7 @@ class Gallery extends Component {
             className,
             columnClassName,
             rowClassName,
+            maxWidth,
         });
     }
 
@@ -74,60 +78,45 @@ class Gallery extends Component {
                 rows: this.engine.buildRows(
                     nextProps.images,
                 ),
+                maxWidth: nextProps.maxWidth,
             });
         }
     }
 
     render() {
         const {imageRenderer} = this.props;
-        const {rows, containerWidth, gutterInPercent, className, rowClassName, columnClassName} = this.state;
+        const {rows, containerWidth, maxWidth, gutterInPercent, className, columnClassName} = this.state;
+        const columnCount = containerWidth / maxWidth;
         return (
-            <div className={`${style.container} ${className}`}>
+            <div
+                className={`${style['masonry-container']} ${className}`}
+                style={{
+                    columnCount,
+                    columnGap: `${gutterInPercent}%`,
+                }}
+            >
                 {rows.map((el, rowIndex) => {
                     const row = el.row;
-                    return (
-                        /* eslint-disable-next-line react/no-array-index-key */
-                        <div key={rowIndex} className={`${style.row} ${rowClassName}`}>
-                            {row.map((column, columnIndex) => {
-                                const newWidth = this.engine.calculateWidth(
-                                    containerWidth, column, row, el.isIncomplete
-                                );
-                                const newHeight = this.engine.calculateHeight(
-                                    containerWidth, column, row, el.isIncomplete
-                                );
-                                const newWidthInPercent = 100 * newWidth / containerWidth;
-                                const placeholderHeight = 100 * newHeight / newWidth;
-                                return (
-                                    <div
-                                        /* eslint-disable-next-line react/no-array-index-key */
-                                        key={`column-${column.src}-${rowIndex}-${columnIndex}`}
-                                        className={`${style.column} ${columnClassName}`}
-                                        style={{
-                                            width: el.isIncomplete
-                                                ? `${newWidth}px`
-                                                : `${newWidthInPercent}%`,
-                                            maxWidth: el.isIncomplete
-                                                ? `${newWidthInPercent}%`
-                                                : 'auto',
-                                            margin: row.length === columnIndex + 1
-                                                ? `0 0 ${gutterInPercent}% 0`
-                                                : `0 ${gutterInPercent}% ${gutterInPercent}% 0`,
-
-                                        }}
-                                    >
-                                        {imageRenderer({
-                                            ...column,
-                                            newWidth,
-                                            newHeight,
-                                            newWidthInPercent,
-                                            placeholderHeight,
-                                        })}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    );
-                })}
+                    return row.map((item, columnIndex) => {
+                        const placeholderHeight = 100 * item.height / item.width;
+                        return (
+                            <div
+                                /* eslint-disable-next-line react/no-array-index-key */
+                                key={`column-${item.src}-${rowIndex}-${columnIndex}`}
+                                className={`${style['masonry-item']} ${columnClassName}`}
+                                style={{
+                                    margin: `0 0 ${gutterInPercent}%`,
+                                }}
+                            >
+                                {imageRenderer({
+                                    ...item,
+                                    placeholderHeight,
+                                })}
+                            </div>
+                        );
+                    });
+                }
+                )}
             </div>
         );
     }
