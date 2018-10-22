@@ -8,7 +8,7 @@ const CONTAINER_WIDTH = 1000;
 const MAX_HEIGHT = 250;
 const MIN_HEIGHT = 200;
 const MAX_WIDTH = 250;
-const GUTTER_IN_PERCENT = 0.5;
+const GUTTER_IN_PERCENT = 1;
 
 class Gallery extends Component {
     static propTypes = {
@@ -92,7 +92,6 @@ class Gallery extends Component {
                 className={`${style['masonry-container']} ${className}`}
                 style={{
                     columnCount,
-                    columnGap: `${gutterInPercent}%`,
                 }}
             >
                 {rows.map((el, rowIndex) => {
@@ -105,7 +104,7 @@ class Gallery extends Component {
                                 key={`column-${item.src}-${rowIndex}-${columnIndex}`}
                                 className={`${style['masonry-item']} ${columnClassName}`}
                                 style={{
-                                    margin: `0 0 ${gutterInPercent}%`,
+                                    margin: `0 0 ${gutterInPercent}% ${gutterInPercent}%`,
                                 }}
                             >
                                 {imageRenderer({
