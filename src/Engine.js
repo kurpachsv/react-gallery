@@ -100,6 +100,20 @@ class Engine {
         }
         return rows;
     }
+
+    buildColumns(items, columnCount) {
+        let columns = [];
+        let currColumn = 0;
+        while (currColumn < columnCount) {
+            for (let i = 0; i < items.length; i += columnCount) {
+                if (items[i + currColumn]) {
+                    columns.push(items[i + currColumn]);
+                }
+            }
+            currColumn++;
+        }
+        return columns;
+    }
 }
 
 export default Engine;
