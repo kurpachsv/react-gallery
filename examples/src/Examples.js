@@ -1,13 +1,13 @@
 import React, {Component, Fragment} from 'react';
 import {getImages} from '../../__mocks__/images';
-import Image from '../../src/Image';
+import LazyImage from '../../src/LazyImage';
 import Gallery from '../../src/Gallery';
 import style from './examples.css';
 
 const imageRenderer = image => {
     return (
         <Fragment>
-            <Image src={image.src} alt={image.alt} />
+            <LazyImage {...image} />
             <div
                 className={style.placeholder}
                 style={{
