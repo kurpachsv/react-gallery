@@ -30,7 +30,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-lazyload": "^2.3.0"
+    "react-lazy-load": "^3.0.13"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
