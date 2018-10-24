@@ -1,7 +1,6 @@
 import React, {Component, Fragment} from 'react';
+import {Gallery, Image} from '@kurpachsv/react-gallery';
 import {getImages} from '../../__mocks__/images';
-import Image from '../../src/Image';
-import Gallery from '../../src/Gallery';
 import style from './examples.css';
 
 const imageRenderer = image => {
