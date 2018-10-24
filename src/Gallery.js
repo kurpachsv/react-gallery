@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import isEqual from 'lodash.isequal';
+import equal from 'fast-deep-equal';
 import Engine from './Engine';
 import style from './gallery.css';
 
@@ -60,7 +60,7 @@ class Gallery extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!isEqual(this.props, nextProps)) {
+        if (!equal(this.props, nextProps)) {
             this.engine.setContainerWidth(nextProps.containerWidth);
             this.engine.setGutterInPercent(nextProps.gutterInPercent);
             this.engine.setMinHeight(nextProps.minHeight);

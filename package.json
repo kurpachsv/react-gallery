@@ -1,8 +1,9 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "A simple, fast and flexibility images gallery.",
   "main": "dist/index.js",
+  "module": "src/index.js",
   "scripts": {
     "build": "NODE_ENV=production ./node_modules/.bin/rollup -c",
     "lint": "./node_modules/.bin/eslint -c ./.eslintrc.json ./src",
@@ -26,7 +27,7 @@
     "url": "https://github.com/kurpachsv/react-gallery/issues"
   },
   "dependencies": {
-    "lodash.isequal": "^4.5.0",
+    "fast-deep-equal": "^2.0.1",
     "prop-types": "^15.6.2"
   },
   "peerDependencies": {
@@ -81,6 +82,8 @@
   "keywords": [
     "react",
     "images",
+    "masonry",
+    "gallery",
     "component",
     "react-gallery"
   ]

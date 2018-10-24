@@ -13,14 +13,14 @@ export default {
             react: 'React',
             'react-dom': 'ReactDOM',
             'prop-types': 'PropTypes',
-            'lodash.isequal': 'isEqual',
+            'fast-deep-equal': 'equal',
         },
     },
     external: [
         'react',
         'react-dom',
         'prop-types',
-        'lodash.isequal',
+        'fast-deep-equal',
     ],
     plugins: [
         postcss({

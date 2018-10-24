@@ -3,7 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/kurpachsv/react-gallery/badge.svg?branch=master)](https://coveralls.io/github/kurpachsv/react-gallery?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0cdc600293ec5b061fc0/maintainability)](https://codeclimate.com/github/kurpachsv/react-gallery/maintainability)
 [![Dependency Status](https://david-dm.org/kurpachsv/react-gallery.svg)](https://david-dm.org/kurpachsv/react-gallery)
-[![npm bundle size (minified + gzip)](https://badgen.net/bundlephobia/minzip/@kurpachsv/react-gallery)](https://bundlephobia.com/result?p=@kurpachsv/react-gallery@0.0.11)
+[![npm bundle size (minified + gzip)](https://badgen.net/bundlephobia/minzip/@kurpachsv/react-gallery)](https://bundlephobia.com/result?p=@kurpachsv/react-gallery@latest)
 
 # react-gallery
 
@@ -72,7 +72,7 @@ imageRenderer | function | – | required; component for render of one image
 - [x] [Rollup.js](https://rollupjs.org) for bundle
 - [ ] **Support masonry layout (draft version see in [feature/masonry](https://github.com/kurpachsv/react-gallery/tree/feature/masonry) branch)**
 - [ ] More examples & documentation 
-- [ ] Remove [lodash.isequal](https://www.npmjs.com/package/lodash.isequal) 
+- [x] Remove [lodash.isequal](https://www.npmjs.com/package/lodash.isequal) 
 - [ ] Support TypeScript
 - [ ] Add more helpers like [Image](https://github.com/kurpachsv/react-gallery/blob/master/src/Image.js)
 
