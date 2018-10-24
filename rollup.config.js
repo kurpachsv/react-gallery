@@ -7,21 +7,22 @@ import {uglify} from 'rollup-plugin-uglify';
 export default {
     input: 'src/index.js',
     output: {
-        file: 'dist/bundle.js',
+        file: 'dist/bundle.min.js',
         format: 'cjs',
+        globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+            'prop-types': 'PropTypes',
+            'lodash.isequal': 'isEqual',
+        },
     },
     external: [
         'react',
         'react-dom',
         'prop-types',
         'lodash.isequal',
+        'react-lazy-load',
     ],
-    globals: {
-        react: 'React',
-        'react-dom': 'ReactDOM',
-        'prop-types': 'PropTypes',
-        'lodash.isequal': 'isEqual',
-    },
     plugins: [
         postcss({
             modules: true,

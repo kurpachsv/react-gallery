@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import * as isEqual from 'lodash.isequal';
+import isEqual from 'lodash.isequal';
 import Engine from './Engine';
 import style from './gallery.css';
 
