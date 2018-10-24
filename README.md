@@ -22,14 +22,14 @@ npm i --save @kurpachsv/react-gallery
 ```
 
 ```javascript
-import {Gallery} from '@kurpachsv/react-gallery';
+import {Gallery, Image} from '@kurpachsv/react-gallery';
 ```
 
 ```javascript
 const imageRenderer = image => {
     return (
         <Fragment>
-            <img src={image.src} alt={image.alt} />
+            <Image {...image} />
             <div
                 style={{
                     paddingTop: `${image.placeholderHeight}%`,
