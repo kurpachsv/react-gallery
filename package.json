@@ -1,6 +1,6 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A simple, fast and flexibility images gallery.",
   "main": "dist/bindle.min.js",
   "scripts": {
