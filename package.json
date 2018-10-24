@@ -1,8 +1,8 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "A simple, fast and flexibility images gallery.",
-  "main": "dist/bindle.min.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "NODE_ENV=production ./node_modules/.bin/rollup -c",
     "lint": "./node_modules/.bin/eslint -c ./.eslintrc.json ./src",

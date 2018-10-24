@@ -7,7 +7,7 @@ import {uglify} from 'rollup-plugin-uglify';
 export default {
     input: 'src/index.js',
     output: {
-        file: 'dist/bundle.min.js',
+        file: 'dist/index.js',
         format: 'cjs',
         globals: {
             react: 'React',
