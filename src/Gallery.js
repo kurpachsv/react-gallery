@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import isEqual from 'lodash.isequal';
 import Engine from './Engine';
+import ViewableMonitor from './ViewableMonitor';
 import style from './gallery.css';
 
 const CONTAINER_WIDTH = 1000;
@@ -100,10 +101,13 @@ class Gallery extends Component {
                                 margin: `0 0 ${gutterInPercent}% ${gutterInPercent}%`,
                             }}
                         >
-                            {imageRenderer({
-                                ...item,
-                                placeholderHeight,
-                            })}
+                            <ViewableMonitor>
+                                {isViewable => imageRenderer({
+                                    ...item,
+                                    inView: isViewable,
+                                    placeholderHeight,
+                                })}
+                            </ViewableMonitor>
                         </div>
                     );
                 }

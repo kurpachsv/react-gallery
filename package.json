@@ -1,8 +1,8 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.0.8",
+  "version": "0.0.15",
   "description": "A simple, fast and flexibility images gallery.",
-  "main": "dist/bundle.min.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "NODE_ENV=production ./node_modules/.bin/rollup -c",
     "lint": "./node_modules/.bin/eslint -c ./.eslintrc.json ./src",
@@ -26,11 +26,11 @@
     "url": "https://github.com/kurpachsv/react-gallery/issues"
   },
   "dependencies": {
+    "@researchgate/react-intersection-observer": "^0.7.4",
     "lodash.isequal": "^4.5.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
-    "react-dom": "^16.4.2",
-    "react-lazy-load": "^3.0.13"
+    "react-dom": "^16.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",

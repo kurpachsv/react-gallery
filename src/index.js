@@ -1,3 +1,3 @@
 export {default as Image} from './Image';
-export {default as LazyImage} from './LazyImage';
+export {default as ImageInView} from './ImageInView';
 export {default as Gallery} from './Gallery';

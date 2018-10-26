@@ -1,12 +1,12 @@
 import React, {Component, Fragment} from 'react';
-import {Gallery, LazyImage} from '@kurpachsv/react-gallery';
+import {Gallery, ImageInView} from '@kurpachsv/react-gallery';
 import {getImages} from '../../__mocks__/images';
 import style from './examples.css';
 
 const imageRenderer = image => {
     return (
         <Fragment>
-            <LazyImage {...image} />
+            <ImageInView {...image} />
             <div
                 className={style.placeholder}
                 style={{
