@@ -26,7 +26,7 @@ function getRandomColor() {
     return color;
 }
 
-export function getImages(width = false, height = false, color = false, imagesCount = 200) {
+export function getImages(width = false, height = false, color = false, imagesCount = 100) {
     return generateSequence(imagesCount).map(() => {
         const newHeight = height || getRandomHeight();
         const newWidth = width || getRandomWidth();

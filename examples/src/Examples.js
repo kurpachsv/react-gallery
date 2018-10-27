@@ -167,7 +167,14 @@ class MasonryWithDynamicWidthExample extends Component {
 class MasonryDynamicViewExample extends Component {
     state = {
         enableMasonry: false,
+        disableActualImage: false,
+        disableObserver: false,
     };
+
+    constructor(props) {
+        super(props);
+        this.showImagesAndEnableObserver = debounce(this.showImagesAndEnableObserver, 500);
+    }
 
     componentWillMount() {
         this.setState({
@@ -175,22 +182,41 @@ class MasonryDynamicViewExample extends Component {
         });
     }
 
-    updateMasonryView = () => {
+    handleClick = () => {
+        this.hideImagesAndDisableObserver();
+    };
+
+    updateMasonryViewMode = () => {
         const {enableMasonry} = this.state;
         this.setState({
             enableMasonry: !enableMasonry,
+        }, this.showImagesAndEnableObserver);
+    };
+
+    hideImagesAndDisableObserver = () => {
+        this.setState({
+            disableActualImage: true,
+            disableObserver: true,
+        }, this.updateMasonryViewMode);
+    };
+
+    showImagesAndEnableObserver = () => {
+        this.setState({
+            disableActualImage: false,
+            disableObserver: false,
         });
     };
 
     render() {
-        const {images, enableMasonry} = this.state;
+        const {images, enableMasonry, disableActualImage, disableObserver} = this.state;
         return (
-            <div onClick={this.updateMasonryView}>
+            <div onClick={this.handleClick}>
                 <Gallery
                     enableMasonry={enableMasonry}
                     imageRenderer={imageRenderer}
                     images={images}
-                    disableObserver
+                    disableObserver={disableObserver}
+                    disableActualImage={disableActualImage}
                 />
             </div>
         );

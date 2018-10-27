@@ -25,6 +25,7 @@ class Gallery extends Component {
         rowClassName: PropTypes.string,
         enableMasonry: PropTypes.bool,
         disableObserver: PropTypes.bool,
+        disableActualImage: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -38,6 +39,7 @@ class Gallery extends Component {
         rowClassName: '',
         enableMasonry: false,
         disableObserver: false,
+        disableActualImage: false,
     };
 
     state = {
@@ -67,6 +69,7 @@ class Gallery extends Component {
             rowClassName,
             enableMasonry,
             disableObserver,
+            disableActualImage,
         } = this.props;
         const columnCount = Math.floor(containerWidth / maxWidth);
         this.setState({
@@ -81,6 +84,7 @@ class Gallery extends Component {
             columnCount,
             enableMasonry,
             disableObserver,
+            disableActualImage,
         });
     }
 
@@ -107,12 +111,14 @@ class Gallery extends Component {
                 columnCount: Math.floor(nextProps.containerWidth / nextProps.maxWidth),
                 enableMasonry: nextProps.enableMasonry,
                 disableObserver: nextProps.disableObserver,
+                disableActualImage: nextProps.disableActualImage,
             });
         }
     }
 
     renderMasonryGallery({
-        className, columnCount, columns, columnClassName, gutter, imageRenderer, disableObserver
+        className, columnCount, columns, columnClassName, gutter, imageRenderer,
+        disableObserver, disableActualImage,
     }) {
         return (
             <div
@@ -135,7 +141,7 @@ class Gallery extends Component {
                             <ViewableMonitor disableObserver={disableObserver}>
                                 {isViewable => imageRenderer({
                                     ...item,
-                                    inView: isViewable,
+                                    inView: !disableActualImage && isViewable,
                                     placeholderHeight,
                                 })}
                             </ViewableMonitor>
@@ -148,7 +154,8 @@ class Gallery extends Component {
     }
 
     renderGallery({
-        className, rows, rowClassName, containerWidth, columnClassName, gutterInPercent, imageRenderer, disableObserver
+        className, rows, rowClassName, containerWidth, columnClassName, gutterInPercent, imageRenderer,
+        disableObserver, disableActualImage,
     }) {
         return (
             <div
@@ -193,7 +200,7 @@ class Gallery extends Component {
                                                 newHeight,
                                                 newWidthInPercent,
                                                 placeholderHeight,
-                                                inView: isViewable,
+                                                inView: !disableActualImage && isViewable,
                                             })}
                                         </ViewableMonitor>
                                     </div>
