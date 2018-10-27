@@ -440,11 +440,17 @@ function (_Component) {
     key: "render",
     value: function render() {
       var _this$props = this.props,
+          disableObserver = _this$props.disableObserver,
           Tag = _this$props.tag,
           children = _this$props.children,
-          rest = _objectWithoutProperties(_this$props, ["tag", "children"]);
+          rest = _objectWithoutProperties(_this$props, ["disableObserver", "tag", "children"]);
 
       var isIntersecting = this.state.isIntersecting;
+
+      if (disableObserver) {
+        return React__default.createElement(Tag, null, children(true));
+      }
+
       return React__default.createElement(Observer, _extends({}, rest, {
         onChange: this.handleChange
       }), React__default.createElement(Tag, null, children(isIntersecting)));
@@ -463,15 +469,15 @@ _defineProperty(ViewableMonitor, "defaultProps", {
   tag: 'div'
 });
 
-var css$1 = ".gallery_container__WHVf3 {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_row__16kGn {\n    display: block;\n}\n\n.gallery_column__3ltJa {\n    position: relative;\n    display: inline-block;\n}\n\n.gallery_masonry-item__2SepU {\n    position: relative;\n    display: inline-block;\n    width: 100%;\n}\n\n.gallery_masonry-container__3vjTf {\n    display: block;\n    font-size: 0;\n}\n";
-var style$1 = {"container":"gallery_container__WHVf3","row":"gallery_row__16kGn","column":"gallery_column__3ltJa","masonry-item":"gallery_masonry-item__2SepU","masonry-container":"gallery_masonry-container__3vjTf"};
+var css$1 = ".gallery_container__WHVf3 {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_row__16kGn {\n    display: block;\n}\n\n.gallery_column__3ltJa {\n    position: relative;\n    display: inline-block;\n}\n\n.gallery_masonry-item__2SepU {\n    position: relative;\n    display: inline-block;\n    width: 100%;\n}\n";
+var style$1 = {"container":"gallery_container__WHVf3","row":"gallery_row__16kGn","column":"gallery_column__3ltJa","masonry-item":"gallery_masonry-item__2SepU"};
 styleInject(css$1);
 
 var CONTAINER_WIDTH = 1000;
 var MAX_HEIGHT = 250;
 var MIN_HEIGHT = 200;
-var MAX_WIDTH = 250;
-var GUTTER_IN_PERCENT = 1;
+var MAX_WIDTH = 200;
+var GUTTER_IN_PX = 5;
 
 var Gallery =
 /*#__PURE__*/
@@ -492,7 +498,7 @@ function (_Component) {
 
     _this.engine = new Engine({
       containerWidth: props.containerWidth,
-      gutterInPercent: props.gutterInPercent,
+      gutterInPercent: 100 * props.gutter / props.containerWidth,
       minHeight: props.minHeight,
       maxHeight: props.maxHeight
     });
@@ -506,22 +512,25 @@ function (_Component) {
           images = _this$props.images,
           containerWidth = _this$props.containerWidth,
           maxWidth = _this$props.maxWidth,
-          gutterInPercent = _this$props.gutterInPercent,
+          gutter = _this$props.gutter,
           className = _this$props.className,
           columnClassName = _this$props.columnClassName,
           rowClassName = _this$props.rowClassName,
-          isMasonryView = _this$props.isMasonryView;
-      var columnCount = containerWidth / maxWidth;
+          enableMasonry = _this$props.enableMasonry,
+          disableObserver = _this$props.disableObserver;
+      var columnCount = Math.floor(containerWidth / maxWidth);
       this.setState({
         columns: this.engine.buildColumns(images, columnCount),
         rows: this.engine.buildRows(images),
         containerWidth: containerWidth,
-        gutterInPercent: gutterInPercent,
+        gutterInPercent: 100 * gutter / containerWidth,
+        gutter: gutter,
         className: className,
         columnClassName: columnClassName,
         rowClassName: rowClassName,
         columnCount: columnCount,
-        isMasonryView: isMasonryView
+        enableMasonry: enableMasonry,
+        disableObserver: disableObserver
       });
     }
   }, {
@@ -529,19 +538,21 @@ function (_Component) {
     value: function componentWillReceiveProps(nextProps) {
       if (!equal(this.props, nextProps)) {
         this.engine.setContainerWidth(nextProps.containerWidth);
-        this.engine.setGutterInPercent(nextProps.gutterInPercent);
+        this.engine.setGutterInPercent(100 * nextProps.gutter / nextProps.containerWidth);
         this.engine.setMinHeight(nextProps.minHeight);
         this.engine.setMaxHeight(nextProps.maxHeight);
         this.setState({
           containerWidth: nextProps.containerWidth,
-          gutterInPercent: nextProps.gutterInPercent,
+          gutterInPercent: 100 * nextProps.gutter / nextProps.containerWidth,
+          gutter: nextProps.gutter,
           className: nextProps.className,
           columnClassName: nextProps.columnClassName,
           rowClassName: nextProps.rowClassName,
           rows: this.engine.buildRows(nextProps.images),
           columns: this.engine.buildColumns(nextProps.images, nextProps.containerWidth / nextProps.maxWidth),
-          columnCount: nextProps.containerWidth / nextProps.maxWidth,
-          isMasonryView: nextProps.isMasonryView
+          columnCount: Math.floor(nextProps.containerWidth / nextProps.maxWidth),
+          enableMasonry: nextProps.enableMasonry,
+          disableObserver: nextProps.disableObserver
         });
       }
     }
@@ -552,8 +563,9 @@ function (_Component) {
           columnCount = _ref.columnCount,
           columns = _ref.columns,
           columnClassName = _ref.columnClassName,
-          gutterInPercent = _ref.gutterInPercent,
-          imageRenderer = _ref.imageRenderer;
+          gutter = _ref.gutter,
+          imageRenderer = _ref.imageRenderer,
+          disableObserver = _ref.disableObserver;
       return React__default.createElement("div", {
         className: "".concat(style$1.container, " ").concat(className),
         style: {
@@ -566,9 +578,11 @@ function (_Component) {
           key: "column-".concat(item.src, "-").concat(itemIndex),
           className: "".concat(style$1['masonry-item'], " ").concat(columnClassName),
           style: {
-            margin: "0 0 ".concat(gutterInPercent, "% ").concat(gutterInPercent, "%")
+            margin: "0 0 ".concat(gutter, "px ").concat(gutter, "px")
           }
-        }, React__default.createElement(ViewableMonitor, null, function (isViewable) {
+        }, React__default.createElement(ViewableMonitor, {
+          disableObserver: disableObserver
+        }, function (isViewable) {
           return imageRenderer(_objectSpread({}, item, {
             inView: isViewable,
             placeholderHeight: placeholderHeight
@@ -587,7 +601,8 @@ function (_Component) {
           containerWidth = _ref2.containerWidth,
           columnClassName = _ref2.columnClassName,
           gutterInPercent = _ref2.gutterInPercent,
-          imageRenderer = _ref2.imageRenderer;
+          imageRenderer = _ref2.imageRenderer,
+          disableObserver = _ref2.disableObserver;
       return React__default.createElement("div", {
         className: "".concat(style$1.container, " ").concat(className)
       }, rows.map(function (el, rowIndex) {
@@ -613,12 +628,17 @@ function (_Component) {
                 maxWidth: el.isIncomplete ? "".concat(newWidthInPercent, "%") : 'auto',
                 margin: row.length === columnIndex + 1 ? "0 0 ".concat(gutterInPercent, "% 0") : "0 ".concat(gutterInPercent, "% ").concat(gutterInPercent, "% 0")
               }
-            }, imageRenderer(_objectSpread({}, column, {
-              newWidth: newWidth,
-              newHeight: newHeight,
-              newWidthInPercent: newWidthInPercent,
-              placeholderHeight: placeholderHeight
-            })));
+            }, React__default.createElement(ViewableMonitor, {
+              disableObserver: disableObserver
+            }, function (isViewable) {
+              return imageRenderer(_objectSpread({}, column, {
+                newWidth: newWidth,
+                newHeight: newHeight,
+                newWidthInPercent: newWidthInPercent,
+                placeholderHeight: placeholderHeight,
+                inView: isViewable
+              }));
+            }));
           }))
         );
       }));
@@ -629,10 +649,10 @@ function (_Component) {
       var imageRenderer = this.props.imageRenderer;
 
       var _this$state = this.state,
-          isMasonryView = _this$state.isMasonryView,
-          rest = _objectWithoutProperties(_this$state, ["isMasonryView"]);
+          enableMasonry = _this$state.enableMasonry,
+          rest = _objectWithoutProperties(_this$state, ["enableMasonry"]);
 
-      return isMasonryView ? this.renderMasonryGallery(_objectSpread({}, rest, {
+      return enableMasonry ? this.renderMasonryGallery(_objectSpread({}, rest, {
         imageRenderer: imageRenderer
       })) : this.renderGallery(_objectSpread({}, rest, {
         imageRenderer: imageRenderer
@@ -650,11 +670,12 @@ _defineProperty(Gallery, "propTypes", {
   maxHeight: PropTypes.number,
   minHeight: PropTypes.number,
   maxWidth: PropTypes.number,
-  gutterInPercent: PropTypes.number,
+  gutter: PropTypes.number,
   className: PropTypes.string,
   columnClassName: PropTypes.string,
   rowClassName: PropTypes.string,
-  isMasonryView: PropTypes.bool
+  enableMasonry: PropTypes.bool,
+  disableObserver: PropTypes.bool
 });
 
 _defineProperty(Gallery, "defaultProps", {
@@ -662,11 +683,12 @@ _defineProperty(Gallery, "defaultProps", {
   maxHeight: MAX_HEIGHT,
   minHeight: MIN_HEIGHT,
   maxWidth: MAX_WIDTH,
-  gutterInPercent: GUTTER_IN_PERCENT,
+  gutter: GUTTER_IN_PX,
   className: '',
   columnClassName: '',
   rowClassName: '',
-  isMasonryView: false
+  enableMasonry: false,
+  disableObserver: false
 });
 
 exports.Image = Image;

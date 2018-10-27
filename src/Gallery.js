@@ -23,7 +23,8 @@ class Gallery extends Component {
         className: PropTypes.string,
         columnClassName: PropTypes.string,
         rowClassName: PropTypes.string,
-        isMasonryView: PropTypes.bool,
+        enableMasonry: PropTypes.bool,
+        disableObserver: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -35,7 +36,8 @@ class Gallery extends Component {
         className: '',
         columnClassName: '',
         rowClassName: '',
-        isMasonryView: false,
+        enableMasonry: false,
+        disableObserver: false,
     };
 
     state = {
@@ -63,7 +65,8 @@ class Gallery extends Component {
             className,
             columnClassName,
             rowClassName,
-            isMasonryView,
+            enableMasonry,
+            disableObserver,
         } = this.props;
         const columnCount = Math.floor(containerWidth / maxWidth);
         this.setState({
@@ -76,7 +79,8 @@ class Gallery extends Component {
             columnClassName,
             rowClassName,
             columnCount,
-            isMasonryView,
+            enableMasonry,
+            disableObserver,
         });
     }
 
@@ -101,13 +105,14 @@ class Gallery extends Component {
                     nextProps.containerWidth / nextProps.maxWidth,
                 ),
                 columnCount: Math.floor(nextProps.containerWidth / nextProps.maxWidth),
-                isMasonryView: nextProps.isMasonryView,
+                enableMasonry: nextProps.enableMasonry,
+                disableObserver: nextProps.disableObserver,
             });
         }
     }
 
     renderMasonryGallery({
-        className, columnCount, columns, columnClassName, gutter, imageRenderer,
+        className, columnCount, columns, columnClassName, gutter, imageRenderer, disableObserver
     }) {
         return (
             <div
@@ -127,7 +132,7 @@ class Gallery extends Component {
                                 margin: `0 0 ${gutter}px ${gutter}px`,
                             }}
                         >
-                            <ViewableMonitor>
+                            <ViewableMonitor disableObserver={disableObserver}>
                                 {isViewable => imageRenderer({
                                     ...item,
                                     inView: isViewable,
@@ -143,7 +148,7 @@ class Gallery extends Component {
     }
 
     renderGallery({
-        className, rows, rowClassName, containerWidth, columnClassName, gutterInPercent, imageRenderer
+        className, rows, rowClassName, containerWidth, columnClassName, gutterInPercent, imageRenderer, disableObserver
     }) {
         return (
             <div
@@ -181,7 +186,7 @@ class Gallery extends Component {
 
                                         }}
                                     >
-                                        <ViewableMonitor>
+                                        <ViewableMonitor disableObserver={disableObserver}>
                                             {isViewable => imageRenderer({
                                                 ...column,
                                                 newWidth,
@@ -203,8 +208,8 @@ class Gallery extends Component {
 
     render() {
         const {imageRenderer} = this.props;
-        const {isMasonryView, ...rest} = this.state;
-        return isMasonryView
+        const {enableMasonry, ...rest} = this.state;
+        return enableMasonry
             ? this.renderMasonryGallery({...rest, imageRenderer})
             : this.renderGallery({...rest, imageRenderer});
     }

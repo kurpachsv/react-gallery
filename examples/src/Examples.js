@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import {Gallery, ImageInView as Image} from '@kurpachsv/react-gallery';
+import debounce from 'lodash.debounce';
 import {getImages} from '../../__mocks__/images';
 import style from './examples.css';
 
@@ -39,6 +40,11 @@ class WithDynamicWidthExample extends Component {
     state = {
         containerWidth: 1000,
     };
+
+    constructor(props) {
+        super(props);
+        this.updateWidth = debounce(this.updateWidth, 250);
+    }
 
     componentWillMount() {
         this.setState({
@@ -108,6 +114,11 @@ class MasonryWithDynamicWidthExample extends Component {
         containerWidth: 1000,
     };
 
+    constructor(props) {
+        super(props);
+        this.updateWidth = debounce(this.updateWidth, 250);
+    }
+
     componentWillMount() {
         this.setState({
             images: getImages(),
@@ -153,9 +164,43 @@ class MasonryWithDynamicWidthExample extends Component {
     }
 }
 
+class MasonryDynamicViewExample extends Component {
+    state = {
+        enableMasonry: false,
+    };
+
+    componentWillMount() {
+        this.setState({
+            images: getImages(),
+        });
+    }
+
+    updateMasonryView = () => {
+        const {enableMasonry} = this.state;
+        this.setState({
+            enableMasonry: !enableMasonry,
+        });
+    };
+
+    render() {
+        const {images, enableMasonry} = this.state;
+        return (
+            <div onClick={this.updateMasonryView}>
+                <Gallery
+                    enableMasonry={enableMasonry}
+                    imageRenderer={imageRenderer}
+                    images={images}
+                    disableObserver
+                />
+            </div>
+        );
+    }
+}
+
 export {
     BasicExample,
     WithDynamicWidthExample,
     MasonryExample,
     MasonryWithDynamicWidthExample,
+    MasonryDynamicViewExample,
 };

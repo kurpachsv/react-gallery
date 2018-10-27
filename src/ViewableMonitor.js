@@ -24,8 +24,15 @@ class ViewableMonitor extends Component {
     };
 
     render() {
-        const {tag: Tag, children, ...rest} = this.props;
+        const {disableObserver, tag: Tag, children, ...rest} = this.props;
         const {isIntersecting} = this.state;
+        if (disableObserver) {
+            return (
+                <Tag>
+                    {children(true)}
+                </Tag>
+            );
+        }
         return (
             <Observer {...rest} onChange={this.handleChange}>
                 <Tag>
