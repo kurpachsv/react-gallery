@@ -2,7 +2,6 @@ import resolve from 'rollup-plugin-node-resolve';
 import postcss from 'rollup-plugin-postcss';
 import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
-import {uglify} from 'rollup-plugin-uglify';
 
 export default {
     input: 'src/index.js',
@@ -21,6 +20,7 @@ export default {
         'react-dom',
         'prop-types',
         'fast-deep-equal',
+        '@researchgate/react-intersection-observer',
     ],
     plugins: [
         postcss({
@@ -34,6 +34,5 @@ export default {
             exclude: 'node_modules/**',
             ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
         }),
-        uglify(),
     ],
 };

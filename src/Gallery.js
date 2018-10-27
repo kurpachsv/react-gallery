@@ -8,8 +8,8 @@ import style from './gallery.css';
 const CONTAINER_WIDTH = 1000;
 const MAX_HEIGHT = 250;
 const MIN_HEIGHT = 200;
-const MAX_WIDTH = 250;
-const GUTTER_IN_PERCENT = 1;
+const MAX_WIDTH = 200;
+const GUTTER_IN_PX = 5;
 
 class Gallery extends Component {
     static propTypes = {
@@ -19,9 +19,11 @@ class Gallery extends Component {
         maxHeight: PropTypes.number,
         minHeight: PropTypes.number,
         maxWidth: PropTypes.number,
-        gutterInPercent: PropTypes.number,
+        gutter: PropTypes.number,
         className: PropTypes.string,
         columnClassName: PropTypes.string,
+        rowClassName: PropTypes.string,
+        isMasonryView: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -29,9 +31,11 @@ class Gallery extends Component {
         maxHeight: MAX_HEIGHT,
         minHeight: MIN_HEIGHT,
         maxWidth: MAX_WIDTH,
-        gutterInPercent: GUTTER_IN_PERCENT,
+        gutter: GUTTER_IN_PX,
         className: '',
         columnClassName: '',
+        rowClassName: '',
+        isMasonryView: false,
     };
 
     state = {
@@ -44,36 +48,48 @@ class Gallery extends Component {
 
         this.engine = new Engine({
             containerWidth: props.containerWidth,
-            gutterInPercent: props.gutterInPercent,
+            gutterInPercent: 100 * props.gutter / props.containerWidth,
             minHeight: props.minHeight,
             maxHeight: props.maxHeight,
         });
     }
 
     componentWillMount() {
-        const {images, containerWidth, maxWidth, gutterInPercent, className, columnClassName, rowClassName} = this.props;
-        const columnCount = containerWidth / maxWidth;
+        const {
+            images,
+            containerWidth,
+            maxWidth,
+            gutter,
+            className,
+            columnClassName,
+            rowClassName,
+            isMasonryView,
+        } = this.props;
+        const columnCount = Math.floor(containerWidth / maxWidth);
         this.setState({
             columns: this.engine.buildColumns(images, columnCount),
             rows: this.engine.buildRows(images),
             containerWidth,
-            gutterInPercent,
+            gutterInPercent: 100 * gutter / containerWidth,
+            gutter,
             className,
             columnClassName,
             rowClassName,
             columnCount,
+            isMasonryView,
         });
     }
 
     componentWillReceiveProps(nextProps) {
         if (!equal(this.props, nextProps)) {
             this.engine.setContainerWidth(nextProps.containerWidth);
-            this.engine.setGutterInPercent(nextProps.gutterInPercent);
+            this.engine.setGutterInPercent(100 * nextProps.gutter / nextProps.containerWidth);
             this.engine.setMinHeight(nextProps.minHeight);
             this.engine.setMaxHeight(nextProps.maxHeight);
             this.setState({
                 containerWidth: nextProps.containerWidth,
-                gutterInPercent: nextProps.gutterInPercent,
+                gutterInPercent: 100 * nextProps.gutter / nextProps.containerWidth,
+                gutter: nextProps.gutter,
                 className: nextProps.className,
                 columnClassName: nextProps.columnClassName,
                 rowClassName: nextProps.rowClassName,
@@ -84,45 +100,54 @@ class Gallery extends Component {
                     nextProps.images,
                     nextProps.containerWidth / nextProps.maxWidth,
                 ),
-                columnCount: nextProps.containerWidth / nextProps.maxWidth,
+                columnCount: Math.floor(nextProps.containerWidth / nextProps.maxWidth),
+                isMasonryView: nextProps.isMasonryView,
             });
         }
     }
 
-    renderMasonryGallery() {
-        {columns.map((item, itemIndex) => {
-                const placeholderHeight = 100 * item.height / item.width;
-                return (
-                    <div
-                        /* eslint-disable-next-line react/no-array-index-key */
-                        key={`column-${item.src}-${itemIndex}`}
-                        className={`${style['masonry-item']} ${columnClassName}`}
-                        style={{
-                            margin: `0 0 ${gutterInPercent}% ${gutterInPercent}%`,
-                        }}
-                    >
-                        <ViewableMonitor>
-                            {isViewable => imageRenderer({
-                                ...item,
-                                inView: isViewable,
-                                placeholderHeight,
-                            })}
-                        </ViewableMonitor>
-                    </div>
-                );
-            }
-        )}
-    }
-
-    render() {
-        const {imageRenderer} = this.props;
-        const {columns, columnCount, rows, containerWidth, gutterInPercent, className, rowClassName, columnClassName} = this.state;
+    renderMasonryGallery({
+        className, columnCount, columns, columnClassName, gutter, imageRenderer,
+    }) {
         return (
             <div
                 className={`${style.container} ${className}`}
                 style={{
                     columnCount,
                 }}
+            >
+                {columns.map((item, itemIndex) => {
+                    const placeholderHeight = 100 * item.height / item.width;
+                    return (
+                        <div
+                            /* eslint-disable-next-line react/no-array-index-key */
+                            key={`column-${item.src}-${itemIndex}`}
+                            className={`${style['masonry-item']} ${columnClassName}`}
+                            style={{
+                                margin: `0 0 ${gutter}px ${gutter}px`,
+                            }}
+                        >
+                            <ViewableMonitor>
+                                {isViewable => imageRenderer({
+                                    ...item,
+                                    inView: isViewable,
+                                    placeholderHeight,
+                                })}
+                            </ViewableMonitor>
+                        </div>
+                    );
+                }
+                )}
+            </div>
+        );
+    }
+
+    renderGallery({
+        className, rows, rowClassName, containerWidth, columnClassName, gutterInPercent, imageRenderer
+    }) {
+        return (
+            <div
+                className={`${style.container} ${className}`}
             >
                 {rows.map((el, rowIndex) => {
                     const row = el.row;
@@ -156,13 +181,16 @@ class Gallery extends Component {
 
                                         }}
                                     >
-                                        {imageRenderer({
-                                            ...column,
-                                            newWidth,
-                                            newHeight,
-                                            newWidthInPercent,
-                                            placeholderHeight,
-                                        })}
+                                        <ViewableMonitor>
+                                            {isViewable => imageRenderer({
+                                                ...column,
+                                                newWidth,
+                                                newHeight,
+                                                newWidthInPercent,
+                                                placeholderHeight,
+                                                inView: isViewable,
+                                            })}
+                                        </ViewableMonitor>
                                     </div>
                                 );
                             })}
@@ -171,6 +199,14 @@ class Gallery extends Component {
                 })}
             </div>
         );
+    }
+
+    render() {
+        const {imageRenderer} = this.props;
+        const {isMasonryView, ...rest} = this.state;
+        return isMasonryView
+            ? this.renderMasonryGallery({...rest, imageRenderer})
+            : this.renderGallery({...rest, imageRenderer});
     }
 }
 

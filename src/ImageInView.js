@@ -16,11 +16,12 @@ const ImageInView = ({src, alt, inView}) => {
 ImageInView.propTypes = {
     src: PropTypes.string.isRequired,
     alt: PropTypes.string,
-    inView: PropTypes.bool.isRequired,
+    inView: PropTypes.bool,
 };
 
 ImageInView.defaultProps = {
     alt: '',
+    inView: true,
 };
 
 export default ImageInView;

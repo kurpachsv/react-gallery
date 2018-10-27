@@ -1,12 +1,12 @@
 import React, {Component, Fragment} from 'react';
-import {Gallery, Image, ImageInView} from '@kurpachsv/react-gallery';
+import {Gallery, ImageInView as Image} from '@kurpachsv/react-gallery';
 import {getImages} from '../../__mocks__/images';
 import style from './examples.css';
 
 const imageRenderer = image => {
     return (
         <Fragment>
-            <ImageInView {...image} />
+            <Image {...image} />
             <div
                 className={style.placeholder}
                 style={{
@@ -84,7 +84,78 @@ class WithDynamicWidthExample extends Component {
     }
 }
 
+class MasonryExample extends Component {
+    componentWillMount() {
+        this.setState({
+            images: getImages(),
+        });
+    }
+
+    render() {
+        const {images} = this.state;
+        return (
+            <Gallery
+                isMasonryView
+                imageRenderer={imageRenderer}
+                images={images}
+            />
+        );
+    }
+}
+
+class MasonryWithDynamicWidthExample extends Component {
+    state = {
+        containerWidth: 1000,
+    };
+
+    componentWillMount() {
+        this.setState({
+            images: getImages(),
+        }, () => {
+            this.updateWidth();
+        });
+    }
+
+    updateWidth = () => {
+        const width = window.innerWidth
+            || document.documentElement.clientWidth
+            || document.body.clientWidth;
+
+        if (width < 640) {
+            this.setState({
+                containerWidth: 500,
+            });
+        } else {
+            this.setState({
+                containerWidth: 1000,
+            });
+        }
+    };
+
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWidth);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWidth);
+    }
+
+    render() {
+        const {containerWidth, images} = this.state;
+        return (
+            <Gallery
+                isMasonryView
+                containerWidth={containerWidth}
+                imageRenderer={imageRenderer}
+                images={images}
+            />
+        );
+    }
+}
+
 export {
     BasicExample,
     WithDynamicWidthExample,
+    MasonryExample,
+    MasonryWithDynamicWidthExample,
 };

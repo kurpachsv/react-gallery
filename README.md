@@ -13,6 +13,9 @@ A simple, fast and flexibility images gallery.
 
 <img src="https://github.com/kurpachsv/react-gallery/raw/master/preview.png" alt="Preview" />
 
+<img src="https://github.com/kurpachsv/react-gallery/raw/master/preview-masonry.png" alt="Preview masonry" />
+
+
 See [storybook](https://kurpachsv.github.io/react-gallery/?selectedKind=Examples&selectedStory=Basic%20Example&full=0&addons=1&stories=1&panelRight=0) for live demonstration.
 
 ## Usage
@@ -22,7 +25,7 @@ npm i --save @kurpachsv/react-gallery
 ```
 
 ```javascript
-import {Gallery, Image} from '@kurpachsv/react-gallery';
+import {Gallery, ImageInView as Image} from '@kurpachsv/react-gallery';
 ```
 
 ```javascript
@@ -41,7 +44,7 @@ const imageRenderer = image => {
 ```
 
 ```javascript
-class Example extends Component {
+class App extends Component {
     render() {
         return (
             <Gallery
@@ -61,18 +64,18 @@ For more details see [examples](https://github.com/kurpachsv/react-gallery/blob/
 
 Property        |       Type            |       Default         |       Description
 :-----------------------|:--------------|:--------------|:--------------------------------
-images | array  | – | required; array of images
+images | array  | undefined | required; array of images
 containerWidth | number  | 1000  | optional; size in px of images container
-gutterInPercent | number  | 0.5  | optional; size in percent margin beetween images
-imageRenderer | function | – | required; component for render of one image
+gutter | number  | 5  | optional; size in px between images
+imageRenderer | function | undefined | required; component for render of one image
 
 ### TODO
 
 - [ ] ~100% coverage
 - [x] [Rollup.js](https://rollupjs.org) for bundle
-- [ ] **Support masonry layout (draft version see in [feature/masonry](https://github.com/kurpachsv/react-gallery/tree/feature/masonry) branch)**
+- [x] Masonry layout
 - [ ] More examples & documentation 
-- [x] Remove [lodash.isequal](https://www.npmjs.com/package/lodash.isequal) 
+- [x] Remove [lodash.isequal](https://www.npmjs.com/package/lodash.isequal) from bundle
 - [ ] Support TypeScript
 - [ ] Add more helpers like [Image](https://github.com/kurpachsv/react-gallery/blob/master/src/Image.js)
 
