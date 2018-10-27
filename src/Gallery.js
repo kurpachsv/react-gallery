@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import isEqual from 'lodash.isequal';
+import equal from 'fast-deep-equal';
 import Engine from './Engine';
 import ViewableMonitor from './ViewableMonitor';
 import style from './gallery.css';
@@ -36,6 +36,7 @@ class Gallery extends Component {
 
     state = {
         columns: [],
+        rows: [],
     };
 
     constructor(props) {
@@ -50,27 +51,35 @@ class Gallery extends Component {
     }
 
     componentWillMount() {
-        const {images, containerWidth, maxWidth, gutterInPercent, className, columnClassName} = this.props;
+        const {images, containerWidth, maxWidth, gutterInPercent, className, columnClassName, rowClassName} = this.props;
         const columnCount = containerWidth / maxWidth;
         this.setState({
             columns: this.engine.buildColumns(images, columnCount),
+            rows: this.engine.buildRows(images),
+            containerWidth,
             gutterInPercent,
             className,
             columnClassName,
+            rowClassName,
             columnCount,
         });
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!isEqual(this.props, nextProps)) {
+        if (!equal(this.props, nextProps)) {
             this.engine.setContainerWidth(nextProps.containerWidth);
             this.engine.setGutterInPercent(nextProps.gutterInPercent);
             this.engine.setMinHeight(nextProps.minHeight);
             this.engine.setMaxHeight(nextProps.maxHeight);
             this.setState({
+                containerWidth: nextProps.containerWidth,
                 gutterInPercent: nextProps.gutterInPercent,
                 className: nextProps.className,
                 columnClassName: nextProps.columnClassName,
+                rowClassName: nextProps.rowClassName,
+                rows: this.engine.buildRows(
+                    nextProps.images,
+                ),
                 columns: this.engine.buildColumns(
                     nextProps.images,
                     nextProps.containerWidth / nextProps.maxWidth,
@@ -80,38 +89,86 @@ class Gallery extends Component {
         }
     }
 
+    renderMasonryGallery() {
+        {columns.map((item, itemIndex) => {
+                const placeholderHeight = 100 * item.height / item.width;
+                return (
+                    <div
+                        /* eslint-disable-next-line react/no-array-index-key */
+                        key={`column-${item.src}-${itemIndex}`}
+                        className={`${style['masonry-item']} ${columnClassName}`}
+                        style={{
+                            margin: `0 0 ${gutterInPercent}% ${gutterInPercent}%`,
+                        }}
+                    >
+                        <ViewableMonitor>
+                            {isViewable => imageRenderer({
+                                ...item,
+                                inView: isViewable,
+                                placeholderHeight,
+                            })}
+                        </ViewableMonitor>
+                    </div>
+                );
+            }
+        )}
+    }
+
     render() {
         const {imageRenderer} = this.props;
-        const {columns, columnCount, gutterInPercent, className, columnClassName} = this.state;
+        const {columns, columnCount, rows, containerWidth, gutterInPercent, className, rowClassName, columnClassName} = this.state;
         return (
             <div
-                className={`${style['masonry-container']} ${className}`}
+                className={`${style.container} ${className}`}
                 style={{
                     columnCount,
                 }}
             >
-                {columns.map((item, itemIndex) => {
-                    const placeholderHeight = 100 * item.height / item.width;
+                {rows.map((el, rowIndex) => {
+                    const row = el.row;
                     return (
-                        <div
-                            /* eslint-disable-next-line react/no-array-index-key */
-                            key={`column-${item.src}-${itemIndex}`}
-                            className={`${style['masonry-item']} ${columnClassName}`}
-                            style={{
-                                margin: `0 0 ${gutterInPercent}% ${gutterInPercent}%`,
-                            }}
-                        >
-                            <ViewableMonitor>
-                                {isViewable => imageRenderer({
-                                    ...item,
-                                    inView: isViewable,
-                                    placeholderHeight,
-                                })}
-                            </ViewableMonitor>
+                        /* eslint-disable-next-line react/no-array-index-key */
+                        <div key={rowIndex} className={`${style.row} ${rowClassName}`}>
+                            {row.map((column, columnIndex) => {
+                                const newWidth = this.engine.calculateWidth(
+                                    containerWidth, column, row, el.isIncomplete
+                                );
+                                const newHeight = this.engine.calculateHeight(
+                                    containerWidth, column, row, el.isIncomplete
+                                );
+                                const newWidthInPercent = 100 * newWidth / containerWidth;
+                                const placeholderHeight = 100 * newHeight / newWidth;
+                                return (
+                                    <div
+                                        /* eslint-disable-next-line react/no-array-index-key */
+                                        key={`column-${column.src}-${rowIndex}-${columnIndex}`}
+                                        className={`${style.column} ${columnClassName}`}
+                                        style={{
+                                            width: el.isIncomplete
+                                                ? `${newWidth}px`
+                                                : `${newWidthInPercent}%`,
+                                            maxWidth: el.isIncomplete
+                                                ? `${newWidthInPercent}%`
+                                                : 'auto',
+                                            margin: row.length === columnIndex + 1
+                                                ? `0 0 ${gutterInPercent}% 0`
+                                                : `0 ${gutterInPercent}% ${gutterInPercent}% 0`,
+
+                                        }}
+                                    >
+                                        {imageRenderer({
+                                            ...column,
+                                            newWidth,
+                                            newHeight,
+                                            newWidthInPercent,
+                                            placeholderHeight,
+                                        })}
+                                    </div>
+                                );
+                            })}
                         </div>
                     );
-                }
-                )}
+                })}
             </div>
         );
     }

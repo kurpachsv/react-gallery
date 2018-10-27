@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {Gallery, ImageInView} from '@kurpachsv/react-gallery';
+import {Gallery, Image, ImageInView} from '@kurpachsv/react-gallery';
 import {getImages} from '../../__mocks__/images';
 import style from './examples.css';
 

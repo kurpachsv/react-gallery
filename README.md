@@ -3,7 +3,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/kurpachsv/react-gallery/badge.svg?branch=master)](https://coveralls.io/github/kurpachsv/react-gallery?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0cdc600293ec5b061fc0/maintainability)](https://codeclimate.com/github/kurpachsv/react-gallery/maintainability)
 [![Dependency Status](https://david-dm.org/kurpachsv/react-gallery.svg)](https://david-dm.org/kurpachsv/react-gallery)
-![Bundle size + gzip](https://img.shields.io/bundlephobia/minzip/@kurpachsv/react-gallery.svg)
+[![npm bundle size (minified + gzip)](https://badgen.net/bundlephobia/minzip/@kurpachsv/react-gallery)](https://bundlephobia.com/result?p=@kurpachsv/react-gallery@latest)
+
 # react-gallery
 
 A simple, fast and flexibility images gallery.
@@ -21,14 +22,14 @@ npm i --save @kurpachsv/react-gallery
 ```
 
 ```javascript
-import {Gallery} from '@kurpachsv/react-gallery';
+import {Gallery, Image} from '@kurpachsv/react-gallery';
 ```
 
 ```javascript
 const imageRenderer = image => {
     return (
         <Fragment>
-            <img src={image.src} alt={image.alt} />
+            <Image {...image} />
             <div
                 style={{
                     paddingTop: `${image.placeholderHeight}%`,
@@ -56,6 +57,25 @@ class Example extends Component {
 
 For more details see [examples](https://github.com/kurpachsv/react-gallery/blob/master/examples/src/Examples.js).
 
+## Basic properties
+
+Property        |       Type            |       Default         |       Description
+:-----------------------|:--------------|:--------------|:--------------------------------
+images | array  | – | required; array of images
+containerWidth | number  | 1000  | optional; size in px of images container
+gutterInPercent | number  | 0.5  | optional; size in percent margin beetween images
+imageRenderer | function | – | required; component for render of one image
+
+### TODO
+
+- [ ] ~100% coverage
+- [x] [Rollup.js](https://rollupjs.org) for bundle
+- [ ] **Support masonry layout (draft version see in [feature/masonry](https://github.com/kurpachsv/react-gallery/tree/feature/masonry) branch)**
+- [ ] More examples & documentation 
+- [x] Remove [lodash.isequal](https://www.npmjs.com/package/lodash.isequal) 
+- [ ] Support TypeScript
+- [ ] Add more helpers like [Image](https://github.com/kurpachsv/react-gallery/blob/master/src/Image.js)
+
 ## License
 
-MIT, Copyright (c) 2018 Sergei Kurpach
+MIT, Copyright (c) Sergei Kurpach, 2018
