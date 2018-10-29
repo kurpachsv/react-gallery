@@ -211,11 +211,18 @@ class MasonryDynamicViewExample extends Component {
         }, this.showImagesAndEnableObserver);
     };
 
-    hideImagesAndDisableObserver = () => {
+    hideImagesAndDisableObserver = (cb = this.updateMasonryViewMode) => {
         this.setState({
             disableActualImage: true,
             disableObserver: true,
-        }, this.updateMasonryViewMode);
+        }, cb);
+    };
+
+    updateWidth = () => {
+        const containerWidth = this.parent.current.offsetWidth;
+        this.setState({
+            containerWidth,
+        }, () => this.hideImagesAndDisableObserver(this.showImagesAndEnableObserver));
     };
 
     showImagesAndEnableObserver = () => {
@@ -226,9 +233,14 @@ class MasonryDynamicViewExample extends Component {
     };
 
     componentDidMount() {
+        window.addEventListener('resize', this.updateWidth);
         this.setState({
             containerWidth: this.parent.current.offsetWidth,
         });
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWidth);
     }
 
     render() {
