@@ -60,7 +60,8 @@ class WithDynamicWidthExample extends Component {
 
     constructor(props) {
         super(props);
-        this.updateWidth = debounce(this.updateWidth, 250);
+        this.parent = React.createRef();
+        this.updateWidth = debounce(this.updateWidth, 100);
     }
 
     componentWillMount() {
@@ -72,19 +73,10 @@ class WithDynamicWidthExample extends Component {
     }
 
     updateWidth = () => {
-        const width = window.innerWidth
-            || document.documentElement.clientWidth
-            || document.body.clientWidth;
-
-        if (width < 640) {
-            this.setState({
-                containerWidth: 500,
-            });
-        } else {
-            this.setState({
-                containerWidth: 1000,
-            });
-        }
+        const containerWidth = this.parent.current.offsetWidth;
+        this.setState({
+            containerWidth,
+        });
     };
 
     componentDidMount() {
@@ -98,11 +90,15 @@ class WithDynamicWidthExample extends Component {
     render() {
         const {containerWidth, images} = this.state;
         return (
-            <Gallery
-                containerWidth={containerWidth}
-                imageRenderer={imageRenderer}
-                images={images}
-            />
+            <div
+                ref={this.parent}
+            >
+                <Gallery
+                    containerWidth={containerWidth}
+                    imageRenderer={imageRenderer}
+                    images={images}
+                />
+            </div>
         );
     }
 }
@@ -133,7 +129,8 @@ class MasonryWithDynamicWidthExample extends Component {
 
     constructor(props) {
         super(props);
-        this.updateWidth = debounce(this.updateWidth, 250);
+        this.parent = React.createRef();
+        this.updateWidth = debounce(this.updateWidth, 100);
     }
 
     componentWillMount() {
@@ -145,23 +142,17 @@ class MasonryWithDynamicWidthExample extends Component {
     }
 
     updateWidth = () => {
-        const width = window.innerWidth
-            || document.documentElement.clientWidth
-            || document.body.clientWidth;
-
-        if (width < 640) {
-            this.setState({
-                containerWidth: 500,
-            });
-        } else {
-            this.setState({
-                containerWidth: 1000,
-            });
-        }
+        const containerWidth = this.parent.current.offsetWidth;
+        this.setState({
+            containerWidth,
+        });
     };
 
     componentDidMount() {
         window.addEventListener('resize', this.updateWidth);
+        this.setState({
+            containerWidth: this.parent.current.offsetWidth,
+        });
     }
 
     componentWillUnmount() {
@@ -171,12 +162,16 @@ class MasonryWithDynamicWidthExample extends Component {
     render() {
         const {containerWidth, images} = this.state;
         return (
-            <Gallery
-                enableMasonry
-                containerWidth={containerWidth}
-                imageRenderer={imageRenderer}
-                images={images}
-            />
+            <div
+                ref={this.parent}
+            >
+                <Gallery
+                    enableMasonry
+                    containerWidth={containerWidth}
+                    imageRenderer={imageRenderer}
+                    images={images}
+                />
+            </div>
         );
     }
 }
@@ -191,7 +186,8 @@ class MasonryDynamicViewExample extends Component {
     constructor(props) {
         super(props);
         this.parent = React.createRef();
-        this.showImagesAndEnableObserver = debounce(this.showImagesAndEnableObserver, 500);
+        this.showImagesAndEnableObserver = debounce(this.showImagesAndEnableObserver, 200);
+        this.updateWidth = debounce(this.updateWidth, 200);
     }
 
     componentWillMount() {

@@ -18,6 +18,6 @@
 
 .masonry-container {
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: row;
     font-size: 0;
 }
