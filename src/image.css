@@ -5,3 +5,8 @@
     max-width: 100%;
     height: auto;
 }
+
+.masonry-image {
+    cursor: pointer;
+    width: 100%;
+}

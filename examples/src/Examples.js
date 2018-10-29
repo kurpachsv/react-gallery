@@ -1,17 +1,34 @@
 import React, {Component, Fragment} from 'react';
-import {Gallery, ImageInView as Image} from '@kurpachsv/react-gallery';
+import {Gallery, Image} from '@kurpachsv/react-gallery';
 import debounce from 'lodash.debounce';
 import {getImages} from '../../__mocks__/images';
 import style from './examples.css';
 
-const imageRenderer = image => {
-    return (
-        <Fragment>
-            <Image {...image} />
+const imageRenderer = imageProps => {
+    if (imageProps.enableMasonry) {
+        return (
             <div
                 className={style.placeholder}
                 style={{
-                    paddingTop: `${image.placeholderHeight}%`,
+                    height: imageProps.height,
+                    width: imageProps.width,
+                }}
+            >
+                <Image
+                    {...imageProps}
+                />
+            </div>
+        );
+    }
+    return (
+        <Fragment>
+            <Image
+                {...imageProps}
+            />
+            <div
+                className={style.placeholder}
+                style={{
+                    paddingTop: `${imageProps.placeholderHeight}%`,
                 }}
             />
         </Fragment>
@@ -101,7 +118,7 @@ class MasonryExample extends Component {
         const {images} = this.state;
         return (
             <Gallery
-                isMasonryView
+                enableMasonry
                 imageRenderer={imageRenderer}
                 images={images}
             />
@@ -155,7 +172,7 @@ class MasonryWithDynamicWidthExample extends Component {
         const {containerWidth, images} = this.state;
         return (
             <Gallery
-                isMasonryView
+                enableMasonry
                 containerWidth={containerWidth}
                 imageRenderer={imageRenderer}
                 images={images}
@@ -173,6 +190,7 @@ class MasonryDynamicViewExample extends Component {
 
     constructor(props) {
         super(props);
+        this.parent = React.createRef();
         this.showImagesAndEnableObserver = debounce(this.showImagesAndEnableObserver, 500);
     }
 
@@ -207,11 +225,21 @@ class MasonryDynamicViewExample extends Component {
         });
     };
 
+    componentDidMount() {
+        this.setState({
+            containerWidth: this.parent.current.offsetWidth,
+        });
+    }
+
     render() {
-        const {images, enableMasonry, disableActualImage, disableObserver} = this.state;
+        const {images, enableMasonry, disableActualImage, disableObserver, containerWidth} = this.state;
         return (
-            <div onClick={this.handleClick}>
+            <div
+                onClick={this.handleClick}
+                ref={this.parent}
+            >
                 <Gallery
+                    containerWidth={containerWidth}
                     enableMasonry={enableMasonry}
                     imageRenderer={imageRenderer}
                     images={images}

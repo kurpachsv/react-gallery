@@ -13,7 +13,11 @@
 }
 
 .masonry-item {
-    position: relative;
-    display: inline-block;
-    width: 100%;
+    display: block;
+}
+
+.masonry-container {
+    display: flex;
+    flex-flow: column wrap;
+    font-size: 0;
 }

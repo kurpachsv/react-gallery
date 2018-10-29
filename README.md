@@ -25,7 +25,7 @@ npm i --save @kurpachsv/react-gallery
 ```
 
 ```javascript
-import {Gallery, ImageInView as Image} from '@kurpachsv/react-gallery';
+import {Gallery, Image as Image} from '@kurpachsv/react-gallery';
 ```
 
 ```javascript
