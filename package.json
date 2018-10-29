@@ -87,5 +87,10 @@
     "gallery",
     "component",
     "react-gallery"
-  ]
+  ],
+  "storybook-deployer": {
+    "gitUsername": "kurpachsv",
+    "gitEmail": "kurpachsv@gmail.com",
+    "commitMessage": "Deploy Storybook to GitHub Pages"
+  }
 }
