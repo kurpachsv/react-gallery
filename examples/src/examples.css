@@ -1,3 +1,16 @@
 .placeholder {
     background-color: rgb(187, 189, 191);
 }
+
+.column {
+    transform: scale(0.5);
+    -webkit-animation: scaleIn 0.25s cubic-bezier(0.64, 0.57, 0.67, 1);
+    animation: scaleIn 0.25s cubic-bezier(0.64, 0.57, 0.67, 1);
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+
+@keyframes scaleIn {
+    0%   { transform: scale(0.5); }
+    100% { transform: scale(1); }
+}

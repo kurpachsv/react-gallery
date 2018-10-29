@@ -55,7 +55,7 @@ class BasicExample extends Component {
 
 class WithDynamicWidthExample extends Component {
     state = {
-        containerWidth: 1000,
+        containerWidth: undefined,
     };
 
     constructor(props) {
@@ -93,11 +93,15 @@ class WithDynamicWidthExample extends Component {
             <div
                 ref={this.parent}
             >
-                <Gallery
-                    containerWidth={containerWidth}
-                    imageRenderer={imageRenderer}
-                    images={images}
-                />
+                {containerWidth
+                    ? (
+                        <Gallery
+                            containerWidth={containerWidth}
+                            imageRenderer={imageRenderer}
+                            images={images}
+                        />
+                    ) : null
+                }
             </div>
         );
     }
@@ -124,7 +128,7 @@ class MasonryExample extends Component {
 
 class MasonryWithDynamicWidthExample extends Component {
     state = {
-        containerWidth: 1000,
+        containerWidth: undefined,
     };
 
     constructor(props) {
@@ -259,10 +263,65 @@ class MasonryDynamicViewExample extends Component {
     }
 }
 
+class WithCustomClassesExample extends Component {
+    state = {
+        containerWidth: undefined,
+    };
+
+    constructor(props) {
+        super(props);
+        this.parent = React.createRef();
+        this.updateWidth = debounce(this.updateWidth, 300);
+    }
+
+    componentWillMount() {
+        this.setState({
+            images: getImages(),
+        }, () => {
+            this.updateWidth();
+        });
+    }
+
+    updateWidth = () => {
+        const containerWidth = this.parent.current.offsetWidth;
+        this.setState({
+            containerWidth,
+        });
+    };
+
+    componentDidMount() {
+        window.addEventListener('resize', this.updateWidth);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWidth);
+    }
+
+    render() {
+        const {containerWidth, images} = this.state;
+        return (
+            <div
+                ref={this.parent}
+            >
+                {containerWidth
+                    ? (
+                        <Gallery
+                            columnClassName={style.column}
+                            containerWidth={containerWidth}
+                            imageRenderer={imageRenderer}
+                            images={images}
+                        />
+                    ) : null}
+            </div>
+        );
+    }
+}
+
 export {
     BasicExample,
     WithDynamicWidthExample,
     MasonryExample,
     MasonryWithDynamicWidthExample,
     MasonryDynamicViewExample,
+    WithCustomClassesExample,
 };
