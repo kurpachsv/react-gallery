@@ -5,21 +5,6 @@ import {getImages} from '../../__mocks__/images';
 import style from './examples.css';
 
 const imageRenderer = imageProps => {
-    if (imageProps.enableMasonry) {
-        return (
-            <div
-                className={style.placeholder}
-                style={{
-                    height: imageProps.height,
-                    width: imageProps.width,
-                }}
-            >
-                <Image
-                    {...imageProps}
-                />
-            </div>
-        );
-    }
     return (
         <Fragment>
             <Image

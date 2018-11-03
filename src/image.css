@@ -2,11 +2,4 @@
     cursor: pointer;
     position: absolute;
     width: 100%;
-    max-width: 100%;
-    height: auto;
-}
-
-.masonry-image {
-    cursor: pointer;
-    width: 100%;
 }

@@ -135,18 +135,14 @@ class Engine {
         let order;
         const items = Engine._normalizeByWidth(images, containerWidth, columnsCount);
         for (let i = 0; i < columnsCount; i++) {
-            columns.push({images: [], order: i, height: 0});
+            columns.push({images: [], order: i});
         }
         for (let i = 0; i < items.length; i++) {
             order = (i + 1) % columnsCount === 0 ? columnsCount : (i + 1) % columnsCount;
             columns[order - 1].images.push(items[i]);
-            columns[order - 1].height += items[i].height;
             items[i].order = order;
         }
-        return {
-            items: columns,
-            maxHeight: Math.max(...columns.map(el => el.height)),
-        };
+        return columns;
     }
 }
 

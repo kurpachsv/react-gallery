@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import style from './image.css';
 
-const Image = ({src, alt, inView, enableMasonry}) => {
+const Image = ({src, alt, inView}) => {
     return (
         <img
-            className={enableMasonry ? style['masonry-image'] : style.image}
+            className={style.image}
             src={inView ? src : null}
             alt={alt}
             style={{

@@ -3,21 +3,8 @@
     font-size: 0;
 }
 
-.row {
-    display: block;
-}
-
-.column {
+.item {
+    vertical-align: top;
     position: relative;
     display: inline-block;
-}
-
-.masonry-item {
-    display: block;
-}
-
-.masonry-container {
-    display: flex;
-    flex-flow: row;
-    font-size: 0;
 }

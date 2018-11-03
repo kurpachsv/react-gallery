@@ -9,7 +9,7 @@ const CONTAINER_WIDTH = 1000;
 const MAX_HEIGHT = 250;
 const MIN_HEIGHT = 200;
 const MAX_WIDTH = 200;
-const GUTTER = 5;
+const GUTTER_IN_PERCENT = 0.5;
 
 class Gallery extends Component {
     static propTypes = {
@@ -33,7 +33,7 @@ class Gallery extends Component {
         maxHeight: MAX_HEIGHT,
         minHeight: MIN_HEIGHT,
         maxWidth: MAX_WIDTH,
-        gutter: GUTTER,
+        gutter: GUTTER_IN_PERCENT,
         className: '',
         columnClassName: '',
         rowClassName: '',
@@ -52,7 +52,7 @@ class Gallery extends Component {
 
         this.engine = new Engine({
             containerWidth: props.containerWidth,
-            gutterInPercent: 100 * props.gutter / props.containerWidth,
+            gutterInPercent: props.gutter,
             minHeight: props.minHeight,
             maxHeight: props.maxHeight,
         });
@@ -76,7 +76,6 @@ class Gallery extends Component {
             columns: Engine.buildColumns(images, columnCount, containerWidth),
             rows: this.engine.buildRows(images),
             containerWidth,
-            gutterInPercent: 100 * gutter / containerWidth,
             gutter,
             className,
             columnClassName,
@@ -91,13 +90,12 @@ class Gallery extends Component {
     componentWillReceiveProps(nextProps) {
         if (!equal(this.props, nextProps)) {
             this.engine.setContainerWidth(nextProps.containerWidth);
-            this.engine.setGutterInPercent(100 * nextProps.gutter / nextProps.containerWidth);
+            this.engine.setGutterInPercent(nextProps.gutter);
             this.engine.setMinHeight(nextProps.minHeight);
             this.engine.setMaxHeight(nextProps.maxHeight);
             const columnCount = Math.floor(nextProps.containerWidth / nextProps.maxWidth);
             this.setState({
                 containerWidth: nextProps.containerWidth,
-                gutterInPercent: 100 * nextProps.gutter / nextProps.containerWidth,
                 gutter: nextProps.gutter,
                 className: nextProps.className,
                 columnClassName: nextProps.columnClassName,
@@ -119,23 +117,22 @@ class Gallery extends Component {
     }
 
     renderMasonryGallery({
-        className, columns, columnClassName, imageRenderer, disableObserver, disableActualImage, gutter,
+        className, columns, columnClassName, imageRenderer, disableObserver, disableActualImage,
+        gutter, columnCount,
     }) {
         return (
             <div
-                className={`${style['masonry-container']} ${className}`}
-                style={{
-                    height: columns.maxHeight,
-                    marginLeft: `${gutter}px`,
-                }}
+                className={`${style.container} ${className}`}
             >
-                {columns.items.map((item, columnIndex) => (
+                {columns.map((item, columnIndex) => (
                     <div
                         /* eslint-disable-next-line react/no-array-index-key */
                         key={`column-${columnIndex}`}
-                        className={`${style['masonry-item']} ${columnClassName}`}
+                        className={`${style.item} ${columnClassName}`}
                         style={{
-                            order: item.order + 1,
+                            width: `${100 / columnCount - gutter}%`,
+                            maxWidth: 'auto',
+                            margin: `0 ${gutter}% 0 0`,
                         }}
                     >
                         {
@@ -146,9 +143,7 @@ class Gallery extends Component {
                                         /* eslint-disable-next-line react/no-array-index-key */
                                         key={`image-${image.src}-${columnIndex}-${imageIndex}`}
                                         style={{
-                                            margin: `0 0 ${gutter}px ${gutter}px`,
-                                            height: image.height,
-                                            width: image.width,
+                                            margin: `0 0 ${gutter * columnCount}% 0`,
                                         }}
                                     >
                                         <ViewableMonitor
@@ -156,27 +151,14 @@ class Gallery extends Component {
                                         >
                                             {isViewable => imageRenderer({
                                                 ...image,
+                                                placeholderHeight,
                                                 inView: !disableActualImage && isViewable,
                                                 enableMasonry: true,
-                                                placeholderHeight,
                                             })}
                                         </ViewableMonitor>
                                     </div>
                                 );
                             })
-                        }
-                        {
-                            item.height < columns.maxHeight
-                                ? (
-                                    <div
-                                        /* eslint-disable-next-line react/no-array-index-key */
-                                        key={`pad-${columnIndex}`}
-                                        style={{
-                                            height: `${columns.maxHeight - item.height}px`,
-                                            order: item.order + 1,
-                                        }}
-                                    />
-                                ) : null
                         }
                     </div>
                 ))}
@@ -185,7 +167,7 @@ class Gallery extends Component {
     }
 
     renderGallery({
-        className, rows, rowClassName, containerWidth, columnClassName, gutterInPercent, imageRenderer,
+        className, rows, rowClassName, containerWidth, columnClassName, gutter, imageRenderer,
         disableObserver, disableActualImage,
     }) {
         return (
@@ -196,7 +178,7 @@ class Gallery extends Component {
                     const row = el.row;
                     return (
                         /* eslint-disable-next-line react/no-array-index-key */
-                        <div key={rowIndex} className={`${style.row} ${rowClassName}`}>
+                        <div key={rowIndex} className={rowClassName}>
                             {row.map((column, columnIndex) => {
                                 const newWidth = this.engine.calculateWidth(
                                     containerWidth, column, row, el.isIncomplete
@@ -210,7 +192,7 @@ class Gallery extends Component {
                                     <div
                                         /* eslint-disable-next-line react/no-array-index-key */
                                         key={`column-${column.src}-${rowIndex}-${columnIndex}`}
-                                        className={`${style.column} ${columnClassName}`}
+                                        className={`${style.item} ${columnClassName}`}
                                         style={{
                                             width: el.isIncomplete
                                                 ? `${newWidth}px`
@@ -219,8 +201,8 @@ class Gallery extends Component {
                                                 ? `${newWidthInPercent}%`
                                                 : 'auto',
                                             margin: row.length === columnIndex + 1
-                                                ? `0 0 ${gutterInPercent}% 0`
-                                                : `0 ${gutterInPercent}% ${gutterInPercent}% 0`,
+                                                ? `0 0 ${gutter}% 0`
+                                                : `0 ${gutter}% ${gutter}% 0`,
 
                                         }}
                                     >
