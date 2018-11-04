@@ -37,29 +37,11 @@ function styleInject(css, ref) {
   }
 }
 
-var css = ".image_image__3LZ6Y {\n    cursor: pointer;\n    position: absolute;\n    width: 100%;\n    max-width: 100%;\n    height: auto;\n}\n";
+var css = ".image_image__3LZ6Y {\n    cursor: pointer;\n    position: absolute;\n    width: 100%;\n}\n";
 var style = {"image":"image_image__3LZ6Y"};
 styleInject(css);
 
 var Image = function Image(_ref) {
-  var src = _ref.src,
-      alt = _ref.alt;
-  return React__default.createElement("img", {
-    className: style.image,
-    src: src,
-    alt: alt
-  });
-};
-
-Image.propTypes = {
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string
-};
-Image.defaultProps = {
-  alt: ''
-};
-
-var ImageInView = function ImageInView(_ref) {
   var src = _ref.src,
       alt = _ref.alt,
       inView = _ref.inView;
@@ -67,18 +49,19 @@ var ImageInView = function ImageInView(_ref) {
     className: style.image,
     src: inView ? src : null,
     alt: alt,
-    style: inView ? {} : {
-      display: 'none'
+    style: {
+      display: inView ? null : 'none'
     }
   });
 };
 
-ImageInView.propTypes = {
+Image.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string,
-  inView: PropTypes.bool
+  inView: PropTypes.bool,
+  enableMasonry: PropTypes.bool.isRequired
 };
-ImageInView.defaultProps = {
+Image.defaultProps = {
   alt: '',
   inView: true
 };
@@ -352,30 +335,35 @@ function () {
 
       return rows;
     }
-  }, {
-    key: "buildColumns",
-    value: function buildColumns(items, columnCount) {
-      var columns = [];
-      var currColumn = 0;
-
-      while (currColumn < columnCount) {
-        for (var i = 0; i < items.length; i += columnCount) {
-          if (items[i + currColumn]) {
-            columns.push(items[i + currColumn]);
-          }
-        }
-
-        currColumn++;
-      }
-
-      return columns;
-    }
   }], [{
     key: "_getRowMinHeight",
     value: function _getRowMinHeight(items) {
       return Math.min.apply(null, items.map(function (item) {
         return item.height;
       }));
+    }
+  }, {
+    key: "_normalizeByWidth",
+    value: function _normalizeByWidth(items, containerWidth, columnsCount) {
+      function calculateHeight(item) {
+        var itemAfterResize = Engine._resizeByWidth(item, calculateWidth(item));
+
+        return itemAfterResize.height;
+      }
+
+      function calculateWidth(item) {
+        var maxWidth = containerWidth / columnsCount;
+        return item.width > maxWidth ? maxWidth : item.width;
+      }
+
+      var result = [];
+      items.forEach(function (el) {
+        result.push(_objectSpread({}, el, {
+          height: calculateHeight(el),
+          width: calculateWidth(el)
+        }));
+      });
+      return result;
     }
   }, {
     key: "_getRowWidth",
@@ -395,10 +383,51 @@ function () {
         height: newHeight
       });
     }
+  }, {
+    key: "_resizeByWidth",
+    value: function _resizeByWidth(item, newWidth) {
+      var aspectRatio = item.width / item.height;
+      return _objectSpread({}, item, {
+        width: newWidth,
+        height: newWidth / aspectRatio
+      });
+    }
+  }, {
+    key: "buildColumns",
+    value: function buildColumns(images, columnsCount, containerWidth) {
+      var columns = [];
+      var order;
+
+      var items = Engine._normalizeByWidth(images, containerWidth, columnsCount);
+
+      for (var i = 0; i < columnsCount; i++) {
+        columns.push({
+          images: [],
+          order: i
+        });
+      }
+
+      for (var _i = 0; _i < items.length; _i++) {
+        order = (_i + 1) % columnsCount === 0 ? columnsCount : (_i + 1) % columnsCount;
+        columns[order - 1].images.push(items[_i]);
+        items[_i].order = order;
+      }
+
+      return columns;
+    }
   }]);
 
   return Engine;
 }();
+
+var defaultRenderer = function defaultRenderer(imageProps) {
+  return React__default.createElement(React.Fragment, null, React__default.createElement(Image, imageProps), React__default.createElement("div", {
+    style: {
+      backgroundColor: 'rgb(187, 189, 191)',
+      paddingTop: "".concat(imageProps.placeholderHeight, "%")
+    }
+  }));
+};
 
 var ViewableMonitor =
 /*#__PURE__*/
@@ -469,15 +498,15 @@ _defineProperty(ViewableMonitor, "defaultProps", {
   tag: 'div'
 });
 
-var css$1 = ".gallery_container__WHVf3 {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_row__16kGn {\n    display: block;\n}\n\n.gallery_column__3ltJa {\n    position: relative;\n    display: inline-block;\n}\n\n.gallery_masonry-item__2SepU {\n    position: relative;\n    display: inline-block;\n    width: 100%;\n}\n";
-var style$1 = {"container":"gallery_container__WHVf3","row":"gallery_row__16kGn","column":"gallery_column__3ltJa","masonry-item":"gallery_masonry-item__2SepU"};
+var css$1 = ".gallery_container__WHVf3 {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_item__2BQxQ {\n    vertical-align: top;\n    position: relative;\n    display: inline-block;\n}\n";
+var style$1 = {"container":"gallery_container__WHVf3","item":"gallery_item__2BQxQ"};
 styleInject(css$1);
 
 var CONTAINER_WIDTH = 1000;
 var MAX_HEIGHT = 250;
 var MIN_HEIGHT = 200;
 var MAX_WIDTH = 200;
-var GUTTER_IN_PX = 5;
+var GUTTER_IN_PERCENT = 0.5;
 
 var Gallery =
 /*#__PURE__*/
@@ -498,7 +527,7 @@ function (_Component) {
 
     _this.engine = new Engine({
       containerWidth: props.containerWidth,
-      gutterInPercent: 100 * props.gutter / props.containerWidth,
+      gutterInPercent: props.gutter,
       minHeight: props.minHeight,
       maxHeight: props.maxHeight
     });
@@ -517,20 +546,21 @@ function (_Component) {
           columnClassName = _this$props.columnClassName,
           rowClassName = _this$props.rowClassName,
           enableMasonry = _this$props.enableMasonry,
-          disableObserver = _this$props.disableObserver;
+          disableObserver = _this$props.disableObserver,
+          disableActualImage = _this$props.disableActualImage;
       var columnCount = Math.floor(containerWidth / maxWidth);
       this.setState({
-        columns: this.engine.buildColumns(images, columnCount),
+        columns: Engine.buildColumns(images, columnCount, containerWidth),
         rows: this.engine.buildRows(images),
         containerWidth: containerWidth,
-        gutterInPercent: 100 * gutter / containerWidth,
         gutter: gutter,
         className: className,
         columnClassName: columnClassName,
         rowClassName: rowClassName,
         columnCount: columnCount,
         enableMasonry: enableMasonry,
-        disableObserver: disableObserver
+        disableObserver: disableObserver,
+        disableActualImage: disableActualImage
       });
     }
   }, {
@@ -538,21 +568,22 @@ function (_Component) {
     value: function componentWillReceiveProps(nextProps) {
       if (!equal(this.props, nextProps)) {
         this.engine.setContainerWidth(nextProps.containerWidth);
-        this.engine.setGutterInPercent(100 * nextProps.gutter / nextProps.containerWidth);
+        this.engine.setGutterInPercent(nextProps.gutter);
         this.engine.setMinHeight(nextProps.minHeight);
         this.engine.setMaxHeight(nextProps.maxHeight);
+        var columnCount = Math.floor(nextProps.containerWidth / nextProps.maxWidth);
         this.setState({
           containerWidth: nextProps.containerWidth,
-          gutterInPercent: 100 * nextProps.gutter / nextProps.containerWidth,
           gutter: nextProps.gutter,
           className: nextProps.className,
           columnClassName: nextProps.columnClassName,
           rowClassName: nextProps.rowClassName,
           rows: this.engine.buildRows(nextProps.images),
-          columns: this.engine.buildColumns(nextProps.images, nextProps.containerWidth / nextProps.maxWidth),
-          columnCount: Math.floor(nextProps.containerWidth / nextProps.maxWidth),
+          columns: Engine.buildColumns(nextProps.images, columnCount, nextProps.containerWidth),
+          columnCount: columnCount,
           enableMasonry: nextProps.enableMasonry,
-          disableObserver: nextProps.disableObserver
+          disableObserver: nextProps.disableObserver,
+          disableActualImage: nextProps.disableActualImage
         });
       }
     }
@@ -560,32 +591,41 @@ function (_Component) {
     key: "renderMasonryGallery",
     value: function renderMasonryGallery(_ref) {
       var className = _ref.className,
-          columnCount = _ref.columnCount,
           columns = _ref.columns,
           columnClassName = _ref.columnClassName,
-          gutter = _ref.gutter,
           imageRenderer = _ref.imageRenderer,
-          disableObserver = _ref.disableObserver;
+          disableObserver = _ref.disableObserver,
+          disableActualImage = _ref.disableActualImage,
+          gutter = _ref.gutter,
+          columnCount = _ref.columnCount;
       return React__default.createElement("div", {
-        className: "".concat(style$1.container, " ").concat(className),
-        style: {
-          columnCount: columnCount
-        }
-      }, columns.map(function (item, itemIndex) {
-        var placeholderHeight = 100 * item.height / item.width;
+        className: "".concat(style$1.container, " ").concat(className)
+      }, columns.map(function (item, columnIndex) {
         return React__default.createElement("div", {
           /* eslint-disable-next-line react/no-array-index-key */
-          key: "column-".concat(item.src, "-").concat(itemIndex),
-          className: "".concat(style$1['masonry-item'], " ").concat(columnClassName),
+          key: "column-".concat(columnIndex),
+          className: "".concat(style$1.item, " ").concat(columnClassName),
           style: {
-            margin: "0 0 ".concat(gutter, "px ").concat(gutter, "px")
+            width: "".concat(100 / columnCount - gutter, "%"),
+            maxWidth: 'auto',
+            margin: "0 ".concat(gutter, "% 0 0")
           }
-        }, React__default.createElement(ViewableMonitor, {
-          disableObserver: disableObserver
-        }, function (isViewable) {
-          return imageRenderer(_objectSpread({}, item, {
-            inView: isViewable,
-            placeholderHeight: placeholderHeight
+        }, item.images.map(function (image, imageIndex) {
+          var placeholderHeight = 100 * image.height / image.width;
+          return React__default.createElement("div", {
+            /* eslint-disable-next-line react/no-array-index-key */
+            key: "image-".concat(image.src, "-").concat(columnIndex, "-").concat(imageIndex),
+            style: {
+              margin: "0 0 ".concat(gutter * columnCount, "% 0")
+            }
+          }, React__default.createElement(ViewableMonitor, {
+            disableObserver: disableObserver
+          }, function (isViewable) {
+            return imageRenderer(_objectSpread({}, image, {
+              placeholderHeight: placeholderHeight,
+              inView: !disableActualImage && isViewable,
+              enableMasonry: true
+            }));
           }));
         }));
       }));
@@ -600,9 +640,10 @@ function (_Component) {
           rowClassName = _ref2.rowClassName,
           containerWidth = _ref2.containerWidth,
           columnClassName = _ref2.columnClassName,
-          gutterInPercent = _ref2.gutterInPercent,
+          gutter = _ref2.gutter,
           imageRenderer = _ref2.imageRenderer,
-          disableObserver = _ref2.disableObserver;
+          disableObserver = _ref2.disableObserver,
+          disableActualImage = _ref2.disableActualImage;
       return React__default.createElement("div", {
         className: "".concat(style$1.container, " ").concat(className)
       }, rows.map(function (el, rowIndex) {
@@ -611,7 +652,7 @@ function (_Component) {
           /* eslint-disable-next-line react/no-array-index-key */
           React__default.createElement("div", {
             key: rowIndex,
-            className: "".concat(style$1.row, " ").concat(rowClassName)
+            className: rowClassName
           }, row.map(function (column, columnIndex) {
             var newWidth = _this2.engine.calculateWidth(containerWidth, column, row, el.isIncomplete);
 
@@ -622,11 +663,11 @@ function (_Component) {
             return React__default.createElement("div", {
               /* eslint-disable-next-line react/no-array-index-key */
               key: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex),
-              className: "".concat(style$1.column, " ").concat(columnClassName),
+              className: "".concat(style$1.item, " ").concat(columnClassName),
               style: {
                 width: el.isIncomplete ? "".concat(newWidth, "px") : "".concat(newWidthInPercent, "%"),
                 maxWidth: el.isIncomplete ? "".concat(newWidthInPercent, "%") : 'auto',
-                margin: row.length === columnIndex + 1 ? "0 0 ".concat(gutterInPercent, "% 0") : "0 ".concat(gutterInPercent, "% ").concat(gutterInPercent, "% 0")
+                margin: row.length === columnIndex + 1 ? "0 0 ".concat(gutter, "% 0") : "0 ".concat(gutter, "% ").concat(gutter, "% 0")
               }
             }, React__default.createElement(ViewableMonitor, {
               disableObserver: disableObserver
@@ -636,7 +677,8 @@ function (_Component) {
                 newHeight: newHeight,
                 newWidthInPercent: newWidthInPercent,
                 placeholderHeight: placeholderHeight,
-                inView: isViewable
+                inView: !disableActualImage && isViewable,
+                enableMasonry: false
               }));
             }));
           }))
@@ -664,7 +706,7 @@ function (_Component) {
 }(React.Component);
 
 _defineProperty(Gallery, "propTypes", {
-  imageRenderer: PropTypes.func.isRequired,
+  imageRenderer: PropTypes.func,
   images: PropTypes.array.isRequired,
   containerWidth: PropTypes.number,
   maxHeight: PropTypes.number,
@@ -675,22 +717,25 @@ _defineProperty(Gallery, "propTypes", {
   columnClassName: PropTypes.string,
   rowClassName: PropTypes.string,
   enableMasonry: PropTypes.bool,
-  disableObserver: PropTypes.bool
+  disableObserver: PropTypes.bool,
+  disableActualImage: PropTypes.bool
 });
 
 _defineProperty(Gallery, "defaultProps", {
+  imageRenderer: defaultRenderer,
   containerWidth: CONTAINER_WIDTH,
   maxHeight: MAX_HEIGHT,
   minHeight: MIN_HEIGHT,
   maxWidth: MAX_WIDTH,
-  gutter: GUTTER_IN_PX,
+  gutter: GUTTER_IN_PERCENT,
   className: '',
   columnClassName: '',
   rowClassName: '',
   enableMasonry: false,
-  disableObserver: false
+  disableObserver: false,
+  disableActualImage: false
 });
 
 exports.Image = Image;
-exports.ImageInView = ImageInView;
 exports.Gallery = Gallery;
+exports.defaultRenderer = defaultRenderer;

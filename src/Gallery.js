@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import equal from 'fast-deep-equal';
 import Engine from './Engine';
+import {defaultRenderer} from './Renderer';
 import ViewableMonitor from './ViewableMonitor';
 import style from './gallery.css';
 
@@ -13,7 +14,7 @@ const GUTTER_IN_PERCENT = 0.5;
 
 class Gallery extends Component {
     static propTypes = {
-        imageRenderer: PropTypes.func.isRequired,
+        imageRenderer: PropTypes.func,
         images: PropTypes.array.isRequired,
         containerWidth: PropTypes.number,
         maxHeight: PropTypes.number,
@@ -29,6 +30,7 @@ class Gallery extends Component {
     };
 
     static defaultProps = {
+        imageRenderer: defaultRenderer,
         containerWidth: CONTAINER_WIDTH,
         maxHeight: MAX_HEIGHT,
         minHeight: MIN_HEIGHT,
