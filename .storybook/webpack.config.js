@@ -40,8 +40,8 @@ module.exports = {
     ],
   },
   resolve: {
-      alias: {
-          '@kurpachsv/react-gallery': path.resolve(__dirname, '../src/index.js'),
-      }
+    alias: {
+      '@kurpachsv/react-gallery': path.resolve(__dirname, '../src/index.js'),
+    }
   },
 };

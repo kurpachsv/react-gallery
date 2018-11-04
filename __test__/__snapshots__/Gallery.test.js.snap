@@ -18,7 +18,13 @@ exports[`Gallery should render correctly 1`] = `
           "width": "250px",
         }
       }
-    />
+    >
+      <ViewableMonitor
+        tag="div"
+      >
+        <Component />
+      </ViewableMonitor>
+    </div>
   </div>
 </div>
 `;

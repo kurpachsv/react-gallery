@@ -34,6 +34,26 @@ class Engine {
         return result;
     }
 
+    static _normalizeByWidth(items, containerWidth, columnsCount) {
+        function calculateHeight(item) {
+            const itemAfterResize = Engine._resizeByWidth(
+                item, calculateWidth(item)
+            );
+            return itemAfterResize.height;
+        }
+
+        function calculateWidth(item) {
+            const maxWidth = containerWidth / columnsCount;
+            return item.width > maxWidth ? maxWidth : item.width;
+        }
+        let result = [];
+        items.forEach(el => {
+            result.push({...el, height: calculateHeight(el), width: calculateWidth(el)});
+        });
+        return result;
+
+    }
+
     static _getRowWidth(items) {
         return items.map(item => item.width)
             .reduce((a, b) => a + b, 0);
@@ -45,6 +65,15 @@ class Engine {
             ...item,
             width: aspectRatio * newHeight,
             height: newHeight,
+        };
+    }
+
+    static _resizeByWidth(item, newWidth) {
+        const aspectRatio = item.width / item.height;
+        return {
+            ...item,
+            width: newWidth,
+            height: newWidth / aspectRatio,
         };
     }
 
@@ -99,6 +128,24 @@ class Engine {
             rows.push(row);
         }
         return rows;
+    }
+
+    static buildColumns(images, columnsCount, containerWidth) {
+        if (columnsCount === 0) {
+            return [];
+        }
+        const columns = [];
+        let order;
+        const items = Engine._normalizeByWidth(images, containerWidth, columnsCount);
+        for (let i = 0; i < columnsCount; i++) {
+            columns.push({images: [], order: i});
+        }
+        for (let i = 0; i < items.length; i++) {
+            order = (i + 1) % columnsCount === 0 ? columnsCount : (i + 1) % columnsCount;
+            columns[order - 1].images.push(items[i]);
+            items[i].order = order;
+        }
+        return columns;
     }
 }
 

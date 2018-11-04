@@ -3,11 +3,8 @@
     font-size: 0;
 }
 
-.row {
-    display: block;
-}
-
-.column {
+.item {
+    vertical-align: top;
     position: relative;
     display: inline-block;
 }

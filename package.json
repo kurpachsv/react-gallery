@@ -1,6 +1,6 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "A simple, fast and flexibility images gallery.",
   "main": "dist/index.js",
   "scripts": {
@@ -26,7 +26,9 @@
     "url": "https://github.com/kurpachsv/react-gallery/issues"
   },
   "dependencies": {
+    "@researchgate/react-intersection-observer": "^0.7.4",
     "fast-deep-equal": "^2.0.1",
+    "intersection-observer": "^0.5.1",
     "prop-types": "^15.6.2"
   },
   "peerDependencies": {
@@ -38,15 +40,16 @@
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
-    "@storybook/addon-actions": "^4.0.0-alpha.1",
-    "@storybook/addon-links": "^4.0.0-alpha.1",
-    "@storybook/addons": "^4.0.0-alpha.1",
-    "@storybook/react": "^4.0.0-alpha.1",
+    "@storybook/addon-knobs": "^4.0.2",
+    "@storybook/addon-links": "^4.0.2",
+    "@storybook/addons": "^4.0.2",
+    "@storybook/react": "^4.0.2",
     "@storybook/storybook-deployer": "^2.3.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.2",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
@@ -65,6 +68,7 @@
     "html-loader": "^0.5.5",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^23.6.0",
+    "lodash.debounce": "^4.0.8",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "rollup": "^0.66.6",
@@ -72,7 +76,6 @@
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-postcss": "^1.6.2",
     "rollup-plugin-replace": "^2.1.0",
-    "rollup-plugin-uglify": "^6.0.0",
     "style-loader": "^0.22.1",
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0",
@@ -85,5 +88,10 @@
     "gallery",
     "component",
     "react-gallery"
-  ]
+  ],
+  "storybook-deployer": {
+    "gitUsername": "kurpachsv",
+    "gitEmail": "kurpachsv@gmail.com",
+    "commitMessage": "Deploy Storybook to GitHub Pages"
+  }
 }

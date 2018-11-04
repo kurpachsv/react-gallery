@@ -1,12 +1,34 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react';
+import {withKnobs, boolean, number} from '@storybook/addon-knobs';
+import {Gallery} from '@kurpachsv/react-gallery';
+import {getImages} from '../__mocks__/images';
 
-import {BasicExample, WithDynamicWidthExample} from '../examples/src/Examples';
+const images = getImages();
 
-storiesOf('Examples', module)
-    .add('Basic Example', () => (
-        <BasicExample />
-    ))
-    .add('Example with dynamic container width', () => (
-        <WithDynamicWidthExample />
-    ));
+const stories = storiesOf('Gallery', module);
+stories.addDecorator(withKnobs);
+
+stories.add('with default layout', () => (
+    <Gallery
+        containerWidth={number('Container width', 1000)}
+        minHeight={number('Minimum image height', 200)}
+        maxHeight={number('Maximum image height', 250)}
+        gutter={number('Gutter in %', 0.5)}
+        disableObserver={boolean('Disable Intersection Observer', false)}
+        disableActualImage={boolean('Disable actual images', false)}
+        images={images}
+    />
+));
+
+stories.add('with masonry layout', () => (
+    <Gallery
+        enableMasonry
+        containerWidth={number('Container width', 1000)}
+        maxWidth={number('Maximum image width', 200)}
+        gutter={number('Gutter in %', 0.5)}
+        disableObserver={boolean('Disable Intersection Observer', false)}
+        disableActualImage={boolean('Disable actual images', false)}
+        images={images}
+    />
+));
