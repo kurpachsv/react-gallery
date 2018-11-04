@@ -62,7 +62,7 @@ disableObserver | bool | false | optional; turn on/off lazy loading and intersec
 disableActualImage | bool | false | optional; show/hide actual images, but not the placeholders
 className | string | '' | optional; container class name
 columnClassName | string | '' | optional; item class name
-rowClassNamesName | string | '' | optional; row class name (for default layout)
+rowClassName | string | '' | optional; row class name (for default layout)
 
 ## Renderers
 
