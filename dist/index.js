@@ -58,8 +58,7 @@ var Image = function Image(_ref) {
 Image.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string,
-  inView: PropTypes.bool,
-  enableMasonry: PropTypes.bool.isRequired
+  inView: PropTypes.bool
 };
 Image.defaultProps = {
   alt: '',

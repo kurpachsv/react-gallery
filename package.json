@@ -1,6 +1,6 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.0.15",
+  "version": "0.1.0",
   "description": "A simple, fast and flexibility images gallery.",
   "main": "dist/index.js",
   "scripts": {
@@ -83,11 +83,16 @@
   },
   "keywords": [
     "react",
+    "component",
     "images",
     "masonry",
     "gallery",
-    "component",
-    "react-gallery"
+    "grid",
+    "react images",
+    "react masonry",
+    "react gallery",
+    "react grid",
+    "react grid gallery"
   ],
   "storybook-deployer": {
     "gitUsername": "kurpachsv",

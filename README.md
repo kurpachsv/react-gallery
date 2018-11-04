@@ -3,12 +3,12 @@
 [![Coverage Status](https://coveralls.io/repos/github/kurpachsv/react-gallery/badge.svg?branch=master)](https://coveralls.io/github/kurpachsv/react-gallery?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0cdc600293ec5b061fc0/maintainability)](https://codeclimate.com/github/kurpachsv/react-gallery/maintainability)
 [![Dependency Status](https://david-dm.org/kurpachsv/react-gallery.svg)](https://david-dm.org/kurpachsv/react-gallery)
-[![npm bundle size (minified)](https://badgen.net/bundlephobia/min/@kurpachsv/react-gallery)](https://bundlephobia.com/result?p=@kurpachsv/react-gallery@0.0.15)
-[![npm bundle size (minified + gzip)](https://badgen.net/bundlephobia/minzip/@kurpachsv/react-gallery)](https://bundlephobia.com/result?p=@kurpachsv/react-gallery@0.0.15)
+[![npm bundle size (minified)](https://badgen.net/bundlephobia/min/@kurpachsv/react-gallery@latest)](https://bundlephobia.com/result?p=@kurpachsv/react-gallery@latest)
+[![npm bundle size (minified + gzip)](https://badgen.net/bundlephobia/minzip/@kurpachsv/react-gallery@latest)](https://bundlephobia.com/result?p=@kurpachsv/react-gallery@latest)
 
 # react-gallery
 
-A simple, fast and flexibility images gallery.
+A simple, fast and flexibility image gallery.
 
 ## Preview
 
@@ -19,7 +19,7 @@ A simple, fast and flexibility images gallery.
 
 See [storybook](https://kurpachsv.github.io/react-gallery) for live demonstration.
 
-## Usage
+## Basic Usage
 
 ```bash
 npm i --save @kurpachsv/react-gallery
@@ -31,28 +31,31 @@ import {Gallery} from '@kurpachsv/react-gallery';
 
 ```javascript
 class App extends Component {
+    
     render() {
         return (
             <Gallery
                 images={
-                    // ...
+                    // your images array
                 }
             />
         );
     }
 }
 ```
+For image must be specify `width`, `height` and `src` attributes.
+
 
 ## Properties
 
 Property        |       Type            |       Default         |       Description
 :-----------------------|:--------------|:--------------|:--------------------------------
 images | array  | undefined | required; array of images
-containerWidth | number  | 1000  | optional; size in px of images container
-minHeight | number | 200 | optional; minimum image height
-maxHeight | number | 250 | optional; maximum image height
-minWidth | number | 200 | optional; minimum image width (for masonry layout)
-gutter | number  | 5  | optional; size in % between images
+containerWidth | number  | 1000  | optional; width in px of images container
+minHeight | number | 200 | optional; minimum image height in px
+maxHeight | number | 250 | optional; maximum image height in px
+maxWidth | number | 200 | optional; maximum image width (for masonry layout) in px
+gutter | number  | 0.5  | optional; value in % between images
 imageRenderer | function | default implementation |  optional; component/function for render of image
 enableMasonry | bool | false | optional; turn on/off masonry layout mode
 disableObserver | bool | false | optional; turn on/off lazy loading and intersection observer for images
@@ -60,6 +63,33 @@ disableActualImage | bool | false | optional; show/hide actual images, but not t
 className | string | '' | optional; container class name
 columnClassName | string | '' | optional; item class name
 rowClassNamesName | string | '' | optional; row class name (for default layout)
+
+## Renderers
+
+For better flexibility, you can override default renderer of images:
+
+```javascript
+import {Image} from '@kurpachsv/react-gallery';
+```
+
+```javascript
+const defaultRenderer = imageProps => {
+    return (
+        <Fragment>
+            <Image
+                {...imageProps}
+            />
+            <div
+                style={{
+                    backgroundColor: 'rgb(187, 189, 191)',
+                    paddingTop: `${imageProps.placeholderHeight}%`,
+                }}
+            />
+        </Fragment>
+    );
+};
+```
+
 
 ## License
 
