@@ -395,6 +395,10 @@ function () {
   }, {
     key: "buildColumns",
     value: function buildColumns(images, columnsCount, containerWidth) {
+      if (columnsCount === 0) {
+        return [];
+      }
+
       var columns = [];
       var order;
 
@@ -513,47 +517,91 @@ var Gallery =
 function (_Component) {
   _inherits(Gallery, _Component);
 
-  function Gallery(props) {
+  function Gallery() {
+    var _getPrototypeOf2;
+
     var _this;
 
     _classCallCheck(this, Gallery);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Gallery).call(this, props));
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Gallery)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
       columns: [],
       rows: []
     });
 
-    _this.engine = new Engine({
-      containerWidth: props.containerWidth,
-      gutterInPercent: props.gutter,
-      minHeight: props.minHeight,
-      maxHeight: props.maxHeight
-    });
     return _this;
   }
 
   _createClass(Gallery, [{
     key: "componentWillMount",
     value: function componentWillMount() {
+      var actualContainerWidth;
+      var actualMaxWidth;
+      var actualGutter;
+      var actualMinHeight;
+      var actualMaxHeight;
       var _this$props = this.props,
           images = _this$props.images,
           containerWidth = _this$props.containerWidth,
           maxWidth = _this$props.maxWidth,
+          minHeight = _this$props.minHeight,
+          maxHeight = _this$props.maxHeight,
           gutter = _this$props.gutter,
-          className = _this$props.className,
-          columnClassName = _this$props.columnClassName,
-          rowClassName = _this$props.rowClassName,
           enableMasonry = _this$props.enableMasonry,
           disableObserver = _this$props.disableObserver,
-          disableActualImage = _this$props.disableActualImage;
-      var columnCount = Math.floor(containerWidth / maxWidth);
+          disableActualImage = _this$props.disableActualImage,
+          className = _this$props.className,
+          columnClassName = _this$props.columnClassName,
+          rowClassName = _this$props.rowClassName;
+
+      if (!containerWidth) {
+        actualContainerWidth = CONTAINER_WIDTH;
+      } else {
+        actualContainerWidth = containerWidth;
+      }
+
+      if (!maxWidth) {
+        actualMaxWidth = MAX_WIDTH;
+      } else {
+        actualMaxWidth = maxWidth;
+      }
+
+      if (gutter < 0) {
+        actualGutter = 0;
+      } else {
+        actualGutter = gutter;
+      }
+
+      if (!maxHeight) {
+        actualMaxHeight = MAX_HEIGHT;
+      } else {
+        actualMaxHeight = maxHeight;
+      }
+
+      if (!minHeight) {
+        actualMinHeight = MIN_HEIGHT;
+      } else {
+        actualMinHeight = minHeight;
+      }
+
+      var columnCount = Math.floor(actualContainerWidth / actualMaxWidth);
+      this.engine = new Engine({
+        containerWidth: actualContainerWidth,
+        gutterInPercent: actualGutter,
+        minHeight: actualMinHeight,
+        maxHeight: actualMaxHeight
+      });
       this.setState({
-        columns: Engine.buildColumns(images, columnCount, containerWidth),
+        columns: Engine.buildColumns(images, columnCount, actualMaxWidth),
         rows: this.engine.buildRows(images),
-        containerWidth: containerWidth,
-        gutter: gutter,
+        containerWidth: actualContainerWidth,
+        gutter: actualGutter,
         className: className,
         columnClassName: columnClassName,
         rowClassName: rowClassName,
@@ -566,20 +614,56 @@ function (_Component) {
   }, {
     key: "componentWillReceiveProps",
     value: function componentWillReceiveProps(nextProps) {
+      var actualContainerWidth;
+      var actualMaxWidth;
+      var actualGutter;
+      var actualMinHeight;
+      var actualMaxHeight;
+
       if (!equal(this.props, nextProps)) {
-        this.engine.setContainerWidth(nextProps.containerWidth);
-        this.engine.setGutterInPercent(nextProps.gutter);
-        this.engine.setMinHeight(nextProps.minHeight);
-        this.engine.setMaxHeight(nextProps.maxHeight);
-        var columnCount = Math.floor(nextProps.containerWidth / nextProps.maxWidth);
+        if (!nextProps.containerWidth) {
+          actualContainerWidth = CONTAINER_WIDTH;
+        } else {
+          actualContainerWidth = nextProps.containerWidth;
+        }
+
+        if (!nextProps.maxWidth) {
+          actualMaxWidth = MAX_WIDTH;
+        } else {
+          actualMaxWidth = nextProps.maxWidth;
+        }
+
+        if (nextProps.gutter < 0) {
+          actualGutter = 0;
+        } else {
+          actualGutter = nextProps.gutter;
+        }
+
+        if (!nextProps.maxHeight) {
+          actualMaxHeight = MAX_HEIGHT;
+        } else {
+          actualMaxHeight = nextProps.maxHeight;
+        }
+
+        if (!nextProps.minHeight) {
+          actualMinHeight = MIN_HEIGHT;
+        } else {
+          actualMinHeight = nextProps.minHeight;
+        }
+
+        var columnCount = Math.floor(actualContainerWidth / actualMaxWidth);
+        this.engine.setContainerWidth(actualContainerWidth);
+        this.engine.setGutterInPercent(actualGutter);
+        this.engine.setMinHeight(actualMinHeight);
+        this.engine.setMaxHeight(actualMaxHeight);
         this.setState({
-          containerWidth: nextProps.containerWidth,
-          gutter: nextProps.gutter,
+          containerWidth: actualContainerWidth,
+          gutter: actualGutter,
           className: nextProps.className,
           columnClassName: nextProps.columnClassName,
           rowClassName: nextProps.rowClassName,
           rows: this.engine.buildRows(nextProps.images),
-          columns: Engine.buildColumns(nextProps.images, columnCount, nextProps.containerWidth),
+          columns: Engine.buildColumns(nextProps.images, columnCount, actualContainerWidth),
           columnCount: columnCount,
           enableMasonry: nextProps.enableMasonry,
           disableObserver: nextProps.disableObserver,
@@ -735,6 +819,8 @@ _defineProperty(Gallery, "defaultProps", {
   disableObserver: false,
   disableActualImage: false
 });
+
+require('intersection-observer');
 
 exports.Image = Image;
 exports.Gallery = Gallery;

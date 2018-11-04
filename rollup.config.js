@@ -21,6 +21,7 @@ export default {
         'prop-types',
         'fast-deep-equal',
         '@researchgate/react-intersection-observer',
+        'intersection-observer',
     ],
     plugins: [
         postcss({
