@@ -49,36 +49,72 @@ class Gallery extends Component {
         rows: [],
     };
 
-    constructor(props) {
-        super(props);
-
-        this.engine = new Engine({
-            containerWidth: props.containerWidth,
-            gutterInPercent: props.gutter,
-            minHeight: props.minHeight,
-            maxHeight: props.maxHeight,
-        });
-    }
-
     componentWillMount() {
+        let actualContainerWidth;
+        let actualMaxWidth;
+        let actualGutter;
+        let actualMinHeight;
+        let actualMaxHeight;
+
         const {
             images,
             containerWidth,
             maxWidth,
+            minHeight,
+            maxHeight,
             gutter,
-            className,
-            columnClassName,
-            rowClassName,
             enableMasonry,
             disableObserver,
             disableActualImage,
+            className,
+            columnClassName,
+            rowClassName,
         } = this.props;
-        const columnCount = Math.floor(containerWidth / maxWidth);
+
+        if (!containerWidth) {
+            actualContainerWidth = CONTAINER_WIDTH;
+        } else {
+            actualContainerWidth = containerWidth;
+        }
+
+        if (!maxWidth) {
+            actualMaxWidth = MAX_WIDTH;
+        } else {
+            actualMaxWidth = maxWidth;
+        }
+
+        if (gutter < 0) {
+            actualGutter = 0;
+        } else {
+            actualGutter = gutter;
+        }
+
+        if (!maxHeight) {
+            actualMaxHeight = MAX_HEIGHT;
+        } else {
+            actualMaxHeight = maxHeight;
+        }
+
+        if (!minHeight) {
+            actualMinHeight = MIN_HEIGHT;
+        } else {
+            actualMinHeight = minHeight;
+        }
+
+        const columnCount = Math.floor(actualContainerWidth / actualMaxWidth);
+
+        this.engine = new Engine({
+            containerWidth: actualContainerWidth,
+            gutterInPercent: actualGutter,
+            minHeight: actualMinHeight,
+            maxHeight: actualMaxHeight,
+        });
+
         this.setState({
-            columns: Engine.buildColumns(images, columnCount, containerWidth),
+            columns: Engine.buildColumns(images, columnCount, actualMaxWidth),
             rows: this.engine.buildRows(images),
-            containerWidth,
-            gutter,
+            containerWidth: actualContainerWidth,
+            gutter: actualGutter,
             className,
             columnClassName,
             rowClassName,
@@ -90,15 +126,54 @@ class Gallery extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        let actualContainerWidth;
+        let actualMaxWidth;
+        let actualGutter;
+        let actualMinHeight;
+        let actualMaxHeight;
+
         if (!equal(this.props, nextProps)) {
-            this.engine.setContainerWidth(nextProps.containerWidth);
-            this.engine.setGutterInPercent(nextProps.gutter);
-            this.engine.setMinHeight(nextProps.minHeight);
-            this.engine.setMaxHeight(nextProps.maxHeight);
-            const columnCount = Math.floor(nextProps.containerWidth / nextProps.maxWidth);
+
+            if (!nextProps.containerWidth) {
+                actualContainerWidth = CONTAINER_WIDTH;
+            } else {
+                actualContainerWidth = nextProps.containerWidth;
+            }
+
+            if (!nextProps.maxWidth) {
+                actualMaxWidth = MAX_WIDTH;
+            } else {
+                actualMaxWidth = nextProps.maxWidth;
+            }
+
+            if (nextProps.gutter < 0) {
+                actualGutter = 0;
+            } else {
+                actualGutter = nextProps.gutter;
+            }
+
+            if (!nextProps.maxHeight) {
+                actualMaxHeight = MAX_HEIGHT;
+            } else {
+                actualMaxHeight = nextProps.maxHeight;
+            }
+
+            if (!nextProps.minHeight) {
+                actualMinHeight = MIN_HEIGHT;
+            } else {
+                actualMinHeight = nextProps.minHeight;
+            }
+
+            const columnCount = Math.floor(actualContainerWidth / actualMaxWidth);
+
+            this.engine.setContainerWidth(actualContainerWidth);
+            this.engine.setGutterInPercent(actualGutter);
+            this.engine.setMinHeight(actualMinHeight);
+            this.engine.setMaxHeight(actualMaxHeight);
+
             this.setState({
-                containerWidth: nextProps.containerWidth,
-                gutter: nextProps.gutter,
+                containerWidth: actualContainerWidth,
+                gutter: actualGutter,
                 className: nextProps.className,
                 columnClassName: nextProps.columnClassName,
                 rowClassName: nextProps.rowClassName,
@@ -108,7 +183,7 @@ class Gallery extends Component {
                 columns: Engine.buildColumns(
                     nextProps.images,
                     columnCount,
-                    nextProps.containerWidth,
+                    actualContainerWidth,
                 ),
                 columnCount,
                 enableMasonry: nextProps.enableMasonry,

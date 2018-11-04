@@ -131,6 +131,9 @@ class Engine {
     }
 
     static buildColumns(images, columnsCount, containerWidth) {
+        if (columnsCount === 0) {
+            return [];
+        }
         const columns = [];
         let order;
         const items = Engine._normalizeByWidth(images, containerWidth, columnsCount);
