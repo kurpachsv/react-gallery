@@ -19,7 +19,6 @@ Image.propTypes = {
     src: PropTypes.string.isRequired,
     alt: PropTypes.string,
     inView: PropTypes.bool,
-    enableMasonry: PropTypes.bool.isRequired,
 };
 
 Image.defaultProps = {

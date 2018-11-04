@@ -5,5 +5,10 @@ exports[`Image should render correctly 1`] = `
   alt="mockTitle"
   className="image"
   src="mockUrl"
+  style={
+    Object {
+      "display": null,
+    }
+  }
 />
 `;

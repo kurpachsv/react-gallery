@@ -5,11 +5,11 @@ exports[`Gallery should render correctly 1`] = `
   className="container "
 >
   <div
-    className="row "
+    className=""
     key="0"
   >
     <div
-      className="column "
+      className="item "
       key="column-https://dummyimage.com/100x100/eee/eee-0-0"
       style={
         Object {
@@ -20,6 +20,7 @@ exports[`Gallery should render correctly 1`] = `
       }
     >
       <ViewableMonitor
+        disableObserver={false}
         tag="div"
       >
         <Component />
