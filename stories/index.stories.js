@@ -7,7 +7,6 @@ import {
     MasonryExample,
     MasonryWithDynamicWidthExample,
     MasonryDynamicViewExample,
-    WithCustomClassesExample,
 } from '../examples/src/Examples';
 
 storiesOf('Examples', module)
@@ -25,7 +24,4 @@ storiesOf('Examples', module)
     ))
     .add('Dynamic change masonry mode', () => (
         <MasonryDynamicViewExample />
-    ))
-    .add('With custom class', () => (
-        <WithCustomClassesExample />
     ));

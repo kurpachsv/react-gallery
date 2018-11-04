@@ -248,65 +248,10 @@ class MasonryDynamicViewExample extends Component {
     }
 }
 
-class WithCustomClassesExample extends Component {
-    state = {
-        containerWidth: undefined,
-    };
-
-    constructor(props) {
-        super(props);
-        this.parent = React.createRef();
-        this.updateWidth = debounce(this.updateWidth, 300);
-    }
-
-    componentWillMount() {
-        this.setState({
-            images: getImages(),
-        }, () => {
-            this.updateWidth();
-        });
-    }
-
-    updateWidth = () => {
-        const containerWidth = this.parent.current.offsetWidth;
-        this.setState({
-            containerWidth,
-        });
-    };
-
-    componentDidMount() {
-        window.addEventListener('resize', this.updateWidth);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateWidth);
-    }
-
-    render() {
-        const {containerWidth, images} = this.state;
-        return (
-            <div
-                ref={this.parent}
-            >
-                {containerWidth
-                    ? (
-                        <Gallery
-                            columnClassName={style.column}
-                            containerWidth={containerWidth}
-                            imageRenderer={imageRenderer}
-                            images={images}
-                        />
-                    ) : null}
-            </div>
-        );
-    }
-}
-
 export {
     BasicExample,
     WithDynamicWidthExample,
     MasonryExample,
     MasonryWithDynamicWidthExample,
     MasonryDynamicViewExample,
-    WithCustomClassesExample,
 };
