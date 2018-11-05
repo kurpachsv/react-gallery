@@ -13,7 +13,7 @@ stories.add('with default layout', () => (
     <Gallery
         containerWidth={number('Container width', 1000)}
         minHeight={number('Minimum image height', 200)}
-        maxHeight={number('Maximum image height', 250)}
+        maxHeight={number('Maximum image height (for last row)', 250)}
         gutter={number('Gutter in %', 0.5)}
         disableObserver={boolean('Disable Intersection Observer', false)}
         disableActualImage={boolean('Disable actual images', false)}

@@ -53,7 +53,7 @@ Property        |       Type            |       Default         |       Descript
 images | array  | undefined | required; array of images
 containerWidth | number  | 1000  | optional; width in px of images container
 minHeight | number | 200 | optional; minimum image height in px
-maxHeight | number | 250 | optional; maximum image height in px
+maxHeight | number | 250 | optional; maximum image height in px (for last row)
 maxWidth | number | 200 | optional; maximum image width (for masonry layout) in px
 gutter | number  | 0.5  | optional; value in % between images
 imageRenderer | function | default implementation |  optional; component/function for render of image
