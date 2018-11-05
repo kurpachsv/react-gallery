@@ -1,26 +1,25 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import equal from 'fast-deep-equal';
-import Engine from './Engine';
+import Engine, {COLUMN_MAX_HEIGHT, COLUMN_MAX_WIDTH, COLUMNS_MAX_COUNT, GUTTER_IN_PERCENT} from './Engine';
 import {defaultRenderer} from './Renderer';
 import ViewableMonitor from './ViewableMonitor';
 import style from './gallery.css';
 
-const CONTAINER_WIDTH = 1000;
-const MAX_HEIGHT = 250;
-const MIN_HEIGHT = 200;
-const MAX_WIDTH = 200;
-const GUTTER_IN_PERCENT = 0.5;
-
 class Gallery extends Component {
+
+    constructor(props) {
+        super(props);
+        this.engine = new Engine();
+    }
+
     static propTypes = {
         imageRenderer: PropTypes.func,
         images: PropTypes.array.isRequired,
-        containerWidth: PropTypes.number,
-        maxHeight: PropTypes.number,
-        minHeight: PropTypes.number,
-        maxWidth: PropTypes.number,
-        gutter: PropTypes.number,
+        columnsMaxCount: PropTypes.number,
+        columnMaxWidth: PropTypes.number,
+        columnMaxHeight: PropTypes.number,
+        gutterInPercent: PropTypes.number,
         className: PropTypes.string,
         columnClassName: PropTypes.string,
         rowClassName: PropTypes.string,
@@ -31,11 +30,10 @@ class Gallery extends Component {
 
     static defaultProps = {
         imageRenderer: defaultRenderer,
-        containerWidth: CONTAINER_WIDTH,
-        maxHeight: MAX_HEIGHT,
-        minHeight: MIN_HEIGHT,
-        maxWidth: MAX_WIDTH,
-        gutter: GUTTER_IN_PERCENT,
+        columnsMaxCount: COLUMNS_MAX_COUNT,
+        columnMaxWidth: COLUMN_MAX_WIDTH,
+        columnMaxHeight: COLUMN_MAX_HEIGHT,
+        gutterInPercent: GUTTER_IN_PERCENT,
         className: '',
         columnClassName: '',
         rowClassName: '',
@@ -50,19 +48,12 @@ class Gallery extends Component {
     };
 
     componentWillMount() {
-        let actualContainerWidth;
-        let actualMaxWidth;
-        let actualGutter;
-        let actualMinHeight;
-        let actualMaxHeight;
-
         const {
             images,
-            containerWidth,
-            maxWidth,
-            minHeight,
-            maxHeight,
-            gutter,
+            columnsMaxCount,
+            columnMaxWidth,
+            columnMaxHeight,
+            gutterInPercent,
             enableMasonry,
             disableObserver,
             disableActualImage,
@@ -71,131 +62,58 @@ class Gallery extends Component {
             rowClassName,
         } = this.props;
 
-        if (!containerWidth) {
-            actualContainerWidth = CONTAINER_WIDTH;
-        } else {
-            actualContainerWidth = containerWidth;
-        }
-
-        if (!maxWidth) {
-            actualMaxWidth = MAX_WIDTH;
-        } else {
-            actualMaxWidth = maxWidth;
-        }
-
-        if (gutter < 0) {
-            actualGutter = 0;
-        } else {
-            actualGutter = gutter;
-        }
-
-        if (!maxHeight) {
-            actualMaxHeight = MAX_HEIGHT;
-        } else {
-            actualMaxHeight = maxHeight;
-        }
-
-        if (!minHeight) {
-            actualMinHeight = MIN_HEIGHT;
-        } else {
-            actualMinHeight = minHeight;
-        }
-
-        const columnCount = Math.floor(actualContainerWidth / actualMaxWidth);
-
-        this.engine = new Engine({
-            containerWidth: actualContainerWidth,
-            gutterInPercent: actualGutter,
-            minHeight: actualMinHeight,
-            maxHeight: actualMaxHeight,
-        });
+        this.engine
+            .setImages(images)
+            .setMaxColumnsCount(columnsMaxCount)
+            .setColumnMaxWidth(columnMaxWidth)
+            .setColumnMaxHeight(columnMaxHeight)
+            .setGutterInPercent(gutterInPercent);
 
         this.setState({
-            columns: Engine.buildColumns(images, columnCount, actualMaxWidth),
-            rows: this.engine.buildRows(images),
-            containerWidth: actualContainerWidth,
-            gutter: actualGutter,
-            className,
-            columnClassName,
-            rowClassName,
-            columnCount,
+            columns: this.engine.buildColumns(),
+            rows: this.engine.buildRows(),
+            columnsMaxCount,
+            columnMaxWidth,
+            columnMaxHeight,
+            gutterInPercent,
             enableMasonry,
             disableObserver,
             disableActualImage,
+            className,
+            columnClassName,
+            rowClassName,
         });
     }
 
     componentWillReceiveProps(nextProps) {
-        let actualContainerWidth;
-        let actualMaxWidth;
-        let actualGutter;
-        let actualMinHeight;
-        let actualMaxHeight;
-
         if (!equal(this.props, nextProps)) {
 
-            if (!nextProps.containerWidth) {
-                actualContainerWidth = CONTAINER_WIDTH;
-            } else {
-                actualContainerWidth = nextProps.containerWidth;
-            }
-
-            if (!nextProps.maxWidth) {
-                actualMaxWidth = MAX_WIDTH;
-            } else {
-                actualMaxWidth = nextProps.maxWidth;
-            }
-
-            if (nextProps.gutter < 0) {
-                actualGutter = 0;
-            } else {
-                actualGutter = nextProps.gutter;
-            }
-
-            if (!nextProps.maxHeight) {
-                actualMaxHeight = MAX_HEIGHT;
-            } else {
-                actualMaxHeight = nextProps.maxHeight;
-            }
-
-            if (!nextProps.minHeight) {
-                actualMinHeight = MIN_HEIGHT;
-            } else {
-                actualMinHeight = nextProps.minHeight;
-            }
-
-            const columnCount = Math.floor(actualContainerWidth / actualMaxWidth);
-
-            this.engine.setContainerWidth(actualContainerWidth);
-            this.engine.setGutterInPercent(actualGutter);
-            this.engine.setMinHeight(actualMinHeight);
-            this.engine.setMaxHeight(actualMaxHeight);
+            this.engine
+                .setImages(nextProps.images)
+                .setMaxColumnsCount(nextProps.columnsMaxCount)
+                .setColumnMaxWidth(nextProps.columnMaxWidth)
+                .setColumnMaxHeight(nextProps.columnMaxHeight)
+                .setGutterInPercent(nextProps.gutterInPercent);
 
             this.setState({
-                containerWidth: actualContainerWidth,
-                gutter: actualGutter,
-                className: nextProps.className,
-                columnClassName: nextProps.columnClassName,
-                rowClassName: nextProps.rowClassName,
-                rows: this.engine.buildRows(
-                    nextProps.images,
-                ),
-                columns: Engine.buildColumns(
-                    nextProps.images,
-                    columnCount,
-                    actualContainerWidth,
-                ),
-                columnCount,
+                columns: this.engine.buildColumns(),
+                rows: this.engine.buildRows(),
+                columnsMaxCount: nextProps.columnsMaxCount,
+                columnMaxWidth: nextProps.columnMaxWidth,
+                columnMaxHeight: nextProps.columnMaxHeight,
+                gutterInPercent: nextProps.gutterInPercent,
                 enableMasonry: nextProps.enableMasonry,
                 disableObserver: nextProps.disableObserver,
                 disableActualImage: nextProps.disableActualImage,
+                className: nextProps.className,
+                columnClassName: nextProps.columnClassName,
+                rowClassName: nextProps.rowClassName,
             });
         }
     }
 
     renderMasonryGallery({
-        className, columns, columnClassName, imageRenderer, disableObserver, disableActualImage,
-        gutter, columnCount,
+        className, columnClassName, imageRenderer, disableObserver, disableActualImage, columns,
     }) {
         return (
             <div
@@ -207,9 +125,9 @@ class Gallery extends Component {
                         key={`column-${columnIndex}`}
                         className={`${style.item} ${columnClassName}`}
                         style={{
-                            width: `${100 / columnCount - gutter}%`,
+                            width: `${100 / this.engine.getMaxColumnsCount() - this.engine.getGutterInPercent()}%`,
                             maxWidth: 'auto',
-                            margin: `0 ${gutter}% 0 0`,
+                            margin: `0 ${this.engine.getGutterInPercent()}% 0 0`,
                         }}
                     >
                         {
@@ -220,7 +138,9 @@ class Gallery extends Component {
                                         /* eslint-disable-next-line react/no-array-index-key */
                                         key={`image-${image.src}-${columnIndex}-${imageIndex}`}
                                         style={{
-                                            margin: `0 0 ${gutter * columnCount}% 0`,
+                                            margin: `0 0 ${
+                                                this.engine.getGutterInPercent() * this.engine.getMaxColumnsCount()
+                                            }% 0`,
                                         }}
                                     >
                                         <ViewableMonitor
@@ -229,7 +149,7 @@ class Gallery extends Component {
                                             {isViewable => imageRenderer({
                                                 ...image,
                                                 placeholderHeight,
-                                                inView: !disableActualImage && isViewable,
+                                                visible: !disableActualImage && isViewable,
                                                 enableMasonry: true,
                                             })}
                                         </ViewableMonitor>
@@ -244,8 +164,7 @@ class Gallery extends Component {
     }
 
     renderGallery({
-        className, rows, rowClassName, containerWidth, columnClassName, gutter, imageRenderer,
-        disableObserver, disableActualImage,
+        className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
     }) {
         return (
             <div
@@ -258,12 +177,13 @@ class Gallery extends Component {
                         <div key={rowIndex} className={rowClassName}>
                             {row.map((column, columnIndex) => {
                                 const newWidth = this.engine.calculateWidth(
-                                    containerWidth, column, row, el.isIncomplete
+                                    column, row, el.isIncomplete
                                 );
                                 const newHeight = this.engine.calculateHeight(
-                                    containerWidth, column, row, el.isIncomplete
+                                    column, row, el.isIncomplete
                                 );
-                                const newWidthInPercent = 100 * newWidth / containerWidth;
+                                const newWidthInPercent = 100 * newWidth / (this.engine.getMaxColumnsCount()
+                                    * this.engine.getColumnsMaxWidth());
                                 const placeholderHeight = 100 * newHeight / newWidth;
                                 return (
                                     <div
@@ -278,8 +198,10 @@ class Gallery extends Component {
                                                 ? `${newWidthInPercent}%`
                                                 : 'auto',
                                             margin: row.length === columnIndex + 1
-                                                ? `0 0 ${gutter}% 0`
-                                                : `0 ${gutter}% ${gutter}% 0`,
+                                                ? `0 0 ${this.engine.getGutterInPercent()}% 0`
+                                                : `0 ${
+                                                    this.engine.getGutterInPercent()
+                                                }% ${this.engine.getGutterInPercent()}% 0`,
 
                                         }}
                                     >
@@ -290,7 +212,7 @@ class Gallery extends Component {
                                                 newHeight,
                                                 newWidthInPercent,
                                                 placeholderHeight,
-                                                inView: !disableActualImage && isViewable,
+                                                visible: !disableActualImage && isViewable,
                                                 enableMasonry: false,
                                             })}
                                         </ViewableMonitor>

@@ -11,10 +11,9 @@ stories.addDecorator(withKnobs);
 
 stories.add('with default layout', () => (
     <Gallery
-        containerWidth={number('Container width', 1000)}
-        minHeight={number('Minimum image height', 200)}
-        maxHeight={number('Maximum image height (for last row)', 250)}
-        gutter={number('Gutter in %', 0.5)}
+        columnMaxHeight={number('Max column height (for prevent pictures degradation, if last row is not filled)', 200)}
+        columnsMaxCount={number('Max columns count', 5)}
+        gutterInPercent={number('Gutter in %', 0.5)}
         disableObserver={boolean('Disable Intersection Observer', false)}
         disableActualImage={boolean('Disable actual images', false)}
         images={images}
@@ -24,9 +23,8 @@ stories.add('with default layout', () => (
 stories.add('with masonry layout', () => (
     <Gallery
         enableMasonry
-        containerWidth={number('Container width', 1000)}
-        maxWidth={number('Maximum image width', 200)}
-        gutter={number('Gutter in %', 0.5)}
+        columnsMaxCount={number('Max columns count', 5)}
+        gutterInPercent={number('Gutter in %', 0.5)}
         disableObserver={boolean('Disable Intersection Observer', false)}
         disableActualImage={boolean('Disable actual images', false)}
         images={images}

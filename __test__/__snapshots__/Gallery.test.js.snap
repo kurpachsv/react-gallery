@@ -14,8 +14,8 @@ exports[`Gallery should render correctly 1`] = `
       style={
         Object {
           "margin": "0 0 0.5% 0",
-          "maxWidth": "25%",
-          "width": "250px",
+          "maxWidth": "20%",
+          "width": "200px",
         }
       }
     >

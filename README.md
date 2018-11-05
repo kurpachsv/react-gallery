@@ -51,11 +51,9 @@ For image must be specify `width`, `height` and `src` attributes.
 Property        |       Type            |       Default         |       Description
 :-----------------------|:--------------|:--------------|:--------------------------------
 images | array  | undefined | required; array of images
-containerWidth | number  | 1000  | optional; width in px of images container
-minHeight | number | 200 | optional; minimum image height in px
-maxHeight | number | 250 | optional; maximum image height in px (for last row)
-maxWidth | number | 200 | optional; maximum image width (for masonry layout) in px
-gutter | number  | 0.5  | optional; value in % between images
+columnsMaxCount | number  | 5  | optional; max value of columns count
+columnsMaxCount | number  | 200  | optional; max column in px height (for prevent pictures degradation, if last row is not filled)
+gutterInPercent | number  | 0.5  | optional; value in % between images
 imageRenderer | function | default implementation |  optional; component/function for render of image
 enableMasonry | bool | false | optional; turn on/off masonry layout mode
 disableObserver | bool | false | optional; turn on/off lazy loading and intersection observer for images
