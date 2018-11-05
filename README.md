@@ -52,7 +52,7 @@ Property        |       Type            |       Default         |       Descript
 :-----------------------|:--------------|:--------------|:--------------------------------
 images | array  | undefined | required; array of images
 columnsMaxCount | number  | 5  | optional; max value of columns count
-columnsMaxCount | number  | 200  | optional; max column in px height (for prevent pictures degradation, if last row is not filled)
+columnMaxHeight | number  | 200  | optional; max column height in px (for prevent pictures degradation, if last row is not filled)
 gutterInPercent | number  | 0.5  | optional; value in % between images
 imageRenderer | function | default implementation |  optional; component/function for render of image
 enableMasonry | bool | false | optional; turn on/off masonry layout mode
