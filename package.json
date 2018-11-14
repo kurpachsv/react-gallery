@@ -1,7 +1,7 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.2.0",
-  "description": "A simple, fast and flexibility images gallery.",
+  "version": "0.2.1",
+  "description": "A simple, fast and flexibility image gallery.",
   "main": "dist/index.js",
   "scripts": {
     "build": "NODE_ENV=production ./node_modules/.bin/rollup -c",
@@ -98,5 +98,14 @@
     "gitUsername": "kurpachsv",
     "gitEmail": "kurpachsv@gmail.com",
     "commitMessage": "Deploy Storybook to GitHub Pages"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
   }
 }
