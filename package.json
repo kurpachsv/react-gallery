@@ -1,6 +1,6 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "A simple, fast and flexibility image gallery.",
   "main": "dist/index.js",
   "scripts": {
@@ -33,7 +33,9 @@
   },
   "peerDependencies": {
     "react": "^16.6.0",
-    "react-dom": "^16.6.0"
+    "react-dom": "^16.6.0",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-react": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
@@ -44,7 +46,7 @@
     "@storybook/addons": "^4.0.2",
     "@storybook/react": "^4.0.2",
     "@storybook/storybook-deployer": "^2.3.0",
-    "babel-core": "^7.0.0-bridge.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.2",
@@ -103,5 +105,8 @@
     "plugins": [
       "babel-plugin-transform-class-properties"
     ]
+  },
+  "jest": {
+    "transform": {}
   }
 }
