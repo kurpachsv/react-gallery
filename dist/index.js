@@ -755,7 +755,10 @@ _defineProperty(Gallery, "defaultProps", {
   disableActualImage: false
 });
 
-require('intersection-observer');
+if (window !== undefined) {
+  // eslint-disable-next-line global-require
+  require('intersection-observer');
+}
 
 exports.Image = Image;
 exports.Gallery = Gallery;
