@@ -10,60 +10,19 @@ var React__default = _interopDefault(React);
 var Observer = _interopDefault(require('@researchgate/react-intersection-observer'));
 var equal = _interopDefault(require('fast-deep-equal'));
 
-function styleInject(css, ref) {
-  if ( ref === void 0 ) ref = {};
-  var insertAt = ref.insertAt;
-
-  if (!css || typeof document === 'undefined') { return; }
-
-  var head = document.head || document.getElementsByTagName('head')[0];
-  var style = document.createElement('style');
-  style.type = 'text/css';
-
-  if (insertAt === 'top') {
-    if (head.firstChild) {
-      head.insertBefore(style, head.firstChild);
-    } else {
-      head.appendChild(style);
-    }
+function _typeof(obj) {
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
   } else {
-    head.appendChild(style);
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
   }
 
-  if (style.styleSheet) {
-    style.styleSheet.cssText = css;
-  } else {
-    style.appendChild(document.createTextNode(css));
-  }
+  return _typeof(obj);
 }
-
-var css = ".image_image__3LZ6Y {\n    cursor: pointer;\n    position: absolute;\n    width: 100%;\n}\n";
-var style = {"image":"image_image__3LZ6Y"};
-styleInject(css);
-
-var Image = function Image(_ref) {
-  var src = _ref.src,
-      alt = _ref.alt,
-      visible = _ref.visible;
-  return React__default.createElement("img", {
-    className: style.image,
-    src: visible ? src : null,
-    alt: alt,
-    style: {
-      display: visible ? null : 'none'
-    }
-  });
-};
-
-Image.propTypes = {
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string,
-  visible: PropTypes.bool
-};
-Image.defaultProps = {
-  alt: '',
-  visible: true
-};
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -221,6 +180,65 @@ function _possibleConstructorReturn(self, call) {
 
   return _assertThisInitialized(self);
 }
+
+var hasDocument = (typeof document === "undefined" ? "undefined" : _typeof(document)) === 'object' && document !== null;
+var hasWindow = (typeof window === "undefined" ? "undefined" : _typeof(window)) === 'object' && window !== null && window.self === window;
+var isBrwser = hasDocument && hasWindow;
+
+function styleInject(css, ref) {
+  if ( ref === void 0 ) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (!css || typeof document === 'undefined') { return; }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css = ".image_image__3LZ6Y {\n    cursor: pointer;\n    position: absolute;\n    width: 100%;\n}\n";
+var style = {"image":"image_image__3LZ6Y"};
+styleInject(css);
+
+var Image = function Image(_ref) {
+  var src = _ref.src,
+      alt = _ref.alt,
+      visible = _ref.visible;
+  return React__default.createElement("img", {
+    className: style.image,
+    src: visible ? src : null,
+    alt: alt,
+    style: {
+      display: visible ? null : 'none'
+    }
+  });
+};
+
+Image.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string,
+  visible: PropTypes.bool
+};
+Image.defaultProps = {
+  alt: '',
+  visible: true
+};
 
 var COLUMNS_MAX_COUNT = 5;
 var COLUMN_MAX_WIDTH = 200;
@@ -510,7 +528,7 @@ function (_Component) {
 
       var isIntersecting = this.state.isIntersecting;
 
-      if (disableObserver) {
+      if (isBrwser || disableObserver) {
         return React__default.createElement(Tag, null, children(true));
       }
 
@@ -755,7 +773,7 @@ _defineProperty(Gallery, "defaultProps", {
   disableActualImage: false
 });
 
-if (window !== undefined) {
+if (isBrwser) {
   // eslint-disable-next-line global-require
   require('intersection-observer');
 }
