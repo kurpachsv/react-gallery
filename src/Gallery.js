@@ -4,6 +4,7 @@ import equal from 'fast-deep-equal';
 import Engine, {COLUMN_MAX_HEIGHT, COLUMN_MAX_WIDTH, COLUMNS_MAX_COUNT, GUTTER_IN_PERCENT} from './Engine';
 import {defaultRenderer} from './Renderer';
 import ViewableMonitor from './ViewableMonitor';
+import isBrowser from './isBrowser';
 import style from './gallery.css';
 
 class Gallery extends Component {
@@ -77,7 +78,7 @@ class Gallery extends Component {
             columnMaxHeight,
             gutterInPercent,
             enableMasonry,
-            disableObserver,
+            disableObserver: !isBrowser ? true : disableObserver,
             disableActualImage,
             className,
             columnClassName,
@@ -103,7 +104,7 @@ class Gallery extends Component {
                 columnMaxHeight: nextProps.columnMaxHeight,
                 gutterInPercent: nextProps.gutterInPercent,
                 enableMasonry: nextProps.enableMasonry,
-                disableObserver: nextProps.disableObserver,
+                disableObserver: !isBrowser ? true : nextProps.disableObserver,
                 disableActualImage: nextProps.disableActualImage,
                 className: nextProps.className,
                 columnClassName: nextProps.columnClassName,

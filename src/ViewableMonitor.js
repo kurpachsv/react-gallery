@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Observer from '@researchgate/react-intersection-observer';
-import isBrwser from './isBrowser';
 
 class ViewableMonitor extends Component {
     static propTypes = {
@@ -27,7 +26,7 @@ class ViewableMonitor extends Component {
     render() {
         const {disableObserver, tag: Tag, children, ...rest} = this.props;
         const {isIntersecting} = this.state;
-        if (isBrwser || disableObserver) {
+        if (disableObserver) {
             return (
                 <Tag>
                     {children(true)}

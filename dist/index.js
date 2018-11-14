@@ -183,7 +183,7 @@ function _possibleConstructorReturn(self, call) {
 
 var hasDocument = (typeof document === "undefined" ? "undefined" : _typeof(document)) === 'object' && document !== null;
 var hasWindow = (typeof window === "undefined" ? "undefined" : _typeof(window)) === 'object' && window !== null && window.self === window;
-var isBrwser = hasDocument && hasWindow;
+var isBrowser = hasDocument && hasWindow;
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
@@ -489,7 +489,7 @@ function (_Component) {
   function ViewableMonitor() {
     var _getPrototypeOf2;
 
-    var _this;
+    var _temp, _this;
 
     _classCallCheck(this, ViewableMonitor);
 
@@ -497,13 +497,9 @@ function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(ViewableMonitor)).call.apply(_getPrototypeOf2, [this].concat(args)));
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
+    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(ViewableMonitor)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {
       isIntersecting: false
-    });
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleChange", function (_ref) {
+    }, _this.handleChange = function (_ref) {
       var isIntersecting = _ref.isIntersecting;
 
       // eslint-disable-next-line react/destructuring-assignment
@@ -512,9 +508,7 @@ function (_Component) {
           isIntersecting: isIntersecting
         });
       }
-    });
-
-    return _this;
+    }, _temp));
   }
 
   _createClass(ViewableMonitor, [{
@@ -528,7 +522,7 @@ function (_Component) {
 
       var isIntersecting = this.state.isIntersecting;
 
-      if (isBrwser || disableObserver) {
+      if (disableObserver) {
         return React__default.createElement(Tag, null, children(true));
       }
 
@@ -541,14 +535,13 @@ function (_Component) {
   return ViewableMonitor;
 }(React.Component);
 
-_defineProperty(ViewableMonitor, "propTypes", {
+ViewableMonitor.propTypes = {
   tag: PropTypes.node,
   children: PropTypes.func.isRequired
-});
-
-_defineProperty(ViewableMonitor, "defaultProps", {
+};
+ViewableMonitor.defaultProps = {
   tag: 'div'
-});
+};
 
 var css$1 = ".gallery_container__WHVf3 {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_item__2BQxQ {\n    vertical-align: top;\n    position: relative;\n    display: inline-block;\n}\n";
 var style$1 = {"container":"gallery_container__WHVf3","item":"gallery_item__2BQxQ"};
@@ -565,12 +558,10 @@ function (_Component) {
     _classCallCheck(this, Gallery);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Gallery).call(this, props));
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
+    _this.state = {
       columns: [],
       rows: []
-    });
-
+    };
     _this.engine = new Engine();
     return _this;
   }
@@ -599,7 +590,7 @@ function (_Component) {
         columnMaxHeight: columnMaxHeight,
         gutterInPercent: gutterInPercent,
         enableMasonry: enableMasonry,
-        disableObserver: disableObserver,
+        disableObserver: !isBrowser ? true : disableObserver,
         disableActualImage: disableActualImage,
         className: className,
         columnClassName: columnClassName,
@@ -619,7 +610,7 @@ function (_Component) {
           columnMaxHeight: nextProps.columnMaxHeight,
           gutterInPercent: nextProps.gutterInPercent,
           enableMasonry: nextProps.enableMasonry,
-          disableObserver: nextProps.disableObserver,
+          disableObserver: !isBrowser ? true : nextProps.disableObserver,
           disableActualImage: nextProps.disableActualImage,
           className: nextProps.className,
           columnClassName: nextProps.columnClassName,
@@ -744,7 +735,7 @@ function (_Component) {
   return Gallery;
 }(React.Component);
 
-_defineProperty(Gallery, "propTypes", {
+Gallery.propTypes = {
   imageRenderer: PropTypes.func,
   images: PropTypes.array.isRequired,
   columnsMaxCount: PropTypes.number,
@@ -757,9 +748,8 @@ _defineProperty(Gallery, "propTypes", {
   enableMasonry: PropTypes.bool,
   disableObserver: PropTypes.bool,
   disableActualImage: PropTypes.bool
-});
-
-_defineProperty(Gallery, "defaultProps", {
+};
+Gallery.defaultProps = {
   imageRenderer: defaultRenderer,
   columnsMaxCount: COLUMNS_MAX_COUNT,
   columnMaxWidth: COLUMN_MAX_WIDTH,
@@ -771,9 +761,9 @@ _defineProperty(Gallery, "defaultProps", {
   enableMasonry: false,
   disableObserver: false,
   disableActualImage: false
-});
+};
 
-if (isBrwser) {
+if (isBrowser) {
   // eslint-disable-next-line global-require
   require('intersection-observer');
 }
