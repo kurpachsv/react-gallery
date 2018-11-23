@@ -216,15 +216,15 @@ class Gallery extends Component {
                                                 enableMasonry: false,
                                             })}
                                         </ViewMonitor>
-                                </div>
-                            );
-                        })}
-                    </div>
-                );
-            })}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    );
+                })}
             </div>
         );
-    };
+    }
 
     render() {
         const {imageRenderer} = this.props;
