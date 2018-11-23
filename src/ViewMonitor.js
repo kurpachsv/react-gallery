@@ -1,8 +1,17 @@
+/* eslint-disable import/first */
+/* eslint-disable import/order */
+/* eslint-disable global-require */
+import isBrowser from './isBrowser';
+
+if (isBrowser) {
+    require('intersection-observer');
+}
+
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Observer from '@researchgate/react-intersection-observer';
 
-class ViewableMonitor extends Component {
+class ViewMonitor extends Component {
     static propTypes = {
         tag: PropTypes.node,
         children: PropTypes.func.isRequired,
@@ -13,19 +22,19 @@ class ViewableMonitor extends Component {
     };
 
     state = {
-        isIntersecting: false,
+        isVisible: false,
     };
 
     handleChange = ({isIntersecting}) => {
-        // eslint-disable-next-line react/destructuring-assignment
-        if (!this.state.isIntersecting) {
-            this.setState({isIntersecting});
+        const {isVisible} = this.state;
+        if (!isVisible) {
+            this.setState({isVisible: isIntersecting});
         }
     };
 
     render() {
         const {disableObserver, tag: Tag, children, ...rest} = this.props;
-        const {isIntersecting} = this.state;
+        const {isVisible} = this.state;
         if (disableObserver) {
             return (
                 <Tag>
@@ -33,14 +42,21 @@ class ViewableMonitor extends Component {
                 </Tag>
             );
         }
+        if (!isBrowser) {
+            return (
+                <Tag>
+                    {children(false)}
+                </Tag>
+            );
+        }
         return (
             <Observer {...rest} onChange={this.handleChange}>
                 <Tag>
-                    {children(isIntersecting)}
+                    {children(isVisible)}
                 </Tag>
             </Observer>
         );
     }
 }
 
-export default ViewableMonitor;
+export default ViewMonitor;

@@ -3,8 +3,7 @@ import React, {Component} from 'react';
 import equal from 'fast-deep-equal';
 import Engine, {COLUMN_MAX_HEIGHT, COLUMN_MAX_WIDTH, COLUMNS_MAX_COUNT, GUTTER_IN_PERCENT} from './Engine';
 import {defaultRenderer} from './Renderer';
-import ViewableMonitor from './ViewableMonitor';
-import isBrowser from './isBrowser';
+import ViewMonitor from './ViewMonitor';
 import style from './gallery.css';
 
 class Gallery extends Component {
@@ -78,7 +77,7 @@ class Gallery extends Component {
             columnMaxHeight,
             gutterInPercent,
             enableMasonry,
-            disableObserver: !isBrowser ? true : disableObserver,
+            disableObserver,
             disableActualImage,
             className,
             columnClassName,
@@ -104,7 +103,7 @@ class Gallery extends Component {
                 columnMaxHeight: nextProps.columnMaxHeight,
                 gutterInPercent: nextProps.gutterInPercent,
                 enableMasonry: nextProps.enableMasonry,
-                disableObserver: !isBrowser ? true : nextProps.disableObserver,
+                disableObserver: nextProps.disableObserver,
                 disableActualImage: nextProps.disableActualImage,
                 className: nextProps.className,
                 columnClassName: nextProps.columnClassName,
@@ -144,7 +143,7 @@ class Gallery extends Component {
                                             }% 0`,
                                         }}
                                     >
-                                        <ViewableMonitor
+                                        <ViewMonitor
                                             disableObserver={disableObserver}
                                         >
                                             {isViewable => imageRenderer({
@@ -153,7 +152,7 @@ class Gallery extends Component {
                                                 visible: !disableActualImage && isViewable,
                                                 enableMasonry: true,
                                             })}
-                                        </ViewableMonitor>
+                                        </ViewMonitor>
                                     </div>
                                 );
                             })
@@ -206,7 +205,7 @@ class Gallery extends Component {
 
                                         }}
                                     >
-                                        <ViewableMonitor disableObserver={disableObserver}>
+                                        <ViewMonitor disableObserver={disableObserver}>
                                             {isViewable => imageRenderer({
                                                 ...column,
                                                 newWidth,
@@ -216,16 +215,16 @@ class Gallery extends Component {
                                                 visible: !disableActualImage && isViewable,
                                                 enableMasonry: false,
                                             })}
-                                        </ViewableMonitor>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    );
-                })}
+                                        </ViewMonitor>
+                                </div>
+                            );
+                        })}
+                    </div>
+                );
+            })}
             </div>
         );
-    }
+    };
 
     render() {
         const {imageRenderer} = this.props;

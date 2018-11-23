@@ -19,12 +19,12 @@ exports[`Gallery should render correctly 1`] = `
         }
       }
     >
-      <ViewableMonitor
+      <ViewMonitor
         disableObserver={false}
         tag="div"
       >
         <Component />
-      </ViewableMonitor>
+      </ViewMonitor>
     </div>
   </div>
 </div>

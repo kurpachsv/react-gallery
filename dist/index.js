@@ -181,10 +181,6 @@ function _possibleConstructorReturn(self, call) {
   return _assertThisInitialized(self);
 }
 
-var hasDocument = (typeof document === "undefined" ? "undefined" : _typeof(document)) === 'object' && document !== null;
-var hasWindow = (typeof window === "undefined" ? "undefined" : _typeof(window)) === 'object' && window !== null && window.self === window;
-var isBrowser = hasDocument && hasWindow;
-
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
   var insertAt = ref.insertAt;
@@ -219,15 +215,19 @@ styleInject(css);
 var Image = function Image(_ref) {
   var src = _ref.src,
       alt = _ref.alt,
-      visible = _ref.visible;
-  return React__default.createElement("img", {
+      visible = _ref.visible,
+      height = _ref.height,
+      width = _ref.width,
+      rest = _objectWithoutProperties(_ref, ["src", "alt", "visible", "height", "width"]);
+
+  return React__default.createElement("img", _extends({}, rest, {
     className: style.image,
     src: visible ? src : null,
     alt: alt,
     style: {
       display: visible ? null : 'none'
     }
-  });
+  }));
 };
 
 Image.propTypes = {
@@ -481,37 +481,51 @@ var defaultRenderer = function defaultRenderer(imageProps) {
   }));
 };
 
-var ViewableMonitor =
+var hasDocument = (typeof document === "undefined" ? "undefined" : _typeof(document)) === 'object' && document !== null;
+var hasWindow = (typeof window === "undefined" ? "undefined" : _typeof(window)) === 'object' && window !== null && window.self === window;
+var isBrowser = hasDocument && hasWindow;
+
+if (isBrowser) {
+  require('intersection-observer');
+}
+
+var ViewMonitor =
 /*#__PURE__*/
 function (_Component) {
-  _inherits(ViewableMonitor, _Component);
+  _inherits(ViewMonitor, _Component);
 
-  function ViewableMonitor() {
+  function ViewMonitor() {
     var _getPrototypeOf2;
 
-    var _temp, _this;
+    var _this;
 
-    _classCallCheck(this, ViewableMonitor);
+    _classCallCheck(this, ViewMonitor);
 
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(ViewableMonitor)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {
-      isIntersecting: false
-    }, _this.handleChange = function (_ref) {
-      var isIntersecting = _ref.isIntersecting;
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(ViewMonitor)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
-      // eslint-disable-next-line react/destructuring-assignment
-      if (!_this.state.isIntersecting) {
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
+      isVisible: false
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleChange", function (_ref) {
+      var isIntersecting = _ref.isIntersecting;
+      var isVisible = _this.state.isVisible;
+
+      if (!isVisible) {
         _this.setState({
-          isIntersecting: isIntersecting
+          isVisible: isIntersecting
         });
       }
-    }, _temp));
+    });
+
+    return _this;
   }
 
-  _createClass(ViewableMonitor, [{
+  _createClass(ViewMonitor, [{
     key: "render",
     value: function render() {
       var _this$props = this.props,
@@ -520,28 +534,33 @@ function (_Component) {
           children = _this$props.children,
           rest = _objectWithoutProperties(_this$props, ["disableObserver", "tag", "children"]);
 
-      var isIntersecting = this.state.isIntersecting;
+      var isVisible = this.state.isVisible;
 
       if (disableObserver) {
         return React__default.createElement(Tag, null, children(true));
       }
 
+      if (!isBrowser) {
+        return React__default.createElement(Tag, null, children(false));
+      }
+
       return React__default.createElement(Observer, _extends({}, rest, {
         onChange: this.handleChange
-      }), React__default.createElement(Tag, null, children(isIntersecting)));
+      }), React__default.createElement(Tag, null, children(isVisible)));
     }
   }]);
 
-  return ViewableMonitor;
+  return ViewMonitor;
 }(React.Component);
 
-ViewableMonitor.propTypes = {
+_defineProperty(ViewMonitor, "propTypes", {
   tag: PropTypes.node,
   children: PropTypes.func.isRequired
-};
-ViewableMonitor.defaultProps = {
+});
+
+_defineProperty(ViewMonitor, "defaultProps", {
   tag: 'div'
-};
+});
 
 var css$1 = ".gallery_container__WHVf3 {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_item__2BQxQ {\n    vertical-align: top;\n    position: relative;\n    display: inline-block;\n}\n";
 var style$1 = {"container":"gallery_container__WHVf3","item":"gallery_item__2BQxQ"};
@@ -558,10 +577,12 @@ function (_Component) {
     _classCallCheck(this, Gallery);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Gallery).call(this, props));
-    _this.state = {
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
       columns: [],
       rows: []
-    };
+    });
+
     _this.engine = new Engine();
     return _this;
   }
@@ -590,7 +611,7 @@ function (_Component) {
         columnMaxHeight: columnMaxHeight,
         gutterInPercent: gutterInPercent,
         enableMasonry: enableMasonry,
-        disableObserver: !isBrowser ? true : disableObserver,
+        disableObserver: disableObserver,
         disableActualImage: disableActualImage,
         className: className,
         columnClassName: columnClassName,
@@ -610,7 +631,7 @@ function (_Component) {
           columnMaxHeight: nextProps.columnMaxHeight,
           gutterInPercent: nextProps.gutterInPercent,
           enableMasonry: nextProps.enableMasonry,
-          disableObserver: !isBrowser ? true : nextProps.disableObserver,
+          disableObserver: nextProps.disableObserver,
           disableActualImage: nextProps.disableActualImage,
           className: nextProps.className,
           columnClassName: nextProps.columnClassName,
@@ -649,7 +670,7 @@ function (_Component) {
             style: {
               margin: "0 0 ".concat(_this2.engine.getGutterInPercent() * _this2.engine.getMaxColumnsCount(), "% 0")
             }
-          }, React__default.createElement(ViewableMonitor, {
+          }, React__default.createElement(ViewMonitor, {
             disableObserver: disableObserver
           }, function (isViewable) {
             return imageRenderer(_objectSpread({}, image, {
@@ -699,7 +720,7 @@ function (_Component) {
                 maxWidth: el.isIncomplete ? "".concat(newWidthInPercent, "%") : 'auto',
                 margin: row.length === columnIndex + 1 ? "0 0 ".concat(_this3.engine.getGutterInPercent(), "% 0") : "0 ".concat(_this3.engine.getGutterInPercent(), "% ").concat(_this3.engine.getGutterInPercent(), "% 0")
               }
-            }, React__default.createElement(ViewableMonitor, {
+            }, React__default.createElement(ViewMonitor, {
               disableObserver: disableObserver
             }, function (isViewable) {
               return imageRenderer(_objectSpread({}, column, {
@@ -735,7 +756,7 @@ function (_Component) {
   return Gallery;
 }(React.Component);
 
-Gallery.propTypes = {
+_defineProperty(Gallery, "propTypes", {
   imageRenderer: PropTypes.func,
   images: PropTypes.array.isRequired,
   columnsMaxCount: PropTypes.number,
@@ -748,8 +769,9 @@ Gallery.propTypes = {
   enableMasonry: PropTypes.bool,
   disableObserver: PropTypes.bool,
   disableActualImage: PropTypes.bool
-};
-Gallery.defaultProps = {
+});
+
+_defineProperty(Gallery, "defaultProps", {
   imageRenderer: defaultRenderer,
   columnsMaxCount: COLUMNS_MAX_COUNT,
   columnMaxWidth: COLUMN_MAX_WIDTH,
@@ -761,12 +783,7 @@ Gallery.defaultProps = {
   enableMasonry: false,
   disableObserver: false,
   disableActualImage: false
-};
-
-if (isBrowser) {
-  // eslint-disable-next-line global-require
-  require('intersection-observer');
-}
+});
 
 exports.Image = Image;
 exports.Gallery = Gallery;
