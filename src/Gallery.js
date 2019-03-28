@@ -1,8 +1,13 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import equal from 'fast-deep-equal';
-import Engine, {COLUMN_MAX_HEIGHT, COLUMN_MAX_WIDTH, COLUMNS_MAX_COUNT, GUTTER_IN_PERCENT} from './Engine';
-import {defaultRenderer} from './Renderer';
+import Engine, {
+    COLUMN_MAX_HEIGHT,
+    COLUMN_MAX_WIDTH,
+    COLUMNS_MAX_COUNT,
+    GUTTER_IN_PERCENT,
+} from './Engine';
+import {defaultRenderer, defaultDetailsViewRenderer} from './Renderer';
 import ViewMonitor from './ViewMonitor';
 import style from './gallery.css';
 
@@ -26,6 +31,9 @@ class Gallery extends Component {
         enableMasonry: PropTypes.bool,
         disableObserver: PropTypes.bool,
         disableActualImage: PropTypes.bool,
+        enableFixed: PropTypes.bool,
+        enableDetailView: PropTypes.bool,
+        detailsViewRenderer: PropTypes.func,
     };
 
     static defaultProps = {
@@ -40,11 +48,20 @@ class Gallery extends Component {
         enableMasonry: false,
         disableObserver: false,
         disableActualImage: false,
+        enableFixed: false,
+        enableDetailView: false,
+        detailsViewRenderer: defaultDetailsViewRenderer,
     };
 
     state = {
         columns: [],
         rows: [],
+        selectedImageRow: null,
+        selectedImageId: null,
+        selectedImageRowPrev: null,
+        selectedImageIdPrev: null,
+        selectedImage: null,
+        selectedRowHeight: 0,
     };
 
     componentWillMount() {
@@ -60,6 +77,8 @@ class Gallery extends Component {
             className,
             columnClassName,
             rowClassName,
+            enableFixed,
+            enableDetailView,
         } = this.props;
 
         this.engine
@@ -82,6 +101,8 @@ class Gallery extends Component {
             className,
             columnClassName,
             rowClassName,
+            enableFixed,
+            enableDetailView,
         });
     }
 
@@ -108,6 +129,8 @@ class Gallery extends Component {
                 className: nextProps.className,
                 columnClassName: nextProps.columnClassName,
                 rowClassName: nextProps.rowClassName,
+                enableFixed: nextProps.enableFixed,
+                enableDetailView: nextProps.enableDetailView,
             });
         }
     }
@@ -165,7 +188,9 @@ class Gallery extends Component {
 
     renderGallery({
         className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
+        enableDetailView, detailsViewRenderer,
     }) {
+        const {selectedImageRow, selectedImage, selectedRowHeight} = this.state;
         return (
             <div
                 className={`${style.container} ${className}`}
@@ -173,53 +198,176 @@ class Gallery extends Component {
                 {rows.map((el, rowIndex) => {
                     const row = el.row;
                     return (
-                        /* eslint-disable-next-line react/no-array-index-key */
-                        <div key={rowIndex} className={rowClassName}>
-                            {row.map((column, columnIndex) => {
-                                const newWidth = this.engine.calculateWidth(
-                                    column, row, el.isIncomplete
-                                );
-                                const newHeight = this.engine.calculateHeight(
-                                    column, row, el.isIncomplete
-                                );
-                                const newWidthInPercent = 100 * newWidth / (this.engine.getMaxColumnsCount()
+                        <React.Fragment>
+                            {/* eslint-disable-next-line react/no-array-index-key */}
+                            <div key={rowIndex} className={rowClassName}>
+                                {row.map((column, columnIndex) => {
+                                    const newWidth = this.engine.calculateWidth(
+                                        column, row, el.isIncomplete
+                                    );
+                                    const newHeight = this.engine.calculateHeight(
+                                        column, row, el.isIncomplete
+                                    );
+                                    const newWidthInPercent = 100 * newWidth / (this.engine.getMaxColumnsCount()
                                     * this.engine.getColumnsMaxWidth());
-                                const placeholderHeight = 100 * newHeight / newWidth;
-                                return (
-                                    <div
+                                    const placeholderHeight = 100 * newHeight / newWidth;
+                                    return (
+                                        <div
                                         /* eslint-disable-next-line react/no-array-index-key */
-                                        key={`column-${column.src}-${rowIndex}-${columnIndex}`}
-                                        className={`${style.item} ${columnClassName}`}
-                                        style={{
-                                            width: el.isIncomplete
-                                                ? `${newWidth}px`
-                                                : `${newWidthInPercent}%`,
-                                            maxWidth: el.isIncomplete
-                                                ? `${newWidthInPercent}%`
-                                                : 'auto',
-                                            margin: row.length === columnIndex + 1
-                                                ? `0 0 ${this.engine.getGutterInPercent()}% 0`
-                                                : `0 ${
-                                                    this.engine.getGutterInPercent()
-                                                }% ${this.engine.getGutterInPercent()}% 0`,
+                                            key={`column-${column.src}-${rowIndex}-${columnIndex}`}
+                                            className={`${style.item} ${columnClassName}`}
+                                            style={{
+                                                width: el.isIncomplete
+                                                    ? `${newWidth}px`
+                                                    : `${newWidthInPercent}%`,
+                                                maxWidth: el.isIncomplete
+                                                    ? `${newWidthInPercent}%`
+                                                    : 'auto',
+                                                margin: row.length === columnIndex + 1
+                                                    ? `0 0 ${this.engine.getGutterInPercent()}% 0`
+                                                    : `0 ${
+                                                        this.engine.getGutterInPercent()
+                                                    }% ${this.engine.getGutterInPercent()}% 0`,
 
-                                        }}
-                                    >
-                                        <ViewMonitor disableObserver={disableObserver}>
-                                            {isViewable => imageRenderer({
-                                                ...column,
-                                                newWidth,
-                                                newHeight,
-                                                newWidthInPercent,
-                                                placeholderHeight,
-                                                visible: !disableActualImage && isViewable,
-                                                enableMasonry: false,
-                                            })}
-                                        </ViewMonitor>
-                                    </div>
-                                );
-                            })}
-                        </div>
+                                            }}
+                                        >
+                                            <ViewMonitor disableObserver={disableObserver}>
+                                                {isViewable => imageRenderer({
+                                                    ...column,
+                                                    newWidth,
+                                                    newHeight,
+                                                    newWidthInPercent,
+                                                    placeholderHeight,
+                                                    visible: !disableActualImage && isViewable,
+                                                    enableMasonry: false,
+                                                    onClick: () => this.handleSelectImage({
+                                                        selectedImageRow: rowIndex,
+                                                        selectedImage: column,
+                                                        selectedRowHeight: newHeight,
+                                                        selectedImageId: `column-${column.src}-${rowIndex}-${columnIndex}`,
+                                                    }),
+                                                })}
+                                            </ViewMonitor>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <div>
+                                {enableDetailView && detailsViewRenderer({
+                                    ...row,
+                                    visible: rowIndex === selectedImageRow,
+                                    selectedImage,
+                                    rowHeight: selectedRowHeight,
+                                    gutterInPercent: this.engine.getGutterInPercent(),
+                                })}
+                            </div>
+                        </React.Fragment>
+                    );
+                })}
+            </div>
+        );
+    }
+
+    handleSelectImage = ({
+        selectedImageRow,
+        selectedImageId,
+        selectedImageIdPrev,
+        selectedRowHeight,
+        selectedImage,
+    }) => {
+        const {selectedImageRowPrev} = this.state;
+        if (selectedImageRowPrev !== selectedImageRow || selectedImageId !== selectedImageIdPrev) {
+            this.setState({
+                selectedImageRow,
+                selectedImageRowPrev: selectedImageRow,
+                selectedImage,
+                selectedRowHeight,
+                selectedImageId,
+                selectedImageIdPrev,
+
+            });
+        } else {
+            this.setState({
+                selectedImageRow: null,
+                selectedImageRowPrev: null,
+                selectedImage: null,
+                selectedRowHeight: 0,
+                selectedImageId: null,
+                selectedImageIdPrev: null,
+            });
+        }
+    };
+
+    renderFixedGallery({
+        className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
+        enableDetailView, detailsViewRenderer,
+    }) {
+        const {selectedImageRow, selectedImage, selectedRowHeight} = this.state;
+        return (
+            <div
+                className={`${style.container} ${className}`}
+            >
+                {rows.map((el, rowIndex) => {
+                    const row = el.row;
+                    return (
+                        <React.Fragment>
+                            {/* eslint-disable-next-line react/no-array-index-key */}
+                            <div key={rowIndex} className={rowClassName}>
+                                {row.map((column, columnIndex) => {
+                                    const newWidth = this.engine.calculateWidth(
+                                        column, row, el.isIncomplete
+                                    );
+                                    const newHeight = this.engine.calculateHeight(
+                                        column, row, el.isIncomplete
+                                    );
+                                    const newWidthInPercent = this.engine.calculateFixedWidthInPercent(
+                                        column, row
+                                    );
+                                    const placeholderHeight = 100 * newHeight / newWidth;
+                                    return (
+                                        <div
+                                            /* eslint-disable-next-line react/no-array-index-key */
+                                            key={`column-${column.src}-${rowIndex}-${columnIndex}`}
+                                            className={`${style['item--fixed']} ${columnClassName}`}
+                                            style={{
+                                                width: el.isIncomplete
+                                                    ? `${newWidth}px`
+                                                    : `${newWidthInPercent}%`,
+                                                margin: row.length === columnIndex + 1
+                                                    ? `0 0 ${this.engine.getGutterInPercent()}% 0`
+                                                    : `0 ${
+                                                        this.engine.getGutterInPercent()
+                                                    }% ${this.engine.getGutterInPercent()}% 0`,
+
+                                            }}
+                                        >
+                                            <ViewMonitor disableObserver={disableObserver}>
+                                                {isViewable => imageRenderer({
+                                                    ...column,
+                                                    placeholderHeight,
+                                                    visible: !disableActualImage && isViewable,
+                                                    onClick: () => this.handleSelectImage({
+                                                        selectedImageRow: rowIndex,
+                                                        selectedImage: column,
+                                                        selectedRowHeight: newHeight,
+                                                        selectedImageId: `column-${column.src}-${rowIndex}-${columnIndex}`,
+                                                    }),
+                                                })}
+                                            </ViewMonitor>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <div>
+                                {enableDetailView && detailsViewRenderer({
+                                    ...row,
+                                    visible: rowIndex === selectedImageRow,
+                                    selectedImage,
+                                    rowHeight: selectedRowHeight,
+                                    gutterInPercent: this.engine.getGutterInPercent(),
+                                })}
+                            </div>
+                        </React.Fragment>
                     );
                 })}
             </div>
@@ -227,11 +375,15 @@ class Gallery extends Component {
     }
 
     render() {
-        const {imageRenderer} = this.props;
-        const {enableMasonry, ...rest} = this.state;
-        return enableMasonry
-            ? this.renderMasonryGallery({...rest, imageRenderer})
-            : this.renderGallery({...rest, imageRenderer});
+        const {imageRenderer, detailsViewRenderer} = this.props;
+        const {enableMasonry, enableFixed, ...rest} = this.state;
+        if (enableMasonry) {
+            return this.renderMasonryGallery({...rest, imageRenderer});
+        }
+        if (enableFixed) {
+            return this.renderFixedGallery({...rest, imageRenderer, detailsViewRenderer});
+        }
+        return this.renderGallery({...rest, imageRenderer, detailsViewRenderer});
     }
 }
 

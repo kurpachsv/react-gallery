@@ -1,28 +1,31 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import style from './image.css';
+import styles from './image.css';
 
-const Image = ({src, alt, visible, height, width, ...rest}) => {
+const Image = ({style, className, src, alt, visible, height, width, ...rest}) => {
     return (
         <img
             {...rest}
-            className={style.image}
+            className={`${styles.image} ${className}`}
             src={visible ? src : null}
             alt={alt}
             style={{
                 display: visible ? null : 'none',
+                ...style,
             }}
         />
     );
 };
 
 Image.propTypes = {
+    className: PropTypes.string,
     src: PropTypes.string.isRequired,
     alt: PropTypes.string,
     visible: PropTypes.bool,
 };
 
 Image.defaultProps = {
+    className: '',
     alt: '',
     visible: true,
 };

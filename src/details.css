@@ -1,0 +1,13 @@
+.container {
+    height: 200px;
+    font-size: 14px;
+}
+
+.container--disable {
+    height: 0;
+}
+
+.image-wrapper {
+    display: flex;
+    justify-content: center;
+}
