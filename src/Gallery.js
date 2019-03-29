@@ -62,6 +62,7 @@ class Gallery extends Component {
         selectedImageIdPrev: null,
         selectedImage: null,
         selectedRowHeight: 0,
+        selectedImageProps: {},
     };
 
     componentWillMount() {
@@ -190,7 +191,9 @@ class Gallery extends Component {
         className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
         enableDetailView, detailsViewRenderer,
     }) {
-        const {selectedImageRow, selectedImage, selectedRowHeight, selectedImageId} = this.state;
+        const {
+            selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
+        } = this.state;
         return (
             <div
                 className={`${style.container} ${className}`}
@@ -245,6 +248,12 @@ class Gallery extends Component {
                                                         selectedImage: column,
                                                         selectedRowHeight: newHeight,
                                                         selectedImageId: `column-${column.src}-${rowIndex}-${columnIndex}`,
+                                                        selectedImageProps: {
+                                                            placeholderHeight,
+                                                            newWidthInPercent,
+                                                            newWidth,
+                                                            newHeight,
+                                                        },
                                                     }),
                                                 })}
                                             </ViewMonitor>
@@ -260,6 +269,7 @@ class Gallery extends Component {
                                     rowHeight: selectedRowHeight,
                                     gutterInPercent: this.engine.getGutterInPercent(),
                                     selectedImageId,
+                                    selectedImageProps,
                                 })}
                             </div>
                         </React.Fragment>
@@ -274,6 +284,7 @@ class Gallery extends Component {
         selectedImageId,
         selectedRowHeight,
         selectedImage,
+        selectedImageProps,
     }) => {
         const {selectedImageRowPrev, selectedImageIdPrev} = this.state;
         if (selectedImageRowPrev !== selectedImageRow
@@ -285,7 +296,7 @@ class Gallery extends Component {
                 selectedRowHeight,
                 selectedImageId,
                 selectedImageIdPrev: selectedImageId,
-
+                selectedImageProps,
             });
         } else {
             this.setState({
@@ -295,6 +306,7 @@ class Gallery extends Component {
                 selectedRowHeight: 0,
                 selectedImageId: null,
                 selectedImageIdPrev: null,
+                selectedImageProps: {},
             });
         }
     };
@@ -303,7 +315,9 @@ class Gallery extends Component {
         className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
         enableDetailView, detailsViewRenderer,
     }) {
-        const {selectedImageRow, selectedImage, selectedRowHeight, selectedImageId} = this.state;
+        const {
+            selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps
+        } = this.state;
         return (
             <div
                 className={`${style.container} ${className}`}
@@ -352,6 +366,12 @@ class Gallery extends Component {
                                                         selectedImage: column,
                                                         selectedRowHeight: newHeight,
                                                         selectedImageId: `column-${column.src}-${rowIndex}-${columnIndex}`,
+                                                        selectedImageProps: {
+                                                            placeholderHeight,
+                                                            newWidthInPercent,
+                                                            newWidth,
+                                                            newHeight,
+                                                        },
                                                     }),
                                                 })}
                                             </ViewMonitor>
@@ -367,6 +387,7 @@ class Gallery extends Component {
                                     rowHeight: selectedRowHeight,
                                     gutterInPercent: this.engine.getGutterInPercent(),
                                     selectedImageId,
+                                    selectedImageProps,
                                 })}
                             </div>
                         </React.Fragment>
