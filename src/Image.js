@@ -2,7 +2,21 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styles from './image.css';
 
-const Image = ({style, className, src, alt, visible, height, width, ...rest}) => {
+const Image = ({
+    style,
+    className,
+    src,
+    alt,
+    visible,
+    height,
+    width,
+    newWidth,
+    newHeight,
+    newWidthInPercent,
+    placeholderHeight,
+    enableMasonry,
+    ...rest
+}) => {
     return (
         <img
             {...rest}
