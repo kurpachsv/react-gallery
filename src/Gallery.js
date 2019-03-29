@@ -198,9 +198,9 @@ class Gallery extends Component {
                 {rows.map((el, rowIndex) => {
                     const row = el.row;
                     return (
-                        <React.Fragment>
-                            {/* eslint-disable-next-line react/no-array-index-key */}
-                            <div key={rowIndex} className={rowClassName}>
+                        /* eslint-disable-next-line react/no-array-index-key */
+                        <React.Fragment key={`row-${rowIndex}`}>
+                            <div className={rowClassName}>
                                 {row.map((column, columnIndex) => {
                                     const newWidth = this.engine.calculateWidth(
                                         column, row, el.isIncomplete
@@ -311,9 +311,9 @@ class Gallery extends Component {
                 {rows.map((el, rowIndex) => {
                     const row = el.row;
                     return (
-                        <React.Fragment>
-                            {/* eslint-disable-next-line react/no-array-index-key */}
-                            <div key={rowIndex} className={rowClassName}>
+                        /* eslint-disable-next-line react/no-array-index-key */
+                        <React.Fragment key={`row-${rowIndex}`}>
+                            <div className={rowClassName}>
                                 {row.map((column, columnIndex) => {
                                     const newWidth = this.engine.calculateWidth(
                                         column, row, el.isIncomplete
