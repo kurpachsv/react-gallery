@@ -6,7 +6,6 @@ exports[`Gallery should render correctly 1`] = `
 >
   <div
     className=""
-    key="0"
   >
     <div
       className="item "
@@ -27,5 +26,6 @@ exports[`Gallery should render correctly 1`] = `
       </ViewMonitor>
     </div>
   </div>
+  <div />
 </div>
 `;
