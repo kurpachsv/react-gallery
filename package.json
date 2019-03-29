@@ -4,7 +4,7 @@
   "description": "A simple, fast and flexibility image gallery.",
   "main": "dist/index.js",
   "scripts": {
-    "build": "NODE_ENV=production ./node_modules/.bin/rollup -c",
+    "build": "cross-env NODE_ENV=production ./node_modules/.bin/rollup -c",
     "lint": "./node_modules/.bin/eslint -c ./.eslintrc.json ./src",
     "eslint-check": "./node_modules/.bin/eslint --print-config ./.eslintrc.json",
     "test": "./node_modules/.bin/jest --config ./jest.config.js",
@@ -13,7 +13,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "deploy-storybook": "storybook-to-ghpages",
-    "prepare": "rm -rf ./dist && npm run build"
+    "prepare": "rimraf ./dist && npm run build"
   },
   "author": "Sergei Kurpach <kurpachsv@gmail.com>",
   "license": "MIT",
@@ -53,6 +53,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-runtime": "^6.26.0",
     "coveralls": "^3.0.2",
+    "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
@@ -68,6 +69,7 @@
     "jest": "^23.6.0",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
+    "rimraf": "^2.6.3",
     "rollup": "^0.66.6",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-node-resolve": "^3.4.0",
