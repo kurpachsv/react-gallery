@@ -190,7 +190,7 @@ class Gallery extends Component {
         className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
         enableDetailView, detailsViewRenderer,
     }) {
-        const {selectedImageRow, selectedImage, selectedRowHeight} = this.state;
+        const {selectedImageRow, selectedImage, selectedRowHeight, selectedImageId} = this.state;
         return (
             <div
                 className={`${style.container} ${className}`}
@@ -259,6 +259,7 @@ class Gallery extends Component {
                                     selectedImage,
                                     rowHeight: selectedRowHeight,
                                     gutterInPercent: this.engine.getGutterInPercent(),
+                                    selectedImageId,
                                 })}
                             </div>
                         </React.Fragment>
@@ -271,19 +272,19 @@ class Gallery extends Component {
     handleSelectImage = ({
         selectedImageRow,
         selectedImageId,
-        selectedImageIdPrev,
         selectedRowHeight,
         selectedImage,
     }) => {
-        const {selectedImageRowPrev} = this.state;
-        if (selectedImageRowPrev !== selectedImageRow || selectedImageId !== selectedImageIdPrev) {
+        const {selectedImageRowPrev, selectedImageIdPrev} = this.state;
+        if (selectedImageRowPrev !== selectedImageRow
+            || selectedImageId !== selectedImageIdPrev) {
             this.setState({
                 selectedImageRow,
                 selectedImageRowPrev: selectedImageRow,
                 selectedImage,
                 selectedRowHeight,
                 selectedImageId,
-                selectedImageIdPrev,
+                selectedImageIdPrev: selectedImageId,
 
             });
         } else {
@@ -302,7 +303,7 @@ class Gallery extends Component {
         className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
         enableDetailView, detailsViewRenderer,
     }) {
-        const {selectedImageRow, selectedImage, selectedRowHeight} = this.state;
+        const {selectedImageRow, selectedImage, selectedRowHeight, selectedImageId} = this.state;
         return (
             <div
                 className={`${style.container} ${className}`}
@@ -365,6 +366,7 @@ class Gallery extends Component {
                                     selectedImage,
                                     rowHeight: selectedRowHeight,
                                     gutterInPercent: this.engine.getGutterInPercent(),
+                                    selectedImageId,
                                 })}
                             </div>
                         </React.Fragment>
