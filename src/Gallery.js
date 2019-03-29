@@ -247,6 +247,7 @@ class Gallery extends Component {
                                                         selectedImageRow: rowIndex,
                                                         selectedImage: column,
                                                         selectedRowHeight: newHeight,
+                                                        // eslint-disable-next-line
                                                         selectedImageId: `column-${column.src}-${rowIndex}-${columnIndex}`,
                                                         selectedImageProps: {
                                                             placeholderHeight,
@@ -316,7 +317,7 @@ class Gallery extends Component {
         enableDetailView, detailsViewRenderer,
     }) {
         const {
-            selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps
+            selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
         } = this.state;
         return (
             <div
@@ -365,6 +366,7 @@ class Gallery extends Component {
                                                         selectedImageRow: rowIndex,
                                                         selectedImage: column,
                                                         selectedRowHeight: newHeight,
+                                                        // eslint-disable-next-line
                                                         selectedImageId: `column-${column.src}-${rowIndex}-${columnIndex}`,
                                                         selectedImageProps: {
                                                             placeholderHeight,
