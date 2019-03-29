@@ -16,6 +16,8 @@ A simple, fast and flexibility image gallery.
 
 <img src="https://github.com/kurpachsv/react-gallery/raw/master/preview-masonry.png" alt="Preview masonry" />
 
+<img src="https://github.com/kurpachsv/react-gallery/raw/master/preview-fixed.png" alt="Preview fixed" />
+
 
 See [storybook](https://kurpachsv.github.io/react-gallery) for live demonstration.
 
@@ -61,6 +63,9 @@ disableActualImage | bool | false | optional; show/hide actual images, but not t
 className | string | '' | optional; container class name
 columnClassName | string | '' | optional; item class name
 rowClassName | string | '' | optional; row class name (for default layout)
+enableFixed | bool | false | optional; turn on/off fixed layout mode
+enableDetailView | bool | false | optional; turn on/off detail view mode for fixed or masonry layout
+detailsViewRenderer | function | default implementation | optional; component/function for render of detail view
 
 ## Renderers
 
@@ -93,4 +98,4 @@ const defaultRenderer = imageProps => {
 
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
-Copyright (c) Sergei Kurpach, 2018
+Copyright (c) Sergei Kurpach, 2019
