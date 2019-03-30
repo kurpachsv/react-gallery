@@ -16,7 +16,7 @@ stories
 
 .coveralls.yml
 .travis.yml
-jest.config
+jest.config.js
 LICENSE
 rollup.config.js
 

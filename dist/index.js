@@ -843,6 +843,7 @@ function (_Component) {
                     selectedImageRow: rowIndex,
                     selectedImage: column,
                     selectedRowHeight: newHeight,
+                    // eslint-disable-next-line
                     selectedImageId: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex),
                     selectedImageProps: {
                       placeholderHeight: placeholderHeight,
@@ -922,6 +923,7 @@ function (_Component) {
                     selectedImageRow: rowIndex,
                     selectedImage: column,
                     selectedRowHeight: newHeight,
+                    // eslint-disable-next-line
                     selectedImageId: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex),
                     selectedImageProps: {
                       placeholderHeight: placeholderHeight,
