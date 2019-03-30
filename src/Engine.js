@@ -156,6 +156,10 @@ class Engine {
         return itemAfterResize.width;
     }
 
+    calculateFixedWidthInPercent(item, row) {
+        return 100 / row.length - this.getGutterInPercent();
+    }
+
     buildRows() {
         let rows = [];
         const items = this.getNormalizedItems(this.images);

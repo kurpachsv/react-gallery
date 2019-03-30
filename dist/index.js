@@ -208,34 +208,43 @@ function styleInject(css, ref) {
   }
 }
 
-var css = ".image_image__3LZ6Y {\n    cursor: pointer;\n    position: absolute;\n    width: 100%;\n}\n";
-var style = {"image":"image_image__3LZ6Y"};
+var css = ".image_image__PNasI {\r\n    cursor: pointer;\r\n    position: absolute;\r\n    width: 100%;\r\n}\r\n";
+var styles = {"image":"image_image__PNasI"};
 styleInject(css);
 
 var Image = function Image(_ref) {
-  var src = _ref.src,
+  var style = _ref.style,
+      className = _ref.className,
+      src = _ref.src,
       alt = _ref.alt,
       visible = _ref.visible,
       height = _ref.height,
       width = _ref.width,
-      rest = _objectWithoutProperties(_ref, ["src", "alt", "visible", "height", "width"]);
+      newWidth = _ref.newWidth,
+      newHeight = _ref.newHeight,
+      newWidthInPercent = _ref.newWidthInPercent,
+      placeholderHeight = _ref.placeholderHeight,
+      enableMasonry = _ref.enableMasonry,
+      rest = _objectWithoutProperties(_ref, ["style", "className", "src", "alt", "visible", "height", "width", "newWidth", "newHeight", "newWidthInPercent", "placeholderHeight", "enableMasonry"]);
 
   return React__default.createElement("img", _extends({}, rest, {
-    className: style.image,
+    className: "".concat(styles.image, " ").concat(className),
     src: visible ? src : null,
     alt: alt,
-    style: {
+    style: _objectSpread({
       display: visible ? null : 'none'
-    }
+    }, style)
   }));
 };
 
 Image.propTypes = {
+  className: PropTypes.string,
   src: PropTypes.string.isRequired,
   alt: PropTypes.string,
   visible: PropTypes.bool
 };
 Image.defaultProps = {
+  className: '',
   alt: '',
   visible: true
 };
@@ -399,6 +408,11 @@ function () {
       return itemAfterResize.width;
     }
   }, {
+    key: "calculateFixedWidthInPercent",
+    value: function calculateFixedWidthInPercent(item, row) {
+      return 100 / row.length - this.getGutterInPercent();
+    }
+  }, {
     key: "buildRows",
     value: function buildRows() {
       var rows = [];
@@ -472,13 +486,52 @@ function () {
   return Engine;
 }();
 
+var css$1 = ".details_container__36DTd {\r\n    height: 200px;\r\n    font-size: 14px;\r\n}\r\n\r\n.details_container--disable__3by1M {\r\n    height: 0;\r\n}\r\n\r\n.details_image-wrapper__2qHsf {\r\n    display: flex;\r\n    justify-content: center;\r\n}\r\n";
+var style = {"container":"details_container__36DTd","container--disable":"details_container--disable__3by1M","image-wrapper":"details_image-wrapper__2qHsf"};
+styleInject(css$1);
+
 var defaultRenderer = function defaultRenderer(imageProps) {
-  return React__default.createElement(React.Fragment, null, React__default.createElement(Image, imageProps), React__default.createElement("div", {
+  return React__default.createElement(React.Fragment, null, React__default.createElement(Image, _extends({
+    onClick: imageProps.onClick
+  }, imageProps)), React__default.createElement("div", {
     style: {
       backgroundColor: 'rgb(187, 189, 191)',
       paddingTop: "".concat(imageProps.placeholderHeight, "%")
     }
   }));
+};
+
+var DETAILS_IMAGE_HEIGHT = 300;
+
+var defaultDetailsViewRenderer = function defaultDetailsViewRenderer(_ref) {
+  var visible = _ref.visible,
+      selectedImage = _ref.selectedImage,
+      gutterInPercent = _ref.gutterInPercent;
+  return React__default.createElement("div", {
+    className: visible ? style.container : style['container--disable'],
+    style: {
+      height: visible ? DETAILS_IMAGE_HEIGHT : 0,
+      visibility: visible ? 'visible' : 'hidden',
+      marginBottom: visible ? "".concat(gutterInPercent, "%") : 0
+    }
+  }, React__default.createElement("div", {
+    className: style['image-wrapper']
+  }, visible && React__default.createElement(Image, {
+    style: {
+      height: DETAILS_IMAGE_HEIGHT,
+      width: selectedImage.width / selectedImage.height * DETAILS_IMAGE_HEIGHT
+    },
+    src: selectedImage.src
+  })));
+};
+
+defaultDetailsViewRenderer.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  selectedImage: PropTypes.object.isRequired,
+  gutterInPercent: PropTypes.number
+};
+defaultDetailsViewRenderer.defaultProps = {
+  gutterInPercent: 0
 };
 
 var hasDocument = (typeof document === "undefined" ? "undefined" : _typeof(document)) === 'object' && document !== null;
@@ -562,9 +615,9 @@ _defineProperty(ViewMonitor, "defaultProps", {
   tag: 'div'
 });
 
-var css$1 = ".gallery_container__WHVf3 {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_item__2BQxQ {\n    vertical-align: top;\n    position: relative;\n    display: inline-block;\n}\n";
-var style$1 = {"container":"gallery_container__WHVf3","item":"gallery_item__2BQxQ"};
-styleInject(css$1);
+var css$2 = ".gallery_container__3i4rI {\r\n    display: block;\r\n    font-size: 0;\r\n}\r\n\r\n.gallery_item__3GrEG {\r\n    vertical-align: top;\r\n    position: relative;\r\n    display: inline-block;\r\n}\r\n\r\n.gallery_item--fixed__223Cp {\r\n    vertical-align: bottom;\r\n    position: relative;\r\n    display: inline-block;\r\n}\r\n";
+var style$1 = {"container":"gallery_container__3i4rI","item":"gallery_item__3GrEG","item--fixed":"gallery_item--fixed__223Cp"};
+styleInject(css$2);
 
 var Gallery =
 /*#__PURE__*/
@@ -580,7 +633,47 @@ function (_Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
       columns: [],
-      rows: []
+      rows: [],
+      selectedImageRow: null,
+      selectedImageId: null,
+      selectedImageRowPrev: null,
+      selectedImageIdPrev: null,
+      selectedImage: null,
+      selectedRowHeight: 0,
+      selectedImageProps: {}
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleSelectImage", function (_ref) {
+      var selectedImageRow = _ref.selectedImageRow,
+          selectedImageId = _ref.selectedImageId,
+          selectedRowHeight = _ref.selectedRowHeight,
+          selectedImage = _ref.selectedImage,
+          selectedImageProps = _ref.selectedImageProps;
+      var _this$state = _this.state,
+          selectedImageRowPrev = _this$state.selectedImageRowPrev,
+          selectedImageIdPrev = _this$state.selectedImageIdPrev;
+
+      if (selectedImageRowPrev !== selectedImageRow || selectedImageId !== selectedImageIdPrev) {
+        _this.setState({
+          selectedImageRow: selectedImageRow,
+          selectedImageRowPrev: selectedImageRow,
+          selectedImage: selectedImage,
+          selectedRowHeight: selectedRowHeight,
+          selectedImageId: selectedImageId,
+          selectedImageIdPrev: selectedImageId,
+          selectedImageProps: selectedImageProps
+        });
+      } else {
+        _this.setState({
+          selectedImageRow: null,
+          selectedImageRowPrev: null,
+          selectedImage: null,
+          selectedRowHeight: 0,
+          selectedImageId: null,
+          selectedImageIdPrev: null,
+          selectedImageProps: {}
+        });
+      }
     });
 
     _this.engine = new Engine();
@@ -601,7 +694,9 @@ function (_Component) {
           disableActualImage = _this$props.disableActualImage,
           className = _this$props.className,
           columnClassName = _this$props.columnClassName,
-          rowClassName = _this$props.rowClassName;
+          rowClassName = _this$props.rowClassName,
+          enableFixed = _this$props.enableFixed,
+          enableDetailView = _this$props.enableDetailView;
       this.engine.setImages(images).setMaxColumnsCount(columnsMaxCount).setColumnMaxWidth(columnMaxWidth).setColumnMaxHeight(columnMaxHeight).setGutterInPercent(gutterInPercent);
       this.setState({
         columns: this.engine.buildColumns(),
@@ -615,7 +710,9 @@ function (_Component) {
         disableActualImage: disableActualImage,
         className: className,
         columnClassName: columnClassName,
-        rowClassName: rowClassName
+        rowClassName: rowClassName,
+        enableFixed: enableFixed,
+        enableDetailView: enableDetailView
       });
     }
   }, {
@@ -635,21 +732,23 @@ function (_Component) {
           disableActualImage: nextProps.disableActualImage,
           className: nextProps.className,
           columnClassName: nextProps.columnClassName,
-          rowClassName: nextProps.rowClassName
+          rowClassName: nextProps.rowClassName,
+          enableFixed: nextProps.enableFixed,
+          enableDetailView: nextProps.enableDetailView
         });
       }
     }
   }, {
     key: "renderMasonryGallery",
-    value: function renderMasonryGallery(_ref) {
+    value: function renderMasonryGallery(_ref2) {
       var _this2 = this;
 
-      var className = _ref.className,
-          columnClassName = _ref.columnClassName,
-          imageRenderer = _ref.imageRenderer,
-          disableObserver = _ref.disableObserver,
-          disableActualImage = _ref.disableActualImage,
-          columns = _ref.columns;
+      var className = _ref2.className,
+          columnClassName = _ref2.columnClassName,
+          imageRenderer = _ref2.imageRenderer,
+          disableObserver = _ref2.disableObserver,
+          disableActualImage = _ref2.disableActualImage,
+          columns = _ref2.columns;
       return React__default.createElement("div", {
         className: "".concat(style$1.container, " ").concat(className)
       }, columns.map(function (item, columnIndex) {
@@ -684,24 +783,33 @@ function (_Component) {
     }
   }, {
     key: "renderGallery",
-    value: function renderGallery(_ref2) {
+    value: function renderGallery(_ref3) {
       var _this3 = this;
 
-      var className = _ref2.className,
-          rows = _ref2.rows,
-          rowClassName = _ref2.rowClassName,
-          columnClassName = _ref2.columnClassName,
-          imageRenderer = _ref2.imageRenderer,
-          disableObserver = _ref2.disableObserver,
-          disableActualImage = _ref2.disableActualImage;
+      var className = _ref3.className,
+          rows = _ref3.rows,
+          rowClassName = _ref3.rowClassName,
+          columnClassName = _ref3.columnClassName,
+          imageRenderer = _ref3.imageRenderer,
+          disableObserver = _ref3.disableObserver,
+          disableActualImage = _ref3.disableActualImage,
+          enableDetailView = _ref3.enableDetailView,
+          detailsViewRenderer = _ref3.detailsViewRenderer;
+      var _this$state2 = this.state,
+          selectedImageRow = _this$state2.selectedImageRow,
+          selectedImage = _this$state2.selectedImage,
+          selectedRowHeight = _this$state2.selectedRowHeight,
+          selectedImageId = _this$state2.selectedImageId,
+          selectedImageProps = _this$state2.selectedImageProps;
       return React__default.createElement("div", {
         className: "".concat(style$1.container, " ").concat(className)
       }, rows.map(function (el, rowIndex) {
         var row = el.row;
         return (
           /* eslint-disable-next-line react/no-array-index-key */
-          React__default.createElement("div", {
-            key: rowIndex,
+          React__default.createElement(React__default.Fragment, {
+            key: "row-".concat(rowIndex)
+          }, React__default.createElement("div", {
             className: rowClassName
           }, row.map(function (column, columnIndex) {
             var newWidth = _this3.engine.calculateWidth(column, row, el.isIncomplete);
@@ -729,26 +837,141 @@ function (_Component) {
                 newWidthInPercent: newWidthInPercent,
                 placeholderHeight: placeholderHeight,
                 visible: !disableActualImage && isViewable,
-                enableMasonry: false
+                enableMasonry: false,
+                onClick: function onClick() {
+                  return _this3.handleSelectImage({
+                    selectedImageRow: rowIndex,
+                    selectedImage: column,
+                    selectedRowHeight: newHeight,
+                    selectedImageId: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex),
+                    selectedImageProps: {
+                      placeholderHeight: placeholderHeight,
+                      newWidthInPercent: newWidthInPercent,
+                      newWidth: newWidth,
+                      newHeight: newHeight
+                    }
+                  });
+                }
               }));
             }));
-          }))
+          })), React__default.createElement("div", null, enableDetailView && detailsViewRenderer(_objectSpread({}, row, {
+            visible: rowIndex === selectedImageRow,
+            selectedImage: selectedImage,
+            rowHeight: selectedRowHeight,
+            gutterInPercent: _this3.engine.getGutterInPercent(),
+            selectedImageId: selectedImageId,
+            selectedImageProps: selectedImageProps
+          }))))
+        );
+      }));
+    }
+  }, {
+    key: "renderFixedGallery",
+    value: function renderFixedGallery(_ref4) {
+      var _this4 = this;
+
+      var className = _ref4.className,
+          rows = _ref4.rows,
+          rowClassName = _ref4.rowClassName,
+          columnClassName = _ref4.columnClassName,
+          imageRenderer = _ref4.imageRenderer,
+          disableObserver = _ref4.disableObserver,
+          disableActualImage = _ref4.disableActualImage,
+          enableDetailView = _ref4.enableDetailView,
+          detailsViewRenderer = _ref4.detailsViewRenderer;
+      var _this$state3 = this.state,
+          selectedImageRow = _this$state3.selectedImageRow,
+          selectedImage = _this$state3.selectedImage,
+          selectedRowHeight = _this$state3.selectedRowHeight,
+          selectedImageId = _this$state3.selectedImageId,
+          selectedImageProps = _this$state3.selectedImageProps;
+      return React__default.createElement("div", {
+        className: "".concat(style$1.container, " ").concat(className)
+      }, rows.map(function (el, rowIndex) {
+        var row = el.row;
+        return (
+          /* eslint-disable-next-line react/no-array-index-key */
+          React__default.createElement(React__default.Fragment, {
+            key: "row-".concat(rowIndex)
+          }, React__default.createElement("div", {
+            className: rowClassName
+          }, row.map(function (column, columnIndex) {
+            var newWidth = _this4.engine.calculateWidth(column, row, el.isIncomplete);
+
+            var newHeight = _this4.engine.calculateHeight(column, row, el.isIncomplete);
+
+            var newWidthInPercent = _this4.engine.calculateFixedWidthInPercent(column, row);
+
+            var placeholderHeight = 100 * newHeight / newWidth;
+            return React__default.createElement("div", {
+              /* eslint-disable-next-line react/no-array-index-key */
+              key: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex),
+              className: "".concat(style$1['item--fixed'], " ").concat(columnClassName),
+              style: {
+                width: el.isIncomplete ? "".concat(newWidth, "px") : "".concat(newWidthInPercent, "%"),
+                margin: row.length === columnIndex + 1 ? "0 0 ".concat(_this4.engine.getGutterInPercent(), "% 0") : "0 ".concat(_this4.engine.getGutterInPercent(), "% ").concat(_this4.engine.getGutterInPercent(), "% 0")
+              }
+            }, React__default.createElement(ViewMonitor, {
+              disableObserver: disableObserver
+            }, function (isViewable) {
+              return imageRenderer(_objectSpread({}, column, {
+                placeholderHeight: placeholderHeight,
+                visible: !disableActualImage && isViewable,
+                onClick: function onClick() {
+                  return _this4.handleSelectImage({
+                    selectedImageRow: rowIndex,
+                    selectedImage: column,
+                    selectedRowHeight: newHeight,
+                    selectedImageId: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex),
+                    selectedImageProps: {
+                      placeholderHeight: placeholderHeight,
+                      newWidthInPercent: newWidthInPercent,
+                      newWidth: newWidth,
+                      newHeight: newHeight
+                    }
+                  });
+                }
+              }));
+            }));
+          })), React__default.createElement("div", null, enableDetailView && detailsViewRenderer(_objectSpread({}, row, {
+            visible: rowIndex === selectedImageRow,
+            selectedImage: selectedImage,
+            rowHeight: selectedRowHeight,
+            gutterInPercent: _this4.engine.getGutterInPercent(),
+            selectedImageId: selectedImageId,
+            selectedImageProps: selectedImageProps
+          }))))
         );
       }));
     }
   }, {
     key: "render",
     value: function render() {
-      var imageRenderer = this.props.imageRenderer;
+      var _this$props2 = this.props,
+          imageRenderer = _this$props2.imageRenderer,
+          detailsViewRenderer = _this$props2.detailsViewRenderer;
 
-      var _this$state = this.state,
-          enableMasonry = _this$state.enableMasonry,
-          rest = _objectWithoutProperties(_this$state, ["enableMasonry"]);
+      var _this$state4 = this.state,
+          enableMasonry = _this$state4.enableMasonry,
+          enableFixed = _this$state4.enableFixed,
+          rest = _objectWithoutProperties(_this$state4, ["enableMasonry", "enableFixed"]);
 
-      return enableMasonry ? this.renderMasonryGallery(_objectSpread({}, rest, {
-        imageRenderer: imageRenderer
-      })) : this.renderGallery(_objectSpread({}, rest, {
-        imageRenderer: imageRenderer
+      if (enableMasonry) {
+        return this.renderMasonryGallery(_objectSpread({}, rest, {
+          imageRenderer: imageRenderer
+        }));
+      }
+
+      if (enableFixed) {
+        return this.renderFixedGallery(_objectSpread({}, rest, {
+          imageRenderer: imageRenderer,
+          detailsViewRenderer: detailsViewRenderer
+        }));
+      }
+
+      return this.renderGallery(_objectSpread({}, rest, {
+        imageRenderer: imageRenderer,
+        detailsViewRenderer: detailsViewRenderer
       }));
     }
   }]);
@@ -768,7 +991,10 @@ _defineProperty(Gallery, "propTypes", {
   rowClassName: PropTypes.string,
   enableMasonry: PropTypes.bool,
   disableObserver: PropTypes.bool,
-  disableActualImage: PropTypes.bool
+  disableActualImage: PropTypes.bool,
+  enableFixed: PropTypes.bool,
+  enableDetailView: PropTypes.bool,
+  detailsViewRenderer: PropTypes.func
 });
 
 _defineProperty(Gallery, "defaultProps", {
@@ -782,7 +1008,10 @@ _defineProperty(Gallery, "defaultProps", {
   rowClassName: '',
   enableMasonry: false,
   disableObserver: false,
-  disableActualImage: false
+  disableActualImage: false,
+  enableFixed: false,
+  enableDetailView: false,
+  detailsViewRenderer: defaultDetailsViewRenderer
 });
 
 exports.Image = Image;

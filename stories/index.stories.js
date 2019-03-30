@@ -16,6 +16,7 @@ stories.add('with default layout', () => (
         gutterInPercent={number('Gutter in %', 0.5)}
         disableObserver={boolean('Disable Intersection Observer', false)}
         disableActualImage={boolean('Disable actual images', false)}
+        enableDetailView={boolean('Enable detail view', false)}
         images={images}
     />
 ));
@@ -27,6 +28,18 @@ stories.add('with masonry layout', () => (
         gutterInPercent={number('Gutter in %', 0.5)}
         disableObserver={boolean('Disable Intersection Observer', false)}
         disableActualImage={boolean('Disable actual images', false)}
+        images={images}
+    />
+));
+
+stories.add('with fixed layout', () => (
+    <Gallery
+        enableFixed
+        columnsMaxCount={number('Max columns count', 5)}
+        gutterInPercent={number('Gutter in %', 0.5)}
+        disableObserver={boolean('Disable Intersection Observer', false)}
+        disableActualImage={boolean('Disable actual images', false)}
+        enableDetailView={boolean('Enable detail view', true)}
         images={images}
     />
 ));

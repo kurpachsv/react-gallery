@@ -3,7 +3,7 @@
 exports[`Image should render correctly 1`] = `
 <img
   alt="mockTitle"
-  className="image"
+  className="image "
   src="mockUrl"
   style={
     Object {

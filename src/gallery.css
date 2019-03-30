@@ -8,3 +8,9 @@
     position: relative;
     display: inline-block;
 }
+
+.item--fixed {
+    vertical-align: bottom;
+    position: relative;
+    display: inline-block;
+}
