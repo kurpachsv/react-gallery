@@ -23,14 +23,14 @@ const defaultRenderer = imageProps => {
 
 const DETAILS_IMAGE_HEIGHT = 300;
 
-const defaultDetailsViewRenderer = ({visible, selectedImage, gutterInPercent}) => {
+const defaultDetailsViewRenderer = ({visible, selectedImage, gutter}) => {
     return (
         <div
             className={visible ? style.container : style['container--disable']}
             style={{
                 height: visible ? DETAILS_IMAGE_HEIGHT : 0,
                 visibility: visible ? 'visible' : 'hidden',
-                marginBottom: visible ? `${gutterInPercent}%` : 0,
+                marginBottom: visible ? `${gutter}px` : 0,
             }}
         >
 
@@ -52,11 +52,11 @@ const defaultDetailsViewRenderer = ({visible, selectedImage, gutterInPercent}) =
 defaultDetailsViewRenderer.propTypes = {
     visible: PropTypes.bool.isRequired,
     selectedImage: PropTypes.object.isRequired,
-    gutterInPercent: PropTypes.number,
+    gutter: PropTypes.number,
 };
 
 defaultDetailsViewRenderer.defaultProps = {
-    gutterInPercent: 0,
+    gutter: 0,
 };
 
 export {

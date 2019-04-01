@@ -20,5 +20,9 @@ jest.config.js
 LICENSE
 rollup.config.js
 
+preview.png
+preview-fixed.png
+preview-masonry.png
+
 package.json
 package-lock.json
