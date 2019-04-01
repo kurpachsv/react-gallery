@@ -378,6 +378,7 @@ class Gallery extends Component {
                                                         width: columnAfterResize.width,
                                                         height: columnAfterResize.height,
                                                         margin: 'auto',
+                                                        // eslint-disable-next-line
                                                         marginTop: `${fixedSize - columnAfterResize.height - fixedBottom}px`,
                                                     }}
                                                 >
