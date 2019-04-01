@@ -4,11 +4,15 @@ exports[`Image should render correctly 1`] = `
 <img
   alt="mockTitle"
   className="image "
+  height="auto"
   src="mockUrl"
   style={
     Object {
       "display": null,
+      "position": "absolute",
+      "width": "100%",
     }
   }
+  width="auto"
 />
 `;
