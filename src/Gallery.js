@@ -340,6 +340,9 @@ class Gallery extends Component {
         return (
             <div
                 className={`${style.container} ${className}`}
+                style={{
+                    width: columnsMaxCount * fixedSize + columnsMaxCount * fixedGutter - fixedGutter,
+                }}
             >
                 {rows.map((el, rowIndex) => {
                     const row = el.row;
@@ -350,9 +353,6 @@ class Gallery extends Component {
                         >
                             <div
                                 className={rowClassName}
-                                style={{
-                                    minWidth: columnsMaxCount * fixedSize + columnsMaxCount * fixedGutter - fixedGutter,
-                                }}
                             >
                                 {row.map((column, columnIndex) => {
                                     const columnAfterResize = this.engine.resizeColumnByFixedSize(
