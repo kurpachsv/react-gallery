@@ -615,7 +615,7 @@ _defineProperty(ViewMonitor, "defaultProps", {
   tag: 'div'
 });
 
-var css$2 = ".gallery_container__3i4rI {\r\n    display: block;\r\n    font-size: 0;\r\n}\r\n\r\n.gallery_item__3GrEG {\r\n    vertical-align: top;\r\n    position: relative;\r\n    display: inline-block;\r\n}\r\n\r\n.gallery_item--fixed__223Cp {\r\n    vertical-align: bottom;\r\n    position: relative;\r\n    display: inline-block;\r\n}\r\n";
+var css$2 = ".gallery_container__3i4rI {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_item__3GrEG {\n    vertical-align: top;\n    position: relative;\n    display: inline-block;\n}\n\n.gallery_item--fixed__223Cp {\n    vertical-align: bottom;\n    position: relative;\n    display: inline-block;\n}\n";
 var style$1 = {"container":"gallery_container__3i4rI","item":"gallery_item__3GrEG","item--fixed":"gallery_item--fixed__223Cp"};
 styleInject(css$2);
 
