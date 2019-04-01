@@ -15,6 +15,8 @@ const Image = ({
     newWidthInPercent,
     placeholderHeight,
     enableMasonry,
+    specifyImageSizes,
+    fixedSize,
     ...rest
 }) => {
     return (
@@ -25,8 +27,12 @@ const Image = ({
             alt={alt}
             style={{
                 display: visible ? null : 'none',
+                position: 'absolute',
+                width: specifyImageSizes ? 'auto' : '100%',
                 ...style,
             }}
+            height={specifyImageSizes ? newHeight : 'auto'}
+            width={specifyImageSizes ? newWidth : 'auto'}
         />
     );
 };

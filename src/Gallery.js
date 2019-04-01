@@ -6,6 +6,9 @@ import Engine, {
     COLUMN_MAX_WIDTH,
     COLUMNS_MAX_COUNT,
     GUTTER_IN_PERCENT,
+    DEFAULT_FIXED_SIZE,
+    DEFAULT_FIXED_BOTTOM,
+    DEFAULT_FIXED_GUTTER,
 } from './Engine';
 import {defaultRenderer, defaultDetailsViewRenderer} from './Renderer';
 import ViewMonitor from './ViewMonitor';
@@ -32,6 +35,9 @@ class Gallery extends Component {
         disableObserver: PropTypes.bool,
         disableActualImage: PropTypes.bool,
         enableFixed: PropTypes.bool,
+        fixedSize: PropTypes.number,
+        fixedBottom: PropTypes.number,
+        fixedGutter: PropTypes.number,
         enableDetailView: PropTypes.bool,
         detailsViewRenderer: PropTypes.func,
     };
@@ -49,6 +55,9 @@ class Gallery extends Component {
         disableObserver: false,
         disableActualImage: false,
         enableFixed: false,
+        fixedSize: DEFAULT_FIXED_SIZE,
+        fixedBottom: DEFAULT_FIXED_BOTTOM,
+        fixedGutter: DEFAULT_FIXED_GUTTER,
         enableDetailView: false,
         detailsViewRenderer: defaultDetailsViewRenderer,
     };
@@ -79,6 +88,9 @@ class Gallery extends Component {
             columnClassName,
             rowClassName,
             enableFixed,
+            fixedSize,
+            fixedBottom,
+            fixedGutter,
             enableDetailView,
         } = this.props;
 
@@ -103,6 +115,9 @@ class Gallery extends Component {
             columnClassName,
             rowClassName,
             enableFixed,
+            fixedSize,
+            fixedBottom,
+            fixedGutter,
             enableDetailView,
         });
     }
@@ -131,6 +146,9 @@ class Gallery extends Component {
                 columnClassName: nextProps.columnClassName,
                 rowClassName: nextProps.rowClassName,
                 enableFixed: nextProps.enableFixed,
+                fixedSize: nextProps.fixedSize,
+                fixedBottom: nextProps.fixedBottom,
+                fixedGutter: nextProps.fixedGutter,
                 enableDetailView: nextProps.enableDetailView,
             });
         }
@@ -314,7 +332,7 @@ class Gallery extends Component {
 
     renderFixedGallery({
         className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
-        enableDetailView, detailsViewRenderer,
+        fixedGutter, columnsMaxCount, fixedSize, fixedBottom, enableDetailView, detailsViewRenderer,
     }) {
         const {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
@@ -326,58 +344,70 @@ class Gallery extends Component {
                 {rows.map((el, rowIndex) => {
                     const row = el.row;
                     return (
-                        /* eslint-disable-next-line react/no-array-index-key */
-                        <React.Fragment key={`row-${rowIndex}`}>
-                            <div className={rowClassName}>
+                        <React.Fragment
+                            /* eslint-disable-next-line react/no-array-index-key */
+                            key={`row-${rowIndex}`}
+                        >
+                            <div
+                                className={rowClassName}
+                                style={{
+                                    minWidth: columnsMaxCount * fixedSize + columnsMaxCount * fixedGutter - fixedGutter,
+                                }}
+                            >
                                 {row.map((column, columnIndex) => {
-                                    const newWidth = this.engine.calculateWidth(
-                                        column, row, el.isIncomplete
+                                    const columnAfterResize = this.engine.resizeColumnByFixedSize(
+                                        column, row, fixedSize, fixedBottom
                                     );
-                                    const newHeight = this.engine.calculateHeight(
-                                        column, row, el.isIncomplete
-                                    );
-                                    const newWidthInPercent = this.engine.calculateFixedWidthInPercent(
-                                        column, row
-                                    );
-                                    const placeholderHeight = 100 * newHeight / newWidth;
+                                    const placeholderHeight = 100 * columnAfterResize.height / columnAfterResize.width;
                                     return (
-                                        <div
+                                        <React.Fragment>
+                                            <div
                                             /* eslint-disable-next-line react/no-array-index-key */
-                                            key={`column-${column.src}-${rowIndex}-${columnIndex}`}
-                                            className={`${style['item--fixed']} ${columnClassName}`}
-                                            style={{
-                                                width: el.isIncomplete
-                                                    ? `${newWidth}px`
-                                                    : `${newWidthInPercent}%`,
-                                                margin: row.length === columnIndex + 1
-                                                    ? `0 0 ${this.engine.getGutterInPercent()}% 0`
-                                                    : `0 ${
-                                                        this.engine.getGutterInPercent()
-                                                    }% ${this.engine.getGutterInPercent()}% 0`,
-
-                                            }}
-                                        >
-                                            <ViewMonitor disableObserver={disableObserver}>
-                                                {isViewable => imageRenderer({
-                                                    ...column,
-                                                    placeholderHeight,
-                                                    visible: !disableActualImage && isViewable,
-                                                    onClick: () => this.handleSelectImage({
-                                                        selectedImageRow: rowIndex,
-                                                        selectedImage: column,
-                                                        selectedRowHeight: newHeight,
-                                                        // eslint-disable-next-line
-                                                        selectedImageId: `column-${column.src}-${rowIndex}-${columnIndex}`,
-                                                        selectedImageProps: {
+                                                key={`column-${column.src}-${rowIndex}-${columnIndex}`}
+                                                className={`${style['item--fixed']} ${columnClassName}`}
+                                                style={{
+                                                    width: fixedSize,
+                                                    height: fixedSize,
+                                                    margin: row.length === columnIndex + 1
+                                                        ? `0 0 ${fixedGutter}px 0`
+                                                        : `0 ${fixedGutter}px ${fixedGutter}px 0`,
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        width: columnAfterResize.width,
+                                                        height: columnAfterResize.height,
+                                                        margin: 'auto',
+                                                        marginTop: `${fixedSize - columnAfterResize.height - fixedBottom}px`,
+                                                    }}
+                                                >
+                                                    <ViewMonitor disableObserver={disableObserver}>
+                                                        {isViewable => imageRenderer({
+                                                            ...columnAfterResize,
                                                             placeholderHeight,
-                                                            newWidthInPercent,
-                                                            newWidth,
-                                                            newHeight,
-                                                        },
-                                                    }),
-                                                })}
-                                            </ViewMonitor>
-                                        </div>
+                                                            visible: !disableActualImage && isViewable,
+                                                            onClick: () => this.handleSelectImage({
+                                                                selectedImageRow: rowIndex,
+                                                                selectedImage: columnAfterResize,
+                                                                selectedRowHeight: columnAfterResize.height,
+                                                                // eslint-disable-next-line
+                                                                selectedImageId: `column-${column.src}-${rowIndex}-${columnIndex}`,
+                                                                selectedImageProps: {
+                                                                    placeholderHeight,
+                                                                    newWidthInPercent: fixedSize,
+                                                                    newWidth: columnAfterResize.width,
+                                                                    newHeight: columnAfterResize.height,
+                                                                },
+                                                            }),
+                                                            specifyImageSizes: true,
+                                                            newWidth: columnAfterResize.width,
+                                                            newHeight: columnAfterResize.height,
+                                                            fixedSize,
+                                                        })}
+                                                    </ViewMonitor>
+                                                </div>
+                                            </div>
+                                        </React.Fragment>
                                     );
                                 })}
                             </div>
@@ -387,7 +417,7 @@ class Gallery extends Component {
                                     visible: rowIndex === selectedImageRow,
                                     selectedImage,
                                     rowHeight: selectedRowHeight,
-                                    gutterInPercent: this.engine.getGutterInPercent(),
+                                    gutter: fixedGutter,
                                     selectedImageId,
                                     selectedImageProps,
                                 })}
