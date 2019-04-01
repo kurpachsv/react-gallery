@@ -919,17 +919,17 @@ function (_Component) {
           selectedImageId = _this$state3.selectedImageId,
           selectedImageProps = _this$state3.selectedImageProps;
       return React__default.createElement("div", {
-        className: "".concat(style$1.container, " ").concat(className),
-        style: {
-          width: columnsMaxCount * fixedSize + columnsMaxCount * fixedGutter - fixedGutter
-        }
+        className: "".concat(style$1.container, " ").concat(className)
       }, rows.map(function (el, rowIndex) {
         var row = el.row;
         return React__default.createElement(React__default.Fragment, {
           /* eslint-disable-next-line react/no-array-index-key */
           key: "row-".concat(rowIndex)
         }, React__default.createElement("div", {
-          className: rowClassName
+          className: rowClassName,
+          style: {
+            width: columnsMaxCount * fixedSize + columnsMaxCount * fixedGutter - fixedGutter
+          }
         }, row.map(function (column, columnIndex) {
           var columnAfterResize = _this4.engine.resizeColumnByFixedSize(column, row, fixedSize, fixedBottom);
 
