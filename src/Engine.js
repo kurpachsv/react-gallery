@@ -159,6 +159,10 @@ class Engine {
         return itemAfterResize.width;
     }
 
+    calculateFixedWidthInPercent(item, row) {
+        return 100 / row.length - this.getGutterInPercent();
+    }
+
     resizeColumnByFixedSize(item, row, fixedSize, fixedBottom) {
         item = Engine.resizeByHeight(
             item, item.height - (fixedBottom - (fixedSize - item.height))
