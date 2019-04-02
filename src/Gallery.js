@@ -286,7 +286,8 @@ class Gallery extends Component {
                                     visible: rowIndex === selectedImageRow,
                                     selectedImage,
                                     rowHeight: selectedRowHeight,
-                                    gutterInPercent: this.engine.getGutterInPercent(),
+                                    gutter: this.engine.getGutterInPercent(),
+                                    isGutterUnitsInPercent: true,
                                     selectedImageId,
                                     selectedImageProps,
                                 })}
@@ -340,6 +341,9 @@ class Gallery extends Component {
         return (
             <div
                 className={`${style.container} ${className}`}
+                style={{
+                    width: columnsMaxCount * fixedSize + columnsMaxCount * fixedGutter - fixedGutter,
+                }}
             >
                 {rows.map((el, rowIndex) => {
                     const row = el.row;
@@ -350,9 +354,6 @@ class Gallery extends Component {
                         >
                             <div
                                 className={rowClassName}
-                                style={{
-                                    width: columnsMaxCount * fixedSize + columnsMaxCount * fixedGutter - fixedGutter,
-                                }}
                             >
                                 {row.map((column, columnIndex) => {
                                     const columnAfterResize = this.engine.resizeColumnByFixedSize(
@@ -360,7 +361,9 @@ class Gallery extends Component {
                                     );
                                     const placeholderHeight = 100 * columnAfterResize.height / columnAfterResize.width;
                                     return (
-                                        <React.Fragment>
+                                        <React.Fragment
+                                            key={`column-${column.src}-${rowIndex}-${columnIndex}`}
+                                        >
                                             <div
                                             /* eslint-disable-next-line react/no-array-index-key */
                                                 key={`column-${column.src}-${rowIndex}-${columnIndex}`}
@@ -419,6 +422,7 @@ class Gallery extends Component {
                                     selectedImage,
                                     rowHeight: selectedRowHeight,
                                     gutter: fixedGutter,
+                                    isGutterUnitsInPercent: false,
                                     selectedImageId,
                                     selectedImageProps,
                                 })}
