@@ -362,6 +362,7 @@ class Gallery extends Component {
                                     const placeholderHeight = 100 * columnAfterResize.height / columnAfterResize.width;
                                     return (
                                         <React.Fragment
+                                            /* eslint-disable-next-line react/no-array-index-key */
                                             key={`column-${column.src}-${rowIndex}-${columnIndex}`}
                                         >
                                             <div
