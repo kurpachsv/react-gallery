@@ -525,13 +525,15 @@ var DETAILS_IMAGE_HEIGHT = 300;
 var defaultDetailsViewRenderer = function defaultDetailsViewRenderer(_ref) {
   var visible = _ref.visible,
       selectedImage = _ref.selectedImage,
-      gutter = _ref.gutter;
+      gutter = _ref.gutter,
+      isGutterUnitsInPercent = _ref.isGutterUnitsInPercent;
+  var gutterWithUnits = isGutterUnitsInPercent ? "".concat(gutter, "%") : "".concat(gutter, "px");
   return React__default.createElement("div", {
     className: visible ? style.container : style['container--disable'],
     style: {
       height: visible ? DETAILS_IMAGE_HEIGHT : 0,
       visibility: visible ? 'visible' : 'hidden',
-      marginBottom: visible ? "".concat(gutter, "px") : 0
+      marginBottom: visible ? gutterWithUnits : 0
     }
   }, React__default.createElement("div", {
     className: style['image-wrapper']
@@ -547,7 +549,8 @@ var defaultDetailsViewRenderer = function defaultDetailsViewRenderer(_ref) {
 defaultDetailsViewRenderer.propTypes = {
   visible: PropTypes.bool.isRequired,
   selectedImage: PropTypes.object.isRequired,
-  gutter: PropTypes.number
+  gutter: PropTypes.number,
+  isGutterUnitsInPercent: PropTypes.bool.isRequired
 };
 defaultDetailsViewRenderer.defaultProps = {
   gutter: 0
@@ -887,7 +890,8 @@ function (_Component) {
             visible: rowIndex === selectedImageRow,
             selectedImage: selectedImage,
             rowHeight: selectedRowHeight,
-            gutterInPercent: _this3.engine.getGutterInPercent(),
+            gutter: _this3.engine.getGutterInPercent(),
+            isGutterUnitsInPercent: true,
             selectedImageId: selectedImageId,
             selectedImageProps: selectedImageProps
           }))))
@@ -919,22 +923,24 @@ function (_Component) {
           selectedImageId = _this$state3.selectedImageId,
           selectedImageProps = _this$state3.selectedImageProps;
       return React__default.createElement("div", {
-        className: "".concat(style$1.container, " ").concat(className)
+        className: "".concat(style$1.container, " ").concat(className),
+        style: {
+          width: columnsMaxCount * fixedSize + columnsMaxCount * fixedGutter - fixedGutter
+        }
       }, rows.map(function (el, rowIndex) {
         var row = el.row;
         return React__default.createElement(React__default.Fragment, {
           /* eslint-disable-next-line react/no-array-index-key */
           key: "row-".concat(rowIndex)
         }, React__default.createElement("div", {
-          className: rowClassName,
-          style: {
-            width: columnsMaxCount * fixedSize + columnsMaxCount * fixedGutter - fixedGutter
-          }
+          className: rowClassName
         }, row.map(function (column, columnIndex) {
           var columnAfterResize = _this4.engine.resizeColumnByFixedSize(column, row, fixedSize, fixedBottom);
 
           var placeholderHeight = 100 * columnAfterResize.height / columnAfterResize.width;
-          return React__default.createElement(React__default.Fragment, null, React__default.createElement("div", {
+          return React__default.createElement(React__default.Fragment, {
+            key: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex)
+          }, React__default.createElement("div", {
             /* eslint-disable-next-line react/no-array-index-key */
             key: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex),
             className: "".concat(style$1['item--fixed'], " ").concat(columnClassName),
@@ -983,6 +989,7 @@ function (_Component) {
           selectedImage: selectedImage,
           rowHeight: selectedRowHeight,
           gutter: fixedGutter,
+          isGutterUnitsInPercent: false,
           selectedImageId: selectedImageId,
           selectedImageProps: selectedImageProps
         }))));
