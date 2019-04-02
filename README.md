@@ -55,7 +55,7 @@ Property        |       Type            |       Default         |       Descript
 images | array  | undefined | required; array of images
 columnsMaxCount | number  | 5  | optional; max value of columns count
 columnMaxHeight | number  | 200  | optional; max column height in px (for prevent pictures degradation, if last row is not filled)
-gutterInPercent | number  | 0.5  | optional; value in % between images
+gutterInPercent | number  | 0.5  | optional; value in % of space between images
 imageRenderer | function | default implementation |  optional; component/function for render of image
 enableMasonry | bool | false | optional; turn on/off masonry layout mode
 disableObserver | bool | false | optional; turn on/off lazy loading and intersection observer for images
@@ -64,12 +64,15 @@ className | string | '' | optional; container class name
 columnClassName | string | '' | optional; item class name
 rowClassName | string | '' | optional; row class name (for default layout)
 enableFixed | bool | false | optional; turn on/off fixed layout mode
+fixedSize | number | 200 | optional; size in px of image container
+fixedBottom | number | 50 | optional; size in px of bottom margin
+fixedGutter | number | 10 | optional size in px of space between images (only for fixed layout mode)
 enableDetailView | bool | false | optional; turn on/off detail view mode for fixed or masonry layout
 detailsViewRenderer | function | default implementation | optional; component/function for render of detail view
 
 ## Renderers
 
-For better flexibility, you can override default renderer of images:
+For better flexibility, you can override default image renderer, here is a default implementation:
 
 ```javascript
 import {Image} from '@kurpachsv/react-gallery';
@@ -89,6 +92,39 @@ const defaultRenderer = imageProps => {
                 }}
             />
         </Fragment>
+    );
+};
+```
+
+Also you can override default details renderer, here is a default implementation:
+
+```javascript
+const DETAILS_IMAGE_HEIGHT = 300;
+
+const defaultDetailsViewRenderer = ({visible, selectedImage, gutter, isGutterUnitsInPercent}) => {
+    const gutterWithUnits = isGutterUnitsInPercent ? `${gutter}%` : `${gutter}px`;
+    return (
+        <div
+            className={visible ? style.container : style['container--disable']}
+            style={{
+                height: visible ? DETAILS_IMAGE_HEIGHT : 0,
+                visibility: visible ? 'visible' : 'hidden',
+                marginBottom: visible ? gutterWithUnits : 0,
+            }}
+        >
+
+            <div className={style['image-wrapper']}>
+                {visible && (
+                    <Image
+                        style={{
+                            height: DETAILS_IMAGE_HEIGHT,
+                            width: selectedImage.width / selectedImage.height * DETAILS_IMAGE_HEIGHT,
+                        }}
+                        src={selectedImage.src}
+                    />
+                )}
+            </div>
+        </div>
     );
 };
 ```
