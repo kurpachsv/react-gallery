@@ -331,6 +331,8 @@ class Gallery extends Component {
             >
                 {rows.map((el, rowIndex) => {
                     const row = el.row;
+                    const maxHeight = this.engine.calculateMaxHeight(row);
+                    const maxWidth = this.engine.calculateMaxWidth(row);
                     return (
                         /* eslint-disable-next-line react/no-array-index-key */
                         <React.Fragment key={`row-${rowIndex}`}>
@@ -386,6 +388,9 @@ class Gallery extends Component {
                                                                 newHeight,
                                                             },
                                                         }),
+                                                        maxHeight,
+                                                        maxWidth,
+                                                        fixedBottom,
                                                     })}
                                                 </ViewMonitor>
                                             </div>

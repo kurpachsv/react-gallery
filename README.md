@@ -68,9 +68,9 @@ detailsViewRenderer | function | default implementation | optional; component/fu
 
 ## Renderers
 
-For better flexibility, you can override default image renderer, [here](https://github.com/kurpachsv/react-gallery/blob/master/src/Renderer.js#L7) is a default implementation.
+For better flexibility, you can override default image renderer, [here](https://github.com/kurpachsv/react-gallery/blob/master/src/Renderer.js#L7-L22) is a default implementation.
 
-Also you can override default details renderer, [here](https://github.com/kurpachsv/react-gallery/blob/master/src/Renderer.js#L26) is a default implementation.
+Also you can override default details renderer, [here](https://github.com/kurpachsv/react-gallery/blob/master/src/Renderer.js#L26-L50) is a default implementation.
 
 ## License
 

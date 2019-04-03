@@ -129,6 +129,7 @@ class Engine {
     }
 
     getNormalizedItems(items) {
+        return items;
         items = items.map(item => {
             return {
                 ...item,
@@ -159,6 +160,20 @@ class Engine {
 
     calculateFixedWidthInPercent(item, row) {
         return 100 / row.length - this.getGutterInPercent();
+    }
+
+    calculateMaxHeight(row) {
+        const heights = row.map(item => {
+            return item.height;
+        });
+        return Math.max.apply(null, heights);
+    }
+
+    calculateMaxWidth(row) {
+        const heights = row.map(item => {
+            return item.width;
+        });
+        return Math.max.apply(null, heights);
     }
 
     buildRows() {

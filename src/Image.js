@@ -15,10 +15,12 @@ const Image = ({
     newWidthInPercent,
     placeholderHeight,
     enableMasonry,
-    specifyImageSizes,
-    fixedSize,
+    maxHeight,
+    maxWidth,
+    fixedBottom,
     ...rest
 }) => {
+    const ratio = width / height;
     return (
         <img
             {...rest}
@@ -28,11 +30,10 @@ const Image = ({
             style={{
                 display: visible ? null : 'none',
                 position: 'absolute',
-                width: specifyImageSizes ? 'auto' : '100%',
+                width: ratio > 1 ? '100%' : 'auto',
+                height: ratio > 1 ? 'auto' : `calc(100% - ${fixedBottom}px)`,
                 ...style,
             }}
-            height={specifyImageSizes ? newHeight : 'auto'}
-            width={specifyImageSizes ? newWidth : 'auto'}
         />
     );
 };

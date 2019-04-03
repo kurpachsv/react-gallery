@@ -1,23 +1,36 @@
 import PropTypes from 'prop-types';
-import React, {Fragment} from 'react';
+import React from 'react';
 import Image from './Image';
 
 import style from './details.css';
 
 const defaultRenderer = imageProps => {
     return (
-        <Fragment>
-            <Image
-                onClick={imageProps.onClick}
-                {...imageProps}
-            />
+        <div
+            style={{
+                display: 'flex',
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+            }}
+        >
             <div
                 style={{
-                    backgroundColor: 'rgb(187, 189, 191)',
-                    paddingTop: `${imageProps.placeholderHeight}%`,
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    justifyContent: 'center',
+                }}
+            >
+                <Image
+                    onClick={imageProps.onClick}
+                    {...imageProps}
+                />
+            </div>
+            <div
+                style={{
+                    paddingTop: '100%',
                 }}
             />
-        </Fragment>
+        </div>
     );
 };
 
