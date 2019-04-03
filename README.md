@@ -16,8 +16,6 @@ A simple, fast and flexibility image gallery.
 
 <img src="https://github.com/kurpachsv/react-gallery/raw/master/preview-masonry.png" alt="Preview masonry" />
 
-<img src="https://github.com/kurpachsv/react-gallery/raw/master/preview-fixed.png" alt="Preview fixed" />
-
 
 See [storybook](https://kurpachsv.github.io/react-gallery) for live demonstration.
 
@@ -64,71 +62,14 @@ className | string | '' | optional; container class name
 columnClassName | string | '' | optional; item class name
 rowClassName | string | '' | optional; row class name (for default layout)
 enableFixed | bool | false | optional; turn on/off fixed layout mode
-fixedSize | number | 200 | optional; size in px of image container
 fixedBottom | number | 50 | optional; size in px of bottom margin
-fixedGutter | number | 10 | optional size in px of space between images (only for fixed layout mode)
 enableDetailView | bool | false | optional; turn on/off detail view mode for fixed or masonry layout
 detailsViewRenderer | function | default implementation | optional; component/function for render of detail view
 
 ## Renderers
 
-For better flexibility, you can override default image renderer, here is a default implementation:
-
-```javascript
-import {Image} from '@kurpachsv/react-gallery';
-```
-
-```javascript
-const defaultRenderer = imageProps => {
-    return (
-        <Fragment>
-            <Image
-                {...imageProps}
-            />
-            <div
-                style={{
-                    backgroundColor: 'rgb(187, 189, 191)',
-                    paddingTop: `${imageProps.placeholderHeight}%`,
-                }}
-            />
-        </Fragment>
-    );
-};
-```
-
-Also you can override default details renderer, here is a default implementation:
-
-```javascript
-const DETAILS_IMAGE_HEIGHT = 300;
-
-const defaultDetailsViewRenderer = ({visible, selectedImage, gutter, isGutterUnitsInPercent}) => {
-    const gutterWithUnits = isGutterUnitsInPercent ? `${gutter}%` : `${gutter}px`;
-    return (
-        <div
-            className={visible ? style.container : style['container--disable']}
-            style={{
-                height: visible ? DETAILS_IMAGE_HEIGHT : 0,
-                visibility: visible ? 'visible' : 'hidden',
-                marginBottom: visible ? gutterWithUnits : 0,
-            }}
-        >
-
-            <div className={style['image-wrapper']}>
-                {visible && (
-                    <Image
-                        style={{
-                            height: DETAILS_IMAGE_HEIGHT,
-                            width: selectedImage.width / selectedImage.height * DETAILS_IMAGE_HEIGHT,
-                        }}
-                        src={selectedImage.src}
-                    />
-                )}
-            </div>
-        </div>
-    );
-};
-```
-
+For better flexibility, you can override default image renderer, [here](https://github.com/kurpachsv/react-gallery/blob/master/src/Renderer.js#L7) is a default implementation:
+Also you can override default details renderer, [here](https://github.com/kurpachsv/react-gallery/blob/master/src/Renderer.js#L26) is a default implementation.
 
 ## License
 

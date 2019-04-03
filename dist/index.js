@@ -939,6 +939,7 @@ function (_Component) {
 
           var placeholderHeight = 100 * columnAfterResize.height / columnAfterResize.width;
           return React__default.createElement(React__default.Fragment, {
+            /* eslint-disable-next-line react/no-array-index-key */
             key: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex)
           }, React__default.createElement("div", {
             /* eslint-disable-next-line react/no-array-index-key */

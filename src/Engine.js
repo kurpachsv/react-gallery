@@ -2,9 +2,7 @@ export const COLUMNS_MAX_COUNT = 5;
 export const COLUMN_MAX_WIDTH = 200;
 export const COLUMN_MAX_HEIGHT = 200;
 export const GUTTER_IN_PERCENT = 0.5;
-export const DEFAULT_FIXED_SIZE = 200;
 export const DEFAULT_FIXED_BOTTOM = 50;
-export const DEFAULT_FIXED_GUTTER = 10;
 
 class Engine {
 
@@ -161,23 +159,6 @@ class Engine {
 
     calculateFixedWidthInPercent(item, row) {
         return 100 / row.length - this.getGutterInPercent();
-    }
-
-    resizeColumnByFixedSize(item, row, fixedSize, fixedBottom) {
-        item = Engine.resizeByHeight(
-            item, item.height - (fixedBottom - (fixedSize - item.height))
-        );
-        if (item.height > fixedSize) {
-            item = Engine.resizeByHeight(
-                item, fixedSize,
-            );
-        }
-        if (item.width > fixedSize) {
-            item = Engine.resizeByWidth(
-                item, fixedSize
-            );
-        }
-        return item;
     }
 
     buildRows() {
