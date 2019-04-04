@@ -208,7 +208,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css = ".image_image__PNasI {\r\n    cursor: pointer;\r\n}\r\n";
+var css = ".image_image__PNasI {\n    cursor: pointer;\n}\n";
 var styles = {"image":"image_image__PNasI"};
 styleInject(css);
 
@@ -225,22 +225,37 @@ var Image = function Image(_ref) {
       newWidthInPercent = _ref.newWidthInPercent,
       placeholderHeight = _ref.placeholderHeight,
       enableMasonry = _ref.enableMasonry,
+      maxHeight = _ref.maxHeight,
+      maxWidth = _ref.maxWidth,
+      fixedBottom = _ref.fixedBottom,
       specifyImageSizes = _ref.specifyImageSizes,
-      fixedSize = _ref.fixedSize,
-      rest = _objectWithoutProperties(_ref, ["style", "className", "src", "alt", "visible", "height", "width", "newWidth", "newHeight", "newWidthInPercent", "placeholderHeight", "enableMasonry", "specifyImageSizes", "fixedSize"]);
+      rest = _objectWithoutProperties(_ref, ["style", "className", "src", "alt", "visible", "height", "width", "newWidth", "newHeight", "newWidthInPercent", "placeholderHeight", "enableMasonry", "maxHeight", "maxWidth", "fixedBottom", "specifyImageSizes"]);
 
-  return React__default.createElement("img", _extends({}, rest, {
-    className: "".concat(styles.image, " ").concat(className),
-    src: visible ? src : null,
-    alt: alt,
-    style: _objectSpread({
-      display: visible ? null : 'none',
-      position: 'absolute',
-      width: specifyImageSizes ? 'auto' : '100%'
-    }, style),
-    height: specifyImageSizes ? newHeight : 'auto',
-    width: specifyImageSizes ? newWidth : 'auto'
-  }));
+  if (specifyImageSizes) {
+    var ratio = width / height;
+    return React__default.createElement("img", _extends({}, rest, {
+      className: "".concat(styles.image, " ").concat(className),
+      src: visible ? src : null,
+      alt: alt,
+      style: _objectSpread({
+        display: visible ? null : 'none',
+        position: 'absolute',
+        width: ratio > 1 ? '100%' : 'auto',
+        height: ratio > 1 ? 'auto' : "calc(100% - ".concat(fixedBottom, "px)")
+      }, style)
+    }));
+  } else {
+    return React__default.createElement("img", _extends({}, rest, {
+      className: "".concat(styles.image, " ").concat(className),
+      src: visible ? src : null,
+      alt: alt,
+      style: _objectSpread({
+        display: visible ? null : 'none',
+        width: '100%',
+        position: 'absolute'
+      }, style)
+    }));
+  }
 };
 
 Image.propTypes = {
@@ -259,7 +274,7 @@ var COLUMNS_MAX_COUNT = 5;
 var COLUMN_MAX_WIDTH = 200;
 var COLUMN_MAX_HEIGHT = 200;
 var GUTTER_IN_PERCENT = 0.5;
-var DEFAULT_FIXED_BOTTOM = 50;
+var FIXED_BOTTOM = 50;
 
 var Engine =
 /*#__PURE__*/
@@ -420,6 +435,19 @@ function () {
       return 100 / row.length - this.getGutterInPercent();
     }
   }, {
+    key: "buildFixedRows",
+    value: function buildFixedRows() {
+      var rows = [];
+      var items = this.images.slice(0);
+
+      while (items.length > 0) {
+        var row = this.buildRow(items);
+        rows.push(row);
+      }
+
+      return rows;
+    }
+  }, {
     key: "buildRows",
     value: function buildRows() {
       var rows = [];
@@ -498,12 +526,42 @@ var style = {"container":"details_container__36DTd","container--disable":"detail
 styleInject(css$1);
 
 var defaultRenderer = function defaultRenderer(imageProps) {
-  return React__default.createElement(React.Fragment, null, React__default.createElement(Image, _extends({
+  if (imageProps.specifyImageSizes) {
+    return React__default.createElement(React__default.Fragment, null, imageRendererForFixedLayout(imageProps));
+  } else {
+    return React__default.createElement(React__default.Fragment, null, imageRenderer(imageProps));
+  }
+};
+
+var imageRenderer = function imageRenderer(imageProps) {
+  return React__default.createElement(React__default.Fragment, null, React__default.createElement(Image, _extends({
     onClick: imageProps.onClick
   }, imageProps)), React__default.createElement("div", {
     style: {
-      backgroundColor: 'rgb(187, 189, 191)',
-      paddingTop: "".concat(imageProps.placeholderHeight, "%")
+      paddingTop: "".concat(imageProps.placeholderHeight, "%"),
+      backgroundColor: 'rgb(187, 189, 191)'
+    }
+  }));
+};
+
+var imageRendererForFixedLayout = function imageRendererForFixedLayout(imageProps) {
+  return React__default.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'flex-end',
+      justifyContent: 'center'
+    }
+  }, React__default.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'flex-end',
+      justifyContent: 'center'
+    }
+  }, React__default.createElement(Image, _extends({
+    onClick: imageProps.onClick
+  }, imageProps))), React__default.createElement("div", {
+    style: {
+      paddingTop: '100%'
     }
   }));
 };
@@ -622,7 +680,7 @@ _defineProperty(ViewMonitor, "defaultProps", {
   tag: 'div'
 });
 
-var css$2 = ".gallery_container__3i4rI {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_item__3GrEG {\n    vertical-align: top;\n    position: relative;\n    display: inline-block;\n}\n\n.gallery_item--fixed__223Cp {\n    vertical-align: bottom;\n    position: relative;\n    display: inline-block;\n}\n";
+var css$2 = ".gallery_container__3i4rI {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_item__3GrEG {\n    vertical-align: top;\n    position: relative;\n    display: inline-block;\n}\n\n.gallery_item--fixed__223Cp {\n    vertical-align: bottom;\n    position: relative;\n    display: inline-block;\n    background-color: rgb(187, 189, 191);\n}\n";
 var style$1 = {"container":"gallery_container__3i4rI","item":"gallery_item__3GrEG","item--fixed":"gallery_item--fixed__223Cp"};
 styleInject(css$2);
 
@@ -641,6 +699,7 @@ function (_Component) {
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
       columns: [],
       rows: [],
+      fixedRows: [],
       selectedImageRow: null,
       selectedImageId: null,
       selectedImageRowPrev: null,
@@ -709,6 +768,7 @@ function (_Component) {
       this.setState({
         columns: this.engine.buildColumns(),
         rows: this.engine.buildRows(),
+        fixedRows: this.engine.buildFixedRows(),
         columnsMaxCount: columnsMaxCount,
         columnMaxWidth: columnMaxWidth,
         columnMaxHeight: columnMaxHeight,
@@ -732,6 +792,7 @@ function (_Component) {
         this.setState({
           columns: this.engine.buildColumns(),
           rows: this.engine.buildRows(),
+          fixedRows: this.engine.buildFixedRows(),
           columnsMaxCount: nextProps.columnsMaxCount,
           columnMaxWidth: nextProps.columnMaxWidth,
           columnMaxHeight: nextProps.columnMaxHeight,
@@ -882,7 +943,7 @@ function (_Component) {
       var _this4 = this;
 
       var className = _ref4.className,
-          rows = _ref4.rows,
+          fixedRows = _ref4.fixedRows,
           rowClassName = _ref4.rowClassName,
           columnClassName = _ref4.columnClassName,
           imageRenderer = _ref4.imageRenderer,
@@ -899,7 +960,7 @@ function (_Component) {
           selectedImageProps = _this$state3.selectedImageProps;
       return React__default.createElement("div", {
         className: "".concat(style$1.container, " ").concat(className)
-      }, rows.map(function (el, rowIndex) {
+      }, fixedRows.map(function (el, rowIndex) {
         var row = el.row;
         return (
           /* eslint-disable-next-line react/no-array-index-key */
@@ -948,7 +1009,9 @@ function (_Component) {
                       newHeight: newHeight
                     }
                   });
-                }
+                },
+                fixedBottom: fixedBottom,
+                specifyImageSizes: true
               }));
             })));
           })), React__default.createElement("div", null, enableDetailView && detailsViewRenderer(_objectSpread({}, row, {
@@ -1029,7 +1092,7 @@ _defineProperty(Gallery, "defaultProps", {
   disableObserver: false,
   disableActualImage: false,
   enableFixed: false,
-  fixedBottom: DEFAULT_FIXED_BOTTOM,
+  fixedBottom: FIXED_BOTTOM,
   enableDetailView: false,
   detailsViewRenderer: defaultDetailsViewRenderer
 });
