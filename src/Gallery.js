@@ -6,9 +6,12 @@ import Engine, {
     COLUMN_MAX_WIDTH,
     COLUMNS_MAX_COUNT,
     GUTTER_IN_PERCENT,
-    DEFAULT_FIXED_BOTTOM,
+    FIXED_BOTTOM,
 } from './Engine';
-import {defaultRenderer, defaultDetailsViewRenderer} from './Renderer';
+import {
+    defaultRenderer,
+    defaultDetailsViewRenderer,
+} from './Renderers';
 import ViewMonitor from './ViewMonitor';
 import style from './gallery.css';
 
@@ -51,7 +54,7 @@ class Gallery extends Component {
         disableObserver: false,
         disableActualImage: false,
         enableFixed: false,
-        fixedBottom: DEFAULT_FIXED_BOTTOM,
+        fixedBottom: FIXED_BOTTOM,
         enableDetailView: false,
         detailsViewRenderer: defaultDetailsViewRenderer,
     };
@@ -59,6 +62,7 @@ class Gallery extends Component {
     state = {
         columns: [],
         rows: [],
+        fixedRows: [],
         selectedImageRow: null,
         selectedImageId: null,
         selectedImageRowPrev: null,
@@ -96,6 +100,7 @@ class Gallery extends Component {
         this.setState({
             columns: this.engine.buildColumns(),
             rows: this.engine.buildRows(),
+            fixedRows: this.engine.buildFixedRows(),
             columnsMaxCount,
             columnMaxWidth,
             columnMaxHeight,
@@ -125,6 +130,7 @@ class Gallery extends Component {
             this.setState({
                 columns: this.engine.buildColumns(),
                 rows: this.engine.buildRows(),
+                fixedRows: this.engine.buildFixedRows(),
                 columnsMaxCount: nextProps.columnsMaxCount,
                 columnMaxWidth: nextProps.columnMaxWidth,
                 columnMaxHeight: nextProps.columnMaxHeight,
@@ -319,7 +325,7 @@ class Gallery extends Component {
     };
 
     renderFixedGallery({
-        className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
+        className, fixedRows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
         enableDetailView, detailsViewRenderer, fixedBottom,
     }) {
         const {
@@ -329,7 +335,7 @@ class Gallery extends Component {
             <div
                 className={`${style.container} ${className}`}
             >
-                {rows.map((el, rowIndex) => {
+                {fixedRows.map((el, rowIndex) => {
                     const row = el.row;
                     return (
                         /* eslint-disable-next-line react/no-array-index-key */
@@ -386,6 +392,8 @@ class Gallery extends Component {
                                                                 newHeight,
                                                             },
                                                         }),
+                                                        fixedBottom,
+                                                        specifyImageSizes: true,
                                                     })}
                                                 </ViewMonitor>
                                             </div>
