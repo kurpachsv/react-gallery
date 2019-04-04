@@ -5,6 +5,40 @@ import Image from './Image';
 import style from './details.css';
 
 const defaultRenderer = imageProps => {
+    if (imageProps.specifyImageSizes) {
+        return (
+            <React.Fragment>
+                {imageRendererForFixedLayout(imageProps)}
+            </React.Fragment>
+        );
+    } else {
+        return (
+            <React.Fragment>
+                {imageRenderer(imageProps)}
+            </React.Fragment>
+        );
+    }
+};
+
+const imageRenderer = imageProps => {
+    return (
+        <React.Fragment>
+            <Image
+                onClick={imageProps.onClick}
+                {...imageProps}
+            />
+            <div
+                style={{
+                    paddingTop: `${imageProps.placeholderHeight}%`,
+                    backgroundColor: 'rgb(187, 189, 191)',
+
+                }}
+            />
+        </React.Fragment>
+    );
+};
+
+const imageRendererForFixedLayout = imageProps => {
     return (
         <div
             style={{

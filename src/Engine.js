@@ -2,7 +2,7 @@ export const COLUMNS_MAX_COUNT = 5;
 export const COLUMN_MAX_WIDTH = 200;
 export const COLUMN_MAX_HEIGHT = 200;
 export const GUTTER_IN_PERCENT = 0.5;
-export const DEFAULT_FIXED_BOTTOM = 50;
+export const FIXED_BOTTOM = 50;
 
 class Engine {
 
@@ -129,7 +129,6 @@ class Engine {
     }
 
     getNormalizedItems(items) {
-        return items;
         items = items.map(item => {
             return {
                 ...item,
@@ -162,18 +161,14 @@ class Engine {
         return 100 / row.length - this.getGutterInPercent();
     }
 
-    calculateMaxHeight(row) {
-        const heights = row.map(item => {
-            return item.height;
-        });
-        return Math.max.apply(null, heights);
-    }
-
-    calculateMaxWidth(row) {
-        const heights = row.map(item => {
-            return item.width;
-        });
-        return Math.max.apply(null, heights);
+    buildFixedRows() {
+        let rows = [];
+        const items = this.images.slice(0);
+        while (items.length > 0) {
+            const row = this.buildRow(items);
+            rows.push(row);
+        }
+        return rows;
     }
 
     buildRows() {

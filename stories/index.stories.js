@@ -35,10 +35,9 @@ stories.add('with masonry layout', () => (
 stories.add('with fixed layout', () => (
     <Gallery
         enableFixed
-        fixedSize={number('Fixed size', 210)}
         fixedBottom={number('Fixed bottom size', 50)}
         columnsMaxCount={number('Max columns count', 5)}
-        fixedGutter={number('Gutter in px', 10)}
+        gutterInPercent={number('Gutter in %', 0.5)}
         disableObserver={boolean('Disable Intersection Observer', false)}
         disableActualImage={boolean('Disable actual images', false)}
         enableDetailView={boolean('Enable detail view', true)}
