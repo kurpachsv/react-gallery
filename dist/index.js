@@ -208,8 +208,8 @@ function styleInject(css, ref) {
   }
 }
 
-var css = ".image_image__PNasI {\n    cursor: pointer;\n}\n";
-var styles = {"image":"image_image__PNasI"};
+var css = ".image_image__3LZ6Y {\n    cursor: pointer;\n}\n";
+var styles = {"image":"image_image__3LZ6Y"};
 styleInject(css);
 
 var Image = function Image(_ref) {
@@ -521,8 +521,8 @@ function () {
   return Engine;
 }();
 
-var css$1 = ".details_container__36DTd {\r\n    height: 200px;\r\n    font-size: 14px;\r\n}\r\n\r\n.details_container--disable__3by1M {\r\n    height: 0;\r\n}\r\n\r\n.details_image-wrapper__2qHsf {\r\n    display: flex;\r\n    justify-content: center;\r\n}\r\n";
-var style = {"container":"details_container__36DTd","container--disable":"details_container--disable__3by1M","image-wrapper":"details_image-wrapper__2qHsf"};
+var css$1 = ".details_container__3c3HA {\n    height: 200px;\n    font-size: 14px;\n}\n\n.details_container--disable__2DScs {\n    height: 0;\n}\n\n.details_image-wrapper__1kmkY {\n    display: flex;\n    justify-content: center;\n}\n";
+var style = {"container":"details_container__3c3HA","container--disable":"details_container--disable__2DScs","image-wrapper":"details_image-wrapper__1kmkY"};
 styleInject(css$1);
 
 var defaultRenderer = function defaultRenderer(imageProps) {
@@ -680,8 +680,8 @@ _defineProperty(ViewMonitor, "defaultProps", {
   tag: 'div'
 });
 
-var css$2 = ".gallery_container__3i4rI {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_item__3GrEG {\n    vertical-align: top;\n    position: relative;\n    display: inline-block;\n}\n\n.gallery_item--fixed__223Cp {\n    vertical-align: bottom;\n    position: relative;\n    display: inline-block;\n    background-color: rgb(187, 189, 191);\n}\n";
-var style$1 = {"container":"gallery_container__3i4rI","item":"gallery_item__3GrEG","item--fixed":"gallery_item--fixed__223Cp"};
+var css$2 = ".gallery_container__WHVf3 {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_item__2BQxQ {\n    vertical-align: top;\n    position: relative;\n    display: inline-block;\n}\n\n.gallery_item--fixed__1UZHs {\n    vertical-align: bottom;\n    position: relative;\n    display: inline-block;\n    background-color: rgb(187, 189, 191);\n}\n";
+var style$1 = {"container":"gallery_container__WHVf3","item":"gallery_item__2BQxQ","item--fixed":"gallery_item--fixed__1UZHs"};
 styleInject(css$2);
 
 var Gallery =
@@ -763,7 +763,8 @@ function (_Component) {
           rowClassName = _this$props.rowClassName,
           enableFixed = _this$props.enableFixed,
           fixedBottom = _this$props.fixedBottom,
-          enableDetailView = _this$props.enableDetailView;
+          enableDetailView = _this$props.enableDetailView,
+          disableLastRowDetecting = _this$props.disableLastRowDetecting;
       this.engine.setImages(images).setMaxColumnsCount(columnsMaxCount).setColumnMaxWidth(columnMaxWidth).setColumnMaxHeight(columnMaxHeight).setGutterInPercent(gutterInPercent);
       this.setState({
         columns: this.engine.buildColumns(),
@@ -781,7 +782,8 @@ function (_Component) {
         rowClassName: rowClassName,
         enableFixed: enableFixed,
         fixedBottom: fixedBottom,
-        enableDetailView: enableDetailView
+        enableDetailView: enableDetailView,
+        disableLastRowDetecting: disableLastRowDetecting
       });
     }
   }, {
@@ -805,7 +807,8 @@ function (_Component) {
           rowClassName: nextProps.rowClassName,
           enableFixed: nextProps.enableFixed,
           fixedBottom: nextProps.fixedBottom,
-          enableDetailView: nextProps.enableDetailView
+          enableDetailView: nextProps.enableDetailView,
+          disableLastRowDetecting: nextProps.disableLastRowDetecting
         });
       }
     }
@@ -865,7 +868,8 @@ function (_Component) {
           disableObserver = _ref3.disableObserver,
           disableActualImage = _ref3.disableActualImage,
           enableDetailView = _ref3.enableDetailView,
-          detailsViewRenderer = _ref3.detailsViewRenderer;
+          detailsViewRenderer = _ref3.detailsViewRenderer,
+          disableLastRowDetecting = _ref3.disableLastRowDetecting;
       var _this$state2 = this.state,
           selectedImageRow = _this$state2.selectedImageRow,
           selectedImage = _this$state2.selectedImage,
@@ -895,8 +899,8 @@ function (_Component) {
               key: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex),
               className: "".concat(style$1.item, " ").concat(columnClassName),
               style: {
-                width: el.isIncomplete ? "".concat(newWidth, "px") : "".concat(newWidthInPercent, "%"),
-                maxWidth: el.isIncomplete ? "".concat(newWidthInPercent, "%") : 'auto',
+                width: el.isIncomplete && !disableLastRowDetecting ? "".concat(newWidth, "px") : "".concat(newWidthInPercent, "%"),
+                maxWidth: el.isIncomplete && !disableLastRowDetecting ? "".concat(newWidthInPercent, "%") : 'auto',
                 margin: row.length === columnIndex + 1 ? "0 0 ".concat(_this3.engine.getGutterInPercent(), "% 0") : "0 ".concat(_this3.engine.getGutterInPercent(), "% ").concat(_this3.engine.getGutterInPercent(), "% 0")
               }
             }, React__default.createElement(ViewMonitor, {
@@ -1076,7 +1080,8 @@ _defineProperty(Gallery, "propTypes", {
   enableFixed: PropTypes.bool,
   fixedBottom: PropTypes.number,
   enableDetailView: PropTypes.bool,
-  detailsViewRenderer: PropTypes.func
+  detailsViewRenderer: PropTypes.func,
+  disableLastRowDetecting: PropTypes.bool
 });
 
 _defineProperty(Gallery, "defaultProps", {
@@ -1094,7 +1099,8 @@ _defineProperty(Gallery, "defaultProps", {
   enableFixed: false,
   fixedBottom: FIXED_BOTTOM,
   enableDetailView: false,
-  detailsViewRenderer: defaultDetailsViewRenderer
+  detailsViewRenderer: defaultDetailsViewRenderer,
+  disableLastRowDetecting: false
 });
 
 exports.Image = Image;
