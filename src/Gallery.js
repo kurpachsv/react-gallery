@@ -223,13 +223,13 @@ class Gallery extends Component {
                             <div className={rowClassName}>
                                 {row.map((column, columnIndex) => {
                                     const newWidth = this.engine.calculateWidth(
-                                        column, row, el.isIncomplete
+                                        column, row, el.isIncomplete, disableLastRowDetecting
                                     );
                                     const newHeight = this.engine.calculateHeight(
-                                        column, row, el.isIncomplete
+                                        column, row, el.isIncomplete, disableLastRowDetecting
                                     );
                                     const newWidthInPercent = 100 * newWidth / (this.engine.getMaxColumnsCount()
-                                    * this.engine.getColumnsMaxWidth());
+                                    * this.engine.getColumnsMaxWidth()) * row.length / this.engine.getMaxColumnsCount();
                                     const placeholderHeight = 100 * newHeight / newWidth;
                                     return (
                                         <div
@@ -240,7 +240,7 @@ class Gallery extends Component {
                                                 width: el.isIncomplete && !disableLastRowDetecting
                                                     ? `${newWidth}px`
                                                     : `${newWidthInPercent}%`,
-                                                maxWidth: el.isIncomplete && !disableLastRowDetecting
+                                                maxWidth: el.isIncomplete && disableLastRowDetecting
                                                     ? `${newWidthInPercent}%`
                                                     : 'auto',
                                                 margin: row.length === columnIndex + 1

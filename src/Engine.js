@@ -140,19 +140,19 @@ class Engine {
         return this.normalizeByHeight(items);
     }
 
-    calculateHeight(item, row, isLastRow) {
+    calculateHeight(item, row, isLastRow, disableLastRowDetecting) {
         const rowWidth = Engine.getRowWidth(row);
         const ratio = this.maxColumnsCount * this.columnMaxWidth / rowWidth;
         const newHeight = Engine.getMinHeight(row) * ratio * (100 - (row.length - 1) * this.gutterInPercent) / 100;
-        if (isLastRow) {
+        if (isLastRow && !disableLastRowDetecting) {
             return newHeight > this.columnMaxHeight ? this.columnMaxHeight : newHeight;
         }
         return newHeight;
     }
 
-    calculateWidth(item, row, isLastRow) {
+    calculateWidth(item, row, isLastRow, disableLastRowDetecting) {
         const itemAfterResize = Engine.resizeByHeight(
-            item, this.calculateHeight(item, row, isLastRow)
+            item, this.calculateHeight(item, row, isLastRow, disableLastRowDetecting)
         );
         return itemAfterResize.width;
     }

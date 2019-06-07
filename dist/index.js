@@ -412,12 +412,12 @@ function () {
     }
   }, {
     key: "calculateHeight",
-    value: function calculateHeight(item, row, isLastRow) {
+    value: function calculateHeight(item, row, isLastRow, disableLastRowDetecting) {
       var rowWidth = Engine.getRowWidth(row);
       var ratio = this.maxColumnsCount * this.columnMaxWidth / rowWidth;
       var newHeight = Engine.getMinHeight(row) * ratio * (100 - (row.length - 1) * this.gutterInPercent) / 100;
 
-      if (isLastRow) {
+      if (isLastRow && !disableLastRowDetecting) {
         return newHeight > this.columnMaxHeight ? this.columnMaxHeight : newHeight;
       }
 
@@ -425,8 +425,8 @@ function () {
     }
   }, {
     key: "calculateWidth",
-    value: function calculateWidth(item, row, isLastRow) {
-      var itemAfterResize = Engine.resizeByHeight(item, this.calculateHeight(item, row, isLastRow));
+    value: function calculateWidth(item, row, isLastRow, disableLastRowDetecting) {
+      var itemAfterResize = Engine.resizeByHeight(item, this.calculateHeight(item, row, isLastRow, disableLastRowDetecting));
       return itemAfterResize.width;
     }
   }, {
@@ -887,11 +887,11 @@ function (_Component) {
           }, React__default.createElement("div", {
             className: rowClassName
           }, row.map(function (column, columnIndex) {
-            var newWidth = _this3.engine.calculateWidth(column, row, el.isIncomplete);
+            var newWidth = _this3.engine.calculateWidth(column, row, el.isIncomplete, disableLastRowDetecting);
 
-            var newHeight = _this3.engine.calculateHeight(column, row, el.isIncomplete);
+            var newHeight = _this3.engine.calculateHeight(column, row, el.isIncomplete, disableLastRowDetecting);
 
-            var newWidthInPercent = 100 * newWidth / (_this3.engine.getMaxColumnsCount() * _this3.engine.getColumnsMaxWidth());
+            var newWidthInPercent = 100 * newWidth / (_this3.engine.getMaxColumnsCount() * _this3.engine.getColumnsMaxWidth()) * row.length / _this3.engine.getMaxColumnsCount();
 
             var placeholderHeight = 100 * newHeight / newWidth;
             return React__default.createElement("div", {
@@ -900,7 +900,7 @@ function (_Component) {
               className: "".concat(style$1.item, " ").concat(columnClassName),
               style: {
                 width: el.isIncomplete && !disableLastRowDetecting ? "".concat(newWidth, "px") : "".concat(newWidthInPercent, "%"),
-                maxWidth: el.isIncomplete && !disableLastRowDetecting ? "".concat(newWidthInPercent, "%") : 'auto',
+                maxWidth: el.isIncomplete && disableLastRowDetecting ? "".concat(newWidthInPercent, "%") : 'auto',
                 margin: row.length === columnIndex + 1 ? "0 0 ".concat(_this3.engine.getGutterInPercent(), "% 0") : "0 ".concat(_this3.engine.getGutterInPercent(), "% ").concat(_this3.engine.getGutterInPercent(), "% 0")
               }
             }, React__default.createElement(ViewMonitor, {
