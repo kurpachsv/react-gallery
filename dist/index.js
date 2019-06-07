@@ -891,7 +891,12 @@ function (_Component) {
 
             var newHeight = _this3.engine.calculateHeight(column, row, el.isIncomplete, disableLastRowDetecting);
 
-            var newWidthInPercent = 100 * newWidth / (_this3.engine.getMaxColumnsCount() * _this3.engine.getColumnsMaxWidth()) * row.length / _this3.engine.getMaxColumnsCount();
+            var newWidthInPercent = 100 * newWidth / (_this3.engine.getMaxColumnsCount() * _this3.engine.getColumnsMaxWidth());
+
+            if (el.isIncomplete && disableLastRowDetecting) {
+              newWidthInPercent = 100 * newWidth / (_this3.engine.getMaxColumnsCount() // eslint-disable-next-line max-len
+              * _this3.engine.getColumnsMaxWidth()) * row.length / _this3.engine.getMaxColumnsCount();
+            }
 
             var placeholderHeight = 100 * newHeight / newWidth;
             return React__default.createElement("div", {

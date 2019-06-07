@@ -228,8 +228,13 @@ class Gallery extends Component {
                                     const newHeight = this.engine.calculateHeight(
                                         column, row, el.isIncomplete, disableLastRowDetecting
                                     );
-                                    const newWidthInPercent = 100 * newWidth / (this.engine.getMaxColumnsCount()
-                                    * this.engine.getColumnsMaxWidth()) * row.length / this.engine.getMaxColumnsCount();
+                                    let newWidthInPercent = 100 * newWidth / (this.engine.getMaxColumnsCount()
+                                        * this.engine.getColumnsMaxWidth());
+                                    if (el.isIncomplete && disableLastRowDetecting) {
+                                        newWidthInPercent = 100 * newWidth / (this.engine.getMaxColumnsCount()
+                                        // eslint-disable-next-line max-len
+                                        * this.engine.getColumnsMaxWidth()) * row.length / this.engine.getMaxColumnsCount();
+                                    }
                                     const placeholderHeight = 100 * newHeight / newWidth;
                                     return (
                                         <div
