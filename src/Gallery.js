@@ -39,6 +39,7 @@ class Gallery extends Component {
         fixedBottom: PropTypes.number,
         enableDetailView: PropTypes.bool,
         detailsViewRenderer: PropTypes.func,
+        disableLastRowDetecting: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -57,6 +58,7 @@ class Gallery extends Component {
         fixedBottom: FIXED_BOTTOM,
         enableDetailView: false,
         detailsViewRenderer: defaultDetailsViewRenderer,
+        disableLastRowDetecting: false,
     };
 
     state = {
@@ -88,6 +90,7 @@ class Gallery extends Component {
             enableFixed,
             fixedBottom,
             enableDetailView,
+            disableLastRowDetecting,
         } = this.props;
 
         this.engine
@@ -114,6 +117,7 @@ class Gallery extends Component {
             enableFixed,
             fixedBottom,
             enableDetailView,
+            disableLastRowDetecting,
         });
     }
 
@@ -144,6 +148,7 @@ class Gallery extends Component {
                 enableFixed: nextProps.enableFixed,
                 fixedBottom: nextProps.fixedBottom,
                 enableDetailView: nextProps.enableDetailView,
+                disableLastRowDetecting: nextProps.disableLastRowDetecting,
             });
         }
     }
@@ -201,7 +206,7 @@ class Gallery extends Component {
 
     renderGallery({
         className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
-        enableDetailView, detailsViewRenderer,
+        enableDetailView, detailsViewRenderer, disableLastRowDetecting
     }) {
         const {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
@@ -232,10 +237,10 @@ class Gallery extends Component {
                                             key={`column-${column.src}-${rowIndex}-${columnIndex}`}
                                             className={`${style.item} ${columnClassName}`}
                                             style={{
-                                                width: el.isIncomplete
+                                                width: el.isIncomplete && !disableLastRowDetecting
                                                     ? `${newWidth}px`
                                                     : `${newWidthInPercent}%`,
-                                                maxWidth: el.isIncomplete
+                                                maxWidth: el.isIncomplete && !disableLastRowDetecting
                                                     ? `${newWidthInPercent}%`
                                                     : 'auto',
                                                 margin: row.length === columnIndex + 1

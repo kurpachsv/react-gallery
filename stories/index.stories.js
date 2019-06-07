@@ -17,6 +17,7 @@ stories.add('with default layout', () => (
         disableObserver={boolean('Disable Intersection Observer', false)}
         disableActualImage={boolean('Disable actual images', false)}
         enableDetailView={boolean('Enable detail view', false)}
+        disableLastRowDetecting={boolean('Disable LastRow Detecting', false)}
         images={images}
     />
 ));
