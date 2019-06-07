@@ -208,8 +208,8 @@ function styleInject(css, ref) {
   }
 }
 
-var css = ".image_image__3LZ6Y {\n    cursor: pointer;\n}\n";
-var styles = {"image":"image_image__3LZ6Y"};
+var css = ".image_image__PNasI {\n    cursor: pointer;\n}\n";
+var styles = {"image":"image_image__PNasI"};
 styleInject(css);
 
 var Image = function Image(_ref) {
@@ -521,8 +521,8 @@ function () {
   return Engine;
 }();
 
-var css$1 = ".details_container__3c3HA {\n    height: 200px;\n    font-size: 14px;\n}\n\n.details_container--disable__2DScs {\n    height: 0;\n}\n\n.details_image-wrapper__1kmkY {\n    display: flex;\n    justify-content: center;\n}\n";
-var style = {"container":"details_container__3c3HA","container--disable":"details_container--disable__2DScs","image-wrapper":"details_image-wrapper__1kmkY"};
+var css$1 = ".details_container__36DTd {\n    height: 200px;\n    font-size: 14px;\n}\n\n.details_container--disable__3by1M {\n    height: 0;\n}\n\n.details_image-wrapper__2qHsf {\n    display: flex;\n    justify-content: center;\n}\n";
+var style = {"container":"details_container__36DTd","container--disable":"details_container--disable__3by1M","image-wrapper":"details_image-wrapper__2qHsf"};
 styleInject(css$1);
 
 var defaultRenderer = function defaultRenderer(imageProps) {
@@ -680,8 +680,8 @@ _defineProperty(ViewMonitor, "defaultProps", {
   tag: 'div'
 });
 
-var css$2 = ".gallery_container__WHVf3 {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_item__2BQxQ {\n    vertical-align: top;\n    position: relative;\n    display: inline-block;\n}\n\n.gallery_item--fixed__1UZHs {\n    vertical-align: bottom;\n    position: relative;\n    display: inline-block;\n    background-color: rgb(187, 189, 191);\n}\n";
-var style$1 = {"container":"gallery_container__WHVf3","item":"gallery_item__2BQxQ","item--fixed":"gallery_item--fixed__1UZHs"};
+var css$2 = ".gallery_container__3i4rI {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_item__3GrEG {\n    vertical-align: top;\n    position: relative;\n    display: inline-block;\n}\n\n.gallery_item--fixed__223Cp {\n    vertical-align: bottom;\n    position: relative;\n    display: inline-block;\n    background-color: rgb(187, 189, 191);\n}\n";
+var style$1 = {"container":"gallery_container__3i4rI","item":"gallery_item__3GrEG","item--fixed":"gallery_item--fixed__223Cp"};
 styleInject(css$2);
 
 var Gallery =

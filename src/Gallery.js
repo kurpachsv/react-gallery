@@ -206,7 +206,7 @@ class Gallery extends Component {
 
     renderGallery({
         className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
-        enableDetailView, detailsViewRenderer, disableLastRowDetecting
+        enableDetailView, detailsViewRenderer, disableLastRowDetecting,
     }) {
         const {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,

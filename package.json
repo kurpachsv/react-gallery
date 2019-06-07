@@ -1,7 +1,7 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.2.19",
-  "description": "A simple, fast and flexibility image gallery.",
+  "version": "0.2.20",
+  "description": "A simple, fast and flexible image gallery.",
   "main": "dist/index.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production ./node_modules/.bin/rollup -c",
