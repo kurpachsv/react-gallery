@@ -905,7 +905,7 @@ function (_Component) {
               className: "".concat(style$1.item, " ").concat(columnClassName),
               style: {
                 width: el.isIncomplete && !disableLastRowDetecting ? "".concat(newWidth, "px") : "".concat(newWidthInPercent, "%"),
-                maxWidth: el.isIncomplete && disableLastRowDetecting ? "".concat(newWidthInPercent, "%") : 'auto',
+                maxWidth: el.isIncomplete && !disableLastRowDetecting ? "".concat(newWidthInPercent, "%") : 'auto',
                 margin: row.length === columnIndex + 1 ? "0 0 ".concat(_this3.engine.getGutterInPercent(), "% 0") : "0 ".concat(_this3.engine.getGutterInPercent(), "% ").concat(_this3.engine.getGutterInPercent(), "% 0")
               }
             }, React__default.createElement(ViewMonitor, {

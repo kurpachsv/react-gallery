@@ -245,7 +245,7 @@ class Gallery extends Component {
                                                 width: el.isIncomplete && !disableLastRowDetecting
                                                     ? `${newWidth}px`
                                                     : `${newWidthInPercent}%`,
-                                                maxWidth: el.isIncomplete && disableLastRowDetecting
+                                                maxWidth: el.isIncomplete && !disableLastRowDetecting
                                                     ? `${newWidthInPercent}%`
                                                     : 'auto',
                                                 margin: row.length === columnIndex + 1
