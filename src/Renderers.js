@@ -34,7 +34,7 @@ const imageRenderer = imageProps => {
             <div
                 style={{
                     paddingTop: `${imageProps.placeholderHeight}%`,
-                    backgroundColor: 'rgb(187, 189, 191)',
+                    backgroundColor: imageProps.placeholderColor,
 
                 }}
             />

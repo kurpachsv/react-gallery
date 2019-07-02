@@ -246,7 +246,9 @@ var ItemDefault = styled(Item).withConfig({
 var ItemFixed = styled(Item).withConfig({
   displayName: "nodes__ItemFixed",
   componentId: "sc-2jwtws-6"
-})(["background-color:rgb(187,189,191);width:", ";margin:", ";"], function (props) {
+})(["background-color:", ";width:", ";margin:", ";"], function (props) {
+  return props.placeholderColor;
+}, function (props) {
   return props.isIncomplete ? "".concat(props.newWidth, "px") : "".concat(props.newWidthInPercent, "%");
 }, function (props) {
   return props.rowLength === props.columnIndex + 1 ? "0 0 ".concat(props.gutterInPercent, "% 0") : "0 ".concat(props.gutterInPercent, "% ").concat(props.gutterInPercent, "% 0");
@@ -326,6 +328,7 @@ var COLUMN_MAX_WIDTH = 200;
 var COLUMN_MAX_HEIGHT = 200;
 var GUTTER_IN_PERCENT = 0.5;
 var FIXED_BOTTOM = 50;
+var PLACEHOLDER_COLOR = '#f0f0f0';
 
 var Engine =
 /*#__PURE__*/
@@ -586,7 +589,7 @@ var imageRenderer = function imageRenderer(imageProps) {
   }, imageProps)), React__default.createElement("div", {
     style: {
       paddingTop: "".concat(imageProps.placeholderHeight, "%"),
-      backgroundColor: 'rgb(187, 189, 191)'
+      backgroundColor: imageProps.placeholderColor
     }
   }));
 };
@@ -812,7 +815,8 @@ function (_Component) {
           enableFixed = _this$props.enableFixed,
           fixedBottom = _this$props.fixedBottom,
           enableDetailView = _this$props.enableDetailView,
-          disableLastRowDetecting = _this$props.disableLastRowDetecting;
+          disableLastRowDetecting = _this$props.disableLastRowDetecting,
+          placeholderColor = _this$props.placeholderColor;
       this.engine.setImages(images).setMaxColumnsCount(columnsMaxCount).setColumnMaxWidth(columnMaxWidth).setColumnMaxHeight(columnMaxHeight).setGutterInPercent(gutterInPercent);
       this.setState({
         columns: this.engine.buildColumns(),
@@ -831,7 +835,8 @@ function (_Component) {
         enableFixed: enableFixed,
         fixedBottom: fixedBottom,
         enableDetailView: enableDetailView,
-        disableLastRowDetecting: disableLastRowDetecting
+        disableLastRowDetecting: disableLastRowDetecting,
+        placeholderColor: placeholderColor
       });
     }
   }, {
@@ -856,7 +861,8 @@ function (_Component) {
           enableFixed: nextProps.enableFixed,
           fixedBottom: nextProps.fixedBottom,
           enableDetailView: nextProps.enableDetailView,
-          disableLastRowDetecting: nextProps.disableLastRowDetecting
+          disableLastRowDetecting: nextProps.disableLastRowDetecting,
+          placeholderColor: nextProps.placeholderColor
         });
       }
     }
@@ -870,7 +876,8 @@ function (_Component) {
           imageRenderer = _ref2.imageRenderer,
           disableObserver = _ref2.disableObserver,
           disableActualImage = _ref2.disableActualImage,
-          columns = _ref2.columns;
+          columns = _ref2.columns,
+          placeholderColor = _ref2.placeholderColor;
       return React__default.createElement(Container, {
         className: className
       }, columns.map(function (item, columnIndex) {
@@ -895,7 +902,8 @@ function (_Component) {
             return imageRenderer(_objectSpread({}, image, {
               placeholderHeight: placeholderHeight,
               visible: !disableActualImage && isViewable,
-              enableMasonry: true
+              enableMasonry: true,
+              placeholderColor: placeholderColor
             }));
           }));
         }));
@@ -915,7 +923,8 @@ function (_Component) {
           disableActualImage = _ref3.disableActualImage,
           enableDetailView = _ref3.enableDetailView,
           detailsViewRenderer = _ref3.detailsViewRenderer,
-          disableLastRowDetecting = _ref3.disableLastRowDetecting;
+          disableLastRowDetecting = _ref3.disableLastRowDetecting,
+          placeholderColor = _ref3.placeholderColor;
       var _this$state2 = this.state,
           selectedImageRow = _this$state2.selectedImageRow,
           selectedImage = _this$state2.selectedImage,
@@ -965,6 +974,7 @@ function (_Component) {
                 newHeight: newHeight,
                 newWidthInPercent: newWidthInPercent,
                 placeholderHeight: placeholderHeight,
+                placeholderColor: placeholderColor,
                 visible: !disableActualImage && isViewable,
                 enableMasonry: false,
                 onClick: function onClick() {
@@ -1009,7 +1019,8 @@ function (_Component) {
           disableActualImage = _ref4.disableActualImage,
           enableDetailView = _ref4.enableDetailView,
           detailsViewRenderer = _ref4.detailsViewRenderer,
-          fixedBottom = _ref4.fixedBottom;
+          fixedBottom = _ref4.fixedBottom,
+          placeholderColor = _ref4.placeholderColor;
       var _this$state3 = this.state,
           selectedImageRow = _this$state3.selectedImageRow,
           selectedImage = _this$state3.selectedImage,
@@ -1044,7 +1055,8 @@ function (_Component) {
               newWidthInPercent: newWidthInPercent,
               gutterInPercent: _this4.engine.getGutterInPercent(),
               rowLength: row.length,
-              columnIndex: columnIndex
+              columnIndex: columnIndex,
+              placeholderColor: placeholderColor
             }, React__default.createElement("div", {
               style: {
                 // eslint-disable-next-line
@@ -1138,7 +1150,8 @@ _defineProperty(Gallery, "propTypes", {
   fixedBottom: PropTypes.number,
   enableDetailView: PropTypes.bool,
   detailsViewRenderer: PropTypes.func,
-  disableLastRowDetecting: PropTypes.bool
+  disableLastRowDetecting: PropTypes.bool,
+  placeholderColor: PropTypes.string
 });
 
 _defineProperty(Gallery, "defaultProps", {
@@ -1157,7 +1170,8 @@ _defineProperty(Gallery, "defaultProps", {
   fixedBottom: FIXED_BOTTOM,
   enableDetailView: false,
   detailsViewRenderer: defaultDetailsViewRenderer,
-  disableLastRowDetecting: false
+  disableLastRowDetecting: false,
+  placeholderColor: PLACEHOLDER_COLOR
 });
 
 exports.Image = Image$1;

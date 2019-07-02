@@ -3,6 +3,7 @@ export const COLUMN_MAX_WIDTH = 200;
 export const COLUMN_MAX_HEIGHT = 200;
 export const GUTTER_IN_PERCENT = 0.5;
 export const FIXED_BOTTOM = 50;
+export const PLACEHOLDER_COLOR = '#f0f0f0';
 
 class Engine {
 

@@ -7,6 +7,7 @@ import Engine, {
     COLUMNS_MAX_COUNT,
     GUTTER_IN_PERCENT,
     FIXED_BOTTOM,
+    PLACEHOLDER_COLOR,
 } from './Engine';
 import {
     defaultRenderer,
@@ -46,6 +47,7 @@ class Gallery extends Component {
         enableDetailView: PropTypes.bool,
         detailsViewRenderer: PropTypes.func,
         disableLastRowDetecting: PropTypes.bool,
+        placeholderColor: PropTypes.string,
     };
 
     static defaultProps = {
@@ -65,6 +67,7 @@ class Gallery extends Component {
         enableDetailView: false,
         detailsViewRenderer: defaultDetailsViewRenderer,
         disableLastRowDetecting: false,
+        placeholderColor: PLACEHOLDER_COLOR,
     };
 
     state = {
@@ -97,6 +100,7 @@ class Gallery extends Component {
             fixedBottom,
             enableDetailView,
             disableLastRowDetecting,
+            placeholderColor,
         } = this.props;
 
         this.engine
@@ -124,6 +128,7 @@ class Gallery extends Component {
             fixedBottom,
             enableDetailView,
             disableLastRowDetecting,
+            placeholderColor,
         });
     }
 
@@ -155,12 +160,14 @@ class Gallery extends Component {
                 fixedBottom: nextProps.fixedBottom,
                 enableDetailView: nextProps.enableDetailView,
                 disableLastRowDetecting: nextProps.disableLastRowDetecting,
+                placeholderColor: nextProps.placeholderColor,
             });
         }
     }
 
     renderMasonryGallery({
         className, columnClassName, imageRenderer, disableObserver, disableActualImage, columns,
+        placeholderColor,
     }) {
         return (
             <Container className={className}>
@@ -193,6 +200,7 @@ class Gallery extends Component {
                                                 placeholderHeight,
                                                 visible: !disableActualImage && isViewable,
                                                 enableMasonry: true,
+                                                placeholderColor,
                                             })}
                                         </ViewMonitor>
                                     </div>
@@ -207,7 +215,7 @@ class Gallery extends Component {
 
     renderGallery({
         className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
-        enableDetailView, detailsViewRenderer, disableLastRowDetecting,
+        enableDetailView, detailsViewRenderer, disableLastRowDetecting, placeholderColor,
     }) {
         const {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
@@ -255,6 +263,7 @@ class Gallery extends Component {
                                                     newHeight,
                                                     newWidthInPercent,
                                                     placeholderHeight,
+                                                    placeholderColor,
                                                     visible: !disableActualImage && isViewable,
                                                     enableMasonry: false,
                                                     onClick: () => this.handleSelectImage({
@@ -340,7 +349,7 @@ class Gallery extends Component {
 
     renderFixedGallery({
         className, fixedRows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
-        enableDetailView, detailsViewRenderer, fixedBottom,
+        enableDetailView, detailsViewRenderer, fixedBottom, placeholderColor,
     }) {
         const {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
@@ -375,6 +384,7 @@ class Gallery extends Component {
                                             gutterInPercent={this.engine.getGutterInPercent()}
                                             rowLength={row.length}
                                             columnIndex={columnIndex}
+                                            placeholderColor={placeholderColor}
                                         >
                                             <div
                                                 style={{

@@ -52,7 +52,7 @@ export const ItemDefault = styled(Item)`
 
 
 export const ItemFixed = styled(Item)`
-    background-color: rgb(187, 189, 191);
+    background-color: ${props => props.placeholderColor};
     width: ${props => props.isIncomplete ? `${props.newWidth}px` : `${props.newWidthInPercent}%`};
     margin: ${props => props.rowLength === props.columnIndex + 1
         ? `0 0 ${props.gutterInPercent}% 0`
