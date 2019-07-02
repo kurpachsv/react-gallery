@@ -8,7 +8,7 @@
 
 # react-gallery
 
-A simple, fast and flexibility image gallery.
+A simple, fast and flexible image gallery.
 
 ## Preview
 
@@ -68,9 +68,7 @@ detailsViewRenderer | function | default implementation | optional; component/fu
 
 ## Renderers
 
-For better flexibility, you can override default image renderer, [here](https://github.com/kurpachsv/react-gallery/blob/master/src/Renderers.js) is a default implementation.
-
-Also you can override default details renderer, [here](https://github.com/kurpachsv/react-gallery/blob/master/src/Renderers.js) is a default implementation.
+For better flexibility, you can override default image renderer or details renderer, [here](https://github.com/kurpachsv/react-gallery/blob/master/src/Renderers.js) is a default implementation this renderers.
 
 ## License
 

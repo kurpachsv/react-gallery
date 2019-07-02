@@ -2,7 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Image from './Image';
 
-import style from './details.css';
+import {
+    DetailsContainer,
+    DetailsImageWrapper,
+    DetailsImage,
+} from './nodes';
 
 const defaultRenderer = imageProps => {
     if (imageProps.specifyImageSizes) {
@@ -72,27 +76,22 @@ const DETAILS_IMAGE_HEIGHT = 300;
 
 const defaultDetailsViewRenderer = ({visible, selectedImage, gutterInPercent}) => {
     return (
-        <div
-            className={visible ? style.container : style['container--disable']}
-            style={{
-                height: visible ? DETAILS_IMAGE_HEIGHT : 0,
-                visibility: visible ? 'visible' : 'hidden',
-                marginBottom: visible ? `${gutterInPercent}%` : 0,
-            }}
+        <DetailsContainer
+            visible={visible}
+            height={DETAILS_IMAGE_HEIGHT}
+            gutterInPercent={gutterInPercent}
         >
 
-            <div className={style['image-wrapper']}>
+            <DetailsImageWrapper>
                 {visible && (
-                    <Image
-                        style={{
-                            height: DETAILS_IMAGE_HEIGHT,
-                            width: selectedImage.width / selectedImage.height * DETAILS_IMAGE_HEIGHT,
-                        }}
+                    <DetailsImage
                         src={selectedImage.src}
+                        height={DETAILS_IMAGE_HEIGHT}
+                        width={selectedImage.width / selectedImage.height * DETAILS_IMAGE_HEIGHT}
                     />
                 )}
-            </div>
-        </div>
+            </DetailsImageWrapper>
+        </DetailsContainer>
     );
 };
 

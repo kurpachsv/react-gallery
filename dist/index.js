@@ -4,9 +4,10 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var PropTypes = _interopDefault(require('prop-types'));
 var React = require('react');
 var React__default = _interopDefault(React);
+var styled = _interopDefault(require('styled-components'));
+var PropTypes = _interopDefault(require('prop-types'));
 var Observer = _interopDefault(require('@researchgate/react-intersection-observer'));
 var equal = _interopDefault(require('fast-deep-equal'));
 
@@ -181,93 +182,143 @@ function _possibleConstructorReturn(self, call) {
   return _assertThisInitialized(self);
 }
 
-function styleInject(css, ref) {
-  if ( ref === void 0 ) ref = {};
-  var insertAt = ref.insertAt;
-
-  if (!css || typeof document === 'undefined') { return; }
-
-  var head = document.head || document.getElementsByTagName('head')[0];
-  var style = document.createElement('style');
-  style.type = 'text/css';
-
-  if (insertAt === 'top') {
-    if (head.firstChild) {
-      head.insertBefore(style, head.firstChild);
-    } else {
-      head.appendChild(style);
-    }
-  } else {
-    head.appendChild(style);
-  }
-
-  if (style.styleSheet) {
-    style.styleSheet.cssText = css;
-  } else {
-    style.appendChild(document.createTextNode(css));
-  }
-}
-
-var css = ".image_image__PNasI {\n    cursor: pointer;\n}\n";
-var styles = {"image":"image_image__PNasI"};
-styleInject(css);
-
 var Image = function Image(_ref) {
-  var style = _ref.style,
-      className = _ref.className,
+  var className = _ref.className,
+      src = _ref.src,
+      alt = _ref.alt,
+      onClick = _ref.onClick;
+  return React__default.createElement("img", {
+    className: className,
+    src: src,
+    alt: alt,
+    onClick: onClick
+  });
+};
+var Div = function Div(_ref2) {
+  var className = _ref2.className,
+      children = _ref2.children;
+  return React__default.createElement("div", {
+    className: className
+  }, children);
+};
+var ImageWithSizes = styled(Image).withConfig({
+  displayName: "nodes__ImageWithSizes",
+  componentId: "sc-2jwtws-0"
+})(["position:absolute;display:", ";width:", ";height:", ";cursor:pointer;"], function (props) {
+  return props.visible ? null : 'none';
+}, function (props) {
+  return props.ratio > 1 ? '100%' : 'auto';
+}, function (props) {
+  return props.radio > 1 ? 'auto' : "calc(100% - ".concat(props.fixedBottom || 0, "px)");
+});
+var ImageWithoutSizes = styled(Image).withConfig({
+  displayName: "nodes__ImageWithoutSizes",
+  componentId: "sc-2jwtws-1"
+})(["position:absolute;display:", ";width:100%;cursor:pointer;"], function (props) {
+  return props.visible ? null : 'none';
+});
+var Container = styled(Div).withConfig({
+  displayName: "nodes__Container",
+  componentId: "sc-2jwtws-2"
+})(["display:block;font-size:0;"]);
+var Item = styled(Div).withConfig({
+  displayName: "nodes__Item",
+  componentId: "sc-2jwtws-3"
+})(["vertical-align:top;position:relative;display:inline-block;"]);
+var ItemMasonry = styled(Item).withConfig({
+  displayName: "nodes__ItemMasonry",
+  componentId: "sc-2jwtws-4"
+})(["width:", ";margin:", ";"], function (props) {
+  return "".concat(100 / props.columnsMaxCount - props.gutterInPercent, "%");
+}, function (props) {
+  return "0 ".concat(props.gutterInPercent, "% 0 0");
+});
+var ItemDefault = styled(Item).withConfig({
+  displayName: "nodes__ItemDefault",
+  componentId: "sc-2jwtws-5"
+})(["width:", ";max-width:", ";margin:", ";"], function (props) {
+  return props.isIncomplete && !props.disableLastRowDetecting ? "".concat(props.newWidth, "px") : "".concat(props.newWidthInPercent, "%");
+}, function (props) {
+  return props.isIncomplete && !props.disableLastRowDetecting ? "".concat(props.newWidthInPercent, "%") : 'auto';
+}, function (props) {
+  return props.rowLength === props.columnIndex + 1 ? "0 0 ".concat(props.gutterInPercent, "% 0") : "0 ".concat(props.gutterInPercent, "% ").concat(props.gutterInPercent, "% 0");
+});
+var ItemFixed = styled(Item).withConfig({
+  displayName: "nodes__ItemFixed",
+  componentId: "sc-2jwtws-6"
+})(["background-color:rgb(187,189,191);width:", ";margin:", ";"], function (props) {
+  return props.isIncomplete ? "".concat(props.newWidth, "px") : "".concat(props.newWidthInPercent, "%");
+}, function (props) {
+  return props.rowLength === props.columnIndex + 1 ? "0 0 ".concat(props.gutterInPercent, "% 0") : "0 ".concat(props.gutterInPercent, "% ").concat(props.gutterInPercent, "% 0");
+});
+var DetailsContainer = styled.div.withConfig({
+  displayName: "nodes__DetailsContainer",
+  componentId: "sc-2jwtws-7"
+})(["height:", ";font-size:14px;visibility:", ";margin-bottom:", ";"], function (props) {
+  return props.visible ? "".concat(props.height, "px") : '0';
+}, function (props) {
+  return props.visible ? 'visible' : 'hidden';
+}, function (props) {
+  return props.visible ? "".concat(props.gutterInPercent, "%") : 0;
+});
+var DetailsImageWrapper = styled.div.withConfig({
+  displayName: "nodes__DetailsImageWrapper",
+  componentId: "sc-2jwtws-8"
+})(["display:flex;justify-content:center;"]);
+var DetailsImage = styled(Image).withConfig({
+  displayName: "nodes__DetailsImage",
+  componentId: "sc-2jwtws-9"
+})(["height:", ";width:", ";"], function (props) {
+  return "".concat(props.height, "px");
+}, function (props) {
+  return "".concat(props.width, "px");
+});
+
+var Image$1 = function Image$$1(_ref) {
+  var className = _ref.className,
       src = _ref.src,
       alt = _ref.alt,
       visible = _ref.visible,
       height = _ref.height,
       width = _ref.width,
-      newWidth = _ref.newWidth,
-      newHeight = _ref.newHeight,
-      newWidthInPercent = _ref.newWidthInPercent,
-      placeholderHeight = _ref.placeholderHeight,
-      enableMasonry = _ref.enableMasonry,
-      maxHeight = _ref.maxHeight,
-      maxWidth = _ref.maxWidth,
       fixedBottom = _ref.fixedBottom,
       specifyImageSizes = _ref.specifyImageSizes,
-      rest = _objectWithoutProperties(_ref, ["style", "className", "src", "alt", "visible", "height", "width", "newWidth", "newHeight", "newWidthInPercent", "placeholderHeight", "enableMasonry", "maxHeight", "maxWidth", "fixedBottom", "specifyImageSizes"]);
+      props = _objectWithoutProperties(_ref, ["className", "src", "alt", "visible", "height", "width", "fixedBottom", "specifyImageSizes"]);
 
   if (specifyImageSizes) {
     var ratio = width / height;
-    return React__default.createElement("img", _extends({}, rest, {
-      className: "".concat(styles.image, " ").concat(className),
+    return React__default.createElement(ImageWithSizes, {
+      className: className,
       src: visible ? src : null,
       alt: alt,
-      style: _objectSpread({
-        display: visible ? null : 'none',
-        position: 'absolute',
-        width: ratio > 1 ? '100%' : 'auto',
-        height: ratio > 1 ? 'auto' : "calc(100% - ".concat(fixedBottom, "px)")
-      }, style)
-    }));
+      ratio: ratio,
+      visible: visible,
+      height: height,
+      width: width,
+      fixedBottom: fixedBottom,
+      onClick: props.onClick
+    });
   } else {
-    return React__default.createElement("img", _extends({}, rest, {
-      className: "".concat(styles.image, " ").concat(className),
+    return React__default.createElement(ImageWithoutSizes, {
+      className: className,
       src: visible ? src : null,
       alt: alt,
-      style: _objectSpread({
-        display: visible ? null : 'none',
-        width: '100%',
-        position: 'absolute'
-      }, style)
-    }));
+      visible: visible,
+      onClick: props.onClick
+    });
   }
 };
 
-Image.propTypes = {
-  className: PropTypes.string,
+Image$1.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string,
-  visible: PropTypes.bool
+  visible: PropTypes.bool,
+  onClick: PropTypes.func
 };
-Image.defaultProps = {
-  className: '',
+Image$1.defaultProps = {
   alt: '',
-  visible: true
+  visible: true,
+  onClick: function onClick() {}
 };
 
 var COLUMNS_MAX_COUNT = 5;
@@ -521,10 +572,6 @@ function () {
   return Engine;
 }();
 
-var css$1 = ".details_container__36DTd {\n    height: 200px;\n    font-size: 14px;\n}\n\n.details_container--disable__3by1M {\n    height: 0;\n}\n\n.details_image-wrapper__2qHsf {\n    display: flex;\n    justify-content: center;\n}\n";
-var style = {"container":"details_container__36DTd","container--disable":"details_container--disable__3by1M","image-wrapper":"details_image-wrapper__2qHsf"};
-styleInject(css$1);
-
 var defaultRenderer = function defaultRenderer(imageProps) {
   if (imageProps.specifyImageSizes) {
     return React__default.createElement(React__default.Fragment, null, imageRendererForFixedLayout(imageProps));
@@ -534,7 +581,7 @@ var defaultRenderer = function defaultRenderer(imageProps) {
 };
 
 var imageRenderer = function imageRenderer(imageProps) {
-  return React__default.createElement(React__default.Fragment, null, React__default.createElement(Image, _extends({
+  return React__default.createElement(React__default.Fragment, null, React__default.createElement(Image$1, _extends({
     onClick: imageProps.onClick
   }, imageProps)), React__default.createElement("div", {
     style: {
@@ -557,7 +604,7 @@ var imageRendererForFixedLayout = function imageRendererForFixedLayout(imageProp
       alignItems: 'flex-end',
       justifyContent: 'center'
     }
-  }, React__default.createElement(Image, _extends({
+  }, React__default.createElement(Image$1, _extends({
     onClick: imageProps.onClick
   }, imageProps))), React__default.createElement("div", {
     style: {
@@ -572,21 +619,14 @@ var defaultDetailsViewRenderer = function defaultDetailsViewRenderer(_ref) {
   var visible = _ref.visible,
       selectedImage = _ref.selectedImage,
       gutterInPercent = _ref.gutterInPercent;
-  return React__default.createElement("div", {
-    className: visible ? style.container : style['container--disable'],
-    style: {
-      height: visible ? DETAILS_IMAGE_HEIGHT : 0,
-      visibility: visible ? 'visible' : 'hidden',
-      marginBottom: visible ? "".concat(gutterInPercent, "%") : 0
-    }
-  }, React__default.createElement("div", {
-    className: style['image-wrapper']
-  }, visible && React__default.createElement(Image, {
-    style: {
-      height: DETAILS_IMAGE_HEIGHT,
-      width: selectedImage.width / selectedImage.height * DETAILS_IMAGE_HEIGHT
-    },
-    src: selectedImage.src
+  return React__default.createElement(DetailsContainer, {
+    visible: visible,
+    height: DETAILS_IMAGE_HEIGHT,
+    gutterInPercent: gutterInPercent
+  }, React__default.createElement(DetailsImageWrapper, null, visible && React__default.createElement(DetailsImage, {
+    src: selectedImage.src,
+    height: DETAILS_IMAGE_HEIGHT,
+    width: selectedImage.width / selectedImage.height * DETAILS_IMAGE_HEIGHT
   })));
 };
 
@@ -680,10 +720,6 @@ _defineProperty(ViewMonitor, "defaultProps", {
   tag: 'div'
 });
 
-var css$2 = ".gallery_container__3i4rI {\n    display: block;\n    font-size: 0;\n}\n\n.gallery_item__3GrEG {\n    vertical-align: top;\n    position: relative;\n    display: inline-block;\n}\n\n.gallery_item--fixed__223Cp {\n    vertical-align: bottom;\n    position: relative;\n    display: inline-block;\n    background-color: rgb(187, 189, 191);\n}\n";
-var style$1 = {"container":"gallery_container__3i4rI","item":"gallery_item__3GrEG","item--fixed":"gallery_item--fixed__223Cp"};
-styleInject(css$2);
-
 var Gallery =
 /*#__PURE__*/
 function (_Component) {
@@ -740,6 +776,18 @@ function (_Component) {
           selectedImageProps: {}
         });
       }
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "close", function () {
+      _this.setState({
+        selectedImageRow: null,
+        selectedImageRowPrev: null,
+        selectedImage: null,
+        selectedRowHeight: 0,
+        selectedImageId: null,
+        selectedImageIdPrev: null,
+        selectedImageProps: {}
+      });
     });
 
     _this.engine = new Engine();
@@ -823,18 +871,16 @@ function (_Component) {
           disableObserver = _ref2.disableObserver,
           disableActualImage = _ref2.disableActualImage,
           columns = _ref2.columns;
-      return React__default.createElement("div", {
-        className: "".concat(style$1.container, " ").concat(className)
+      return React__default.createElement(Container, {
+        className: className
       }, columns.map(function (item, columnIndex) {
-        return React__default.createElement("div", {
-          /* eslint-disable-next-line react/no-array-index-key */
+        return React__default.createElement(ItemMasonry
+        /* eslint-disable-next-line react/no-array-index-key */
+        , {
           key: "column-".concat(columnIndex),
-          className: "".concat(style$1.item, " ").concat(columnClassName),
-          style: {
-            width: "".concat(100 / _this2.engine.getMaxColumnsCount() - _this2.engine.getGutterInPercent(), "%"),
-            maxWidth: 'auto',
-            margin: "0 ".concat(_this2.engine.getGutterInPercent(), "% 0 0")
-          }
+          className: columnClassName,
+          columnsMaxCount: _this2.engine.getMaxColumnsCount(),
+          gutterInPercent: _this2.engine.getGutterInPercent()
         }, item.images.map(function (image, imageIndex) {
           var placeholderHeight = 100 * image.height / image.width;
           return React__default.createElement("div", {
@@ -876,8 +922,8 @@ function (_Component) {
           selectedRowHeight = _this$state2.selectedRowHeight,
           selectedImageId = _this$state2.selectedImageId,
           selectedImageProps = _this$state2.selectedImageProps;
-      return React__default.createElement("div", {
-        className: "".concat(style$1.container, " ").concat(className)
+      return React__default.createElement(Container, {
+        className: className
       }, rows.map(function (el, rowIndex) {
         var row = el.row;
         return (
@@ -899,15 +945,18 @@ function (_Component) {
             }
 
             var placeholderHeight = 100 * newHeight / newWidth;
-            return React__default.createElement("div", {
-              /* eslint-disable-next-line react/no-array-index-key */
+            return React__default.createElement(ItemDefault
+            /* eslint-disable-next-line react/no-array-index-key */
+            , {
               key: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex),
-              className: "".concat(style$1.item, " ").concat(columnClassName),
-              style: {
-                width: el.isIncomplete && !disableLastRowDetecting ? "".concat(newWidth, "px") : "".concat(newWidthInPercent, "%"),
-                maxWidth: el.isIncomplete && !disableLastRowDetecting ? "".concat(newWidthInPercent, "%") : 'auto',
-                margin: row.length === columnIndex + 1 ? "0 0 ".concat(_this3.engine.getGutterInPercent(), "% 0") : "0 ".concat(_this3.engine.getGutterInPercent(), "% ").concat(_this3.engine.getGutterInPercent(), "% 0")
-              }
+              className: columnClassName,
+              isIncomplete: el.isIncomplete,
+              disableLastRowDetecting: disableLastRowDetecting,
+              newWidth: newWidth,
+              newWidthInPercent: newWidthInPercent,
+              gutterInPercent: _this3.engine.getGutterInPercent(),
+              rowLength: row.length,
+              columnIndex: columnIndex
             }, React__default.createElement(ViewMonitor, {
               disableObserver: disableObserver
             }, function (isViewable) {
@@ -967,8 +1016,8 @@ function (_Component) {
           selectedRowHeight = _this$state3.selectedRowHeight,
           selectedImageId = _this$state3.selectedImageId,
           selectedImageProps = _this$state3.selectedImageProps;
-      return React__default.createElement("div", {
-        className: "".concat(style$1.container, " ").concat(className)
+      return React__default.createElement(Container, {
+        className: className
       }, fixedRows.map(function (el, rowIndex) {
         var row = el.row;
         return (
@@ -985,14 +1034,17 @@ function (_Component) {
             var newWidthInPercent = _this4.engine.calculateFixedWidthInPercent(column, row);
 
             var placeholderHeight = 100 * newHeight / newWidth;
-            return React__default.createElement("div", {
-              /* eslint-disable-next-line react/no-array-index-key */
+            return React__default.createElement(ItemFixed
+            /* eslint-disable-next-line react/no-array-index-key */
+            , {
               key: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex),
-              className: "".concat(style$1['item--fixed'], " ").concat(columnClassName),
-              style: {
-                width: el.isIncomplete ? "".concat(newWidth, "px") : "".concat(newWidthInPercent, "%"),
-                margin: row.length === columnIndex + 1 ? "0 0 ".concat(_this4.engine.getGutterInPercent(), "% 0") : "0 ".concat(_this4.engine.getGutterInPercent(), "% ").concat(_this4.engine.getGutterInPercent(), "% 0")
-              }
+              className: columnClassName,
+              isIncomplete: el.isIncomplete,
+              newWidth: newWidth,
+              newWidthInPercent: newWidthInPercent,
+              gutterInPercent: _this4.engine.getGutterInPercent(),
+              rowLength: row.length,
+              columnIndex: columnIndex
             }, React__default.createElement("div", {
               style: {
                 // eslint-disable-next-line
@@ -1108,6 +1160,6 @@ _defineProperty(Gallery, "defaultProps", {
   disableLastRowDetecting: false
 });
 
-exports.Image = Image;
+exports.Image = Image$1;
 exports.Gallery = Gallery;
 exports.defaultRenderer = defaultRenderer;

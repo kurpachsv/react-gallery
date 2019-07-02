@@ -13,7 +13,13 @@ import {
     defaultDetailsViewRenderer,
 } from './Renderers';
 import ViewMonitor from './ViewMonitor';
-import style from './gallery.css';
+
+import {
+    Container,
+    ItemMasonry,
+    ItemDefault,
+    ItemFixed,
+} from './nodes';
 
 class Gallery extends Component {
 
@@ -157,19 +163,14 @@ class Gallery extends Component {
         className, columnClassName, imageRenderer, disableObserver, disableActualImage, columns,
     }) {
         return (
-            <div
-                className={`${style.container} ${className}`}
-            >
+            <Container className={className}>
                 {columns.map((item, columnIndex) => (
-                    <div
+                    <ItemMasonry
                         /* eslint-disable-next-line react/no-array-index-key */
                         key={`column-${columnIndex}`}
-                        className={`${style.item} ${columnClassName}`}
-                        style={{
-                            width: `${100 / this.engine.getMaxColumnsCount() - this.engine.getGutterInPercent()}%`,
-                            maxWidth: 'auto',
-                            margin: `0 ${this.engine.getGutterInPercent()}% 0 0`,
-                        }}
+                        className={columnClassName}
+                        columnsMaxCount={this.engine.getMaxColumnsCount()}
+                        gutterInPercent={this.engine.getGutterInPercent()}
                     >
                         {
                             item.images.map((image, imageIndex) => {
@@ -198,9 +199,9 @@ class Gallery extends Component {
                                 );
                             })
                         }
-                    </div>
+                    </ItemMasonry>
                 ))}
-            </div>
+            </Container>
         );
     }
 
@@ -212,9 +213,7 @@ class Gallery extends Component {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
         } = this.state;
         return (
-            <div
-                className={`${style.container} ${className}`}
-            >
+            <Container className={className}>
                 {rows.map((el, rowIndex) => {
                     const row = el.row;
                     return (
@@ -237,24 +236,17 @@ class Gallery extends Component {
                                     }
                                     const placeholderHeight = 100 * newHeight / newWidth;
                                     return (
-                                        <div
-                                        /* eslint-disable-next-line react/no-array-index-key */
+                                        <ItemDefault
+                                            /* eslint-disable-next-line react/no-array-index-key */
                                             key={`column-${column.src}-${rowIndex}-${columnIndex}`}
-                                            className={`${style.item} ${columnClassName}`}
-                                            style={{
-                                                width: el.isIncomplete && !disableLastRowDetecting
-                                                    ? `${newWidth}px`
-                                                    : `${newWidthInPercent}%`,
-                                                maxWidth: el.isIncomplete && !disableLastRowDetecting
-                                                    ? `${newWidthInPercent}%`
-                                                    : 'auto',
-                                                margin: row.length === columnIndex + 1
-                                                    ? `0 0 ${this.engine.getGutterInPercent()}% 0`
-                                                    : `0 ${
-                                                        this.engine.getGutterInPercent()
-                                                    }% ${this.engine.getGutterInPercent()}% 0`,
-
-                                            }}
+                                            className={columnClassName}
+                                            isIncomplete={el.isIncomplete}
+                                            disableLastRowDetecting={disableLastRowDetecting}
+                                            newWidth={newWidth}
+                                            newWidthInPercent={newWidthInPercent}
+                                            gutterInPercent={this.engine.getGutterInPercent()}
+                                            rowLength={row.length}
+                                            columnIndex={columnIndex}
                                         >
                                             <ViewMonitor disableObserver={disableObserver}>
                                                 {isViewable => imageRenderer({
@@ -280,7 +272,7 @@ class Gallery extends Component {
                                                     }),
                                                 })}
                                             </ViewMonitor>
-                                        </div>
+                                        </ItemDefault>
                                     );
                                 })}
                             </div>
@@ -298,7 +290,7 @@ class Gallery extends Component {
                         </React.Fragment>
                     );
                 })}
-            </div>
+            </Container>
         );
     }
 
@@ -334,6 +326,18 @@ class Gallery extends Component {
         }
     };
 
+    close = () => {
+        this.setState({
+            selectedImageRow: null,
+            selectedImageRowPrev: null,
+            selectedImage: null,
+            selectedRowHeight: 0,
+            selectedImageId: null,
+            selectedImageIdPrev: null,
+            selectedImageProps: {},
+        }); 
+    }
+
     renderFixedGallery({
         className, fixedRows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
         enableDetailView, detailsViewRenderer, fixedBottom,
@@ -342,9 +346,7 @@ class Gallery extends Component {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
         } = this.state;
         return (
-            <div
-                className={`${style.container} ${className}`}
-            >
+            <Container className={className}>
                 {fixedRows.map((el, rowIndex) => {
                     const row = el.row;
                     return (
@@ -363,20 +365,16 @@ class Gallery extends Component {
                                     );
                                     const placeholderHeight = 100 * newHeight / newWidth;
                                     return (
-                                        <div
+                                        <ItemFixed
                                             /* eslint-disable-next-line react/no-array-index-key */
                                             key={`column-${column.src}-${rowIndex}-${columnIndex}`}
-                                            className={`${style['item--fixed']} ${columnClassName}`}
-                                            style={{
-                                                width: el.isIncomplete
-                                                    ? `${newWidth}px`
-                                                    : `${newWidthInPercent}%`,
-                                                margin: row.length === columnIndex + 1
-                                                    ? `0 0 ${this.engine.getGutterInPercent()}% 0`
-                                                    : `0 ${
-                                                        this.engine.getGutterInPercent()
-                                                    }% ${this.engine.getGutterInPercent()}% 0`,
-                                            }}
+                                            className={columnClassName}
+                                            isIncomplete={el.isIncomplete}
+                                            newWidth={newWidth}
+                                            newWidthInPercent={newWidthInPercent}
+                                            gutterInPercent={this.engine.getGutterInPercent()}
+                                            rowLength={row.length}
+                                            columnIndex={columnIndex}
                                         >
                                             <div
                                                 style={{
@@ -394,7 +392,7 @@ class Gallery extends Component {
                                                             selectedImage: column,
                                                             selectedRowHeight: newHeight,
                                                             // eslint-disable-next-line
-                                                        selectedImageId: `column-${column.src}-${rowIndex}-${columnIndex}`,
+                                                            selectedImageId: `column-${column.src}-${rowIndex}-${columnIndex}`,
                                                             selectedImageProps: {
                                                                 placeholderHeight,
                                                                 newWidthInPercent,
@@ -407,7 +405,7 @@ class Gallery extends Component {
                                                     })}
                                                 </ViewMonitor>
                                             </div>
-                                        </div>
+                                        </ItemFixed>
                                     );
                                 })}
                             </div>
@@ -425,7 +423,7 @@ class Gallery extends Component {
                         </React.Fragment>
                     );
                 })}
-            </div>
+            </Container>
         );
     }
 

@@ -22,6 +22,7 @@ export default {
         'fast-deep-equal',
         '@researchgate/react-intersection-observer',
         'intersection-observer',
+        'styled-components',
     ],
     plugins: [
         postcss({
@@ -36,4 +37,5 @@ export default {
             ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
         }),
     ],
+
 };

@@ -1,16 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Image should render correctly 1`] = `
-<img
+<nodes__ImageWithoutSizes
   alt="mockTitle"
-  className="image "
+  onClick={[Function]}
   src="mockUrl"
-  style={
-    Object {
-      "display": null,
-      "position": "absolute",
-      "width": "100%",
-    }
-  }
+  visible={true}
 />
 `;
