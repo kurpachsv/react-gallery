@@ -1,6 +1,6 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.2.24",
+  "version": "0.2.25",
   "description": "A simple, fast and flexible image gallery.",
   "main": "dist/index.js",
   "scripts": {
@@ -28,13 +28,13 @@
   "dependencies": {
     "@researchgate/react-intersection-observer": "^0.7.4",
     "fast-deep-equal": "^2.0.1",
-    "intersection-observer": "^0.5.1",
-    "styled-components": "^4.3.2"
+    "intersection-observer": "^0.5.1"
   },
   "peerDependencies": {
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
-    "prop-types": "^15.6.2"
+    "prop-types": "^15.6.2",
+    "styled-components": "^4.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",

@@ -13,6 +13,7 @@ export default {
             'react-dom': 'ReactDOM',
             'prop-types': 'PropTypes',
             'fast-deep-equal': 'equal',
+            'styled-components': 'styled',
         },
     },
     external: [
