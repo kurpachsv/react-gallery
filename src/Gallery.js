@@ -326,6 +326,18 @@ class Gallery extends Component {
         }
     };
 
+    close = () => {
+        this.setState({
+            selectedImageRow: null,
+            selectedImageRowPrev: null,
+            selectedImage: null,
+            selectedRowHeight: 0,
+            selectedImageId: null,
+            selectedImageIdPrev: null,
+            selectedImageProps: {},
+        }); 
+    }
+
     renderFixedGallery({
         className, fixedRows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
         enableDetailView, detailsViewRenderer, fixedBottom,

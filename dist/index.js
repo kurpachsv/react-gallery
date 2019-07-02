@@ -11,129 +11,6 @@ var PropTypes = _interopDefault(require('prop-types'));
 var Observer = _interopDefault(require('@researchgate/react-intersection-observer'));
 var equal = _interopDefault(require('fast-deep-equal'));
 
-var Image = function Image(_ref) {
-  var className = _ref.className,
-      src = _ref.src,
-      alt = _ref.alt;
-  return React__default.createElement("img", {
-    className: className,
-    src: src,
-    alt: alt
-  });
-};
-var Div = function Div(_ref2) {
-  var className = _ref2.className,
-      children = _ref2.children;
-  return React__default.createElement("div", {
-    className: className
-  }, children);
-};
-var ImageWithSizes = styled(Image).withConfig({
-  displayName: "nodes__ImageWithSizes",
-  componentId: "sc-2jwtws-0"
-})(["position:absolute;display:", ";width:", ";height:", ";cursor:pointer;"], function (props) {
-  return props.visible ? null : 'none';
-}, function (props) {
-  return props.ratio > 1 ? '100%' : 'auto';
-}, function (props) {
-  return props.radio > 1 ? 'auto' : "calc(100% - ".concat(props.fixedBottom || 0, "px)");
-});
-var ImageWithoutSizes = styled(Image).withConfig({
-  displayName: "nodes__ImageWithoutSizes",
-  componentId: "sc-2jwtws-1"
-})(["position:absolute;display:", ";width:100%;cursor:pointer;"], function (props) {
-  return props.visible ? null : 'none';
-});
-var Container = styled(Div).withConfig({
-  displayName: "nodes__Container",
-  componentId: "sc-2jwtws-2"
-})(["display:block;font-size:0;"]);
-var Item = styled(Div).withConfig({
-  displayName: "nodes__Item",
-  componentId: "sc-2jwtws-3"
-})(["vertical-align:top;position:relative;display:inline-block;"]);
-var ItemMasonry = styled(Item).withConfig({
-  displayName: "nodes__ItemMasonry",
-  componentId: "sc-2jwtws-4"
-})(["width:", ";margin:", ";"], function (props) {
-  return "".concat(100 / props.columnsMaxCount - props.gutterInPercent, "%");
-}, function (props) {
-  return "0 ".concat(props.gutterInPercent, "% 0 0");
-});
-var ItemDefault = styled(Item).withConfig({
-  displayName: "nodes__ItemDefault",
-  componentId: "sc-2jwtws-5"
-})(["width:", ";max-width:", ";margin:", ";"], function (props) {
-  return props.isIncomplete && !props.disableLastRowDetecting ? "".concat(props.newWidth, "px") : "".concat(props.newWidthInPercent, "%");
-}, function (props) {
-  return props.isIncomplete && !props.disableLastRowDetecting ? "".concat(props.newWidthInPercent, "%") : 'auto';
-}, function (props) {
-  return props.rowLength === props.columnIndex + 1 ? "0 0 ".concat(props.gutterInPercent, "% 0") : "0 ".concat(props.gutterInPercent, "% ").concat(props.gutterInPercent, "% 0");
-});
-var ItemFixed = styled(Item).withConfig({
-  displayName: "nodes__ItemFixed",
-  componentId: "sc-2jwtws-6"
-})(["background-color:rgb(187,189,191);width:", ";margin:", ";"], function (props) {
-  return props.isIncomplete ? "".concat(props.newWidth, "px") : "".concat(props.newWidthInPercent, "%");
-}, function (props) {
-  return props.rowLength === props.columnIndex + 1 ? "0 0 ".concat(props.gutterInPercent, "% 0") : "0 ".concat(props.gutterInPercent, "% ").concat(props.gutterInPercent, "% 0");
-});
-var DetailsContainer = styled.div.withConfig({
-  displayName: "nodes__DetailsContainer",
-  componentId: "sc-2jwtws-7"
-})(["height:", ";font-size:14px;visibility:", ";margin-bottom:", ";"], function (props) {
-  return props.visible ? "".concat(props.height, "px") : '0';
-}, function (props) {
-  return props.visible ? 'visible' : 'hidden';
-}, function (props) {
-  return props.visible ? "".concat(props.gutterInPercent, "%") : 0;
-});
-var DetailsImageWrapper = styled.div.withConfig({
-  displayName: "nodes__DetailsImageWrapper",
-  componentId: "sc-2jwtws-8"
-})(["display:flex;justify-content:center;"]);
-
-var Image$1 = function Image$$1(_ref) {
-  var className = _ref.className,
-      src = _ref.src,
-      alt = _ref.alt,
-      visible = _ref.visible,
-      height = _ref.height,
-      width = _ref.width,
-      fixedBottom = _ref.fixedBottom,
-      specifyImageSizes = _ref.specifyImageSizes;
-
-  if (specifyImageSizes) {
-    var ratio = width / height;
-    return React__default.createElement(ImageWithSizes, {
-      src: visible ? src : null,
-      alt: alt,
-      ratio: ratio,
-      visible: visible,
-      height: height,
-      width: width,
-      fixedBottom: fixedBottom
-    });
-  } else {
-    return React__default.createElement(ImageWithoutSizes, {
-      className: className,
-      src: visible ? src : null,
-      alt: alt,
-      visible: visible
-    });
-  }
-};
-
-Image$1.propTypes = {
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string,
-  visible: PropTypes.bool
-};
-Image$1.defaultProps = {
-  alt: '',
-  visible: true
-};
-
 function _typeof(obj) {
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
     _typeof = function (obj) {
@@ -304,6 +181,145 @@ function _possibleConstructorReturn(self, call) {
 
   return _assertThisInitialized(self);
 }
+
+var Image = function Image(_ref) {
+  var className = _ref.className,
+      src = _ref.src,
+      alt = _ref.alt,
+      onClick = _ref.onClick;
+  return React__default.createElement("img", {
+    className: className,
+    src: src,
+    alt: alt,
+    onClick: onClick
+  });
+};
+var Div = function Div(_ref2) {
+  var className = _ref2.className,
+      children = _ref2.children;
+  return React__default.createElement("div", {
+    className: className
+  }, children);
+};
+var ImageWithSizes = styled(Image).withConfig({
+  displayName: "nodes__ImageWithSizes",
+  componentId: "sc-2jwtws-0"
+})(["position:absolute;display:", ";width:", ";height:", ";cursor:pointer;"], function (props) {
+  return props.visible ? null : 'none';
+}, function (props) {
+  return props.ratio > 1 ? '100%' : 'auto';
+}, function (props) {
+  return props.radio > 1 ? 'auto' : "calc(100% - ".concat(props.fixedBottom || 0, "px)");
+});
+var ImageWithoutSizes = styled(Image).withConfig({
+  displayName: "nodes__ImageWithoutSizes",
+  componentId: "sc-2jwtws-1"
+})(["position:absolute;display:", ";width:100%;cursor:pointer;"], function (props) {
+  return props.visible ? null : 'none';
+});
+var Container = styled(Div).withConfig({
+  displayName: "nodes__Container",
+  componentId: "sc-2jwtws-2"
+})(["display:block;font-size:0;"]);
+var Item = styled(Div).withConfig({
+  displayName: "nodes__Item",
+  componentId: "sc-2jwtws-3"
+})(["vertical-align:top;position:relative;display:inline-block;"]);
+var ItemMasonry = styled(Item).withConfig({
+  displayName: "nodes__ItemMasonry",
+  componentId: "sc-2jwtws-4"
+})(["width:", ";margin:", ";"], function (props) {
+  return "".concat(100 / props.columnsMaxCount - props.gutterInPercent, "%");
+}, function (props) {
+  return "0 ".concat(props.gutterInPercent, "% 0 0");
+});
+var ItemDefault = styled(Item).withConfig({
+  displayName: "nodes__ItemDefault",
+  componentId: "sc-2jwtws-5"
+})(["width:", ";max-width:", ";margin:", ";"], function (props) {
+  return props.isIncomplete && !props.disableLastRowDetecting ? "".concat(props.newWidth, "px") : "".concat(props.newWidthInPercent, "%");
+}, function (props) {
+  return props.isIncomplete && !props.disableLastRowDetecting ? "".concat(props.newWidthInPercent, "%") : 'auto';
+}, function (props) {
+  return props.rowLength === props.columnIndex + 1 ? "0 0 ".concat(props.gutterInPercent, "% 0") : "0 ".concat(props.gutterInPercent, "% ").concat(props.gutterInPercent, "% 0");
+});
+var ItemFixed = styled(Item).withConfig({
+  displayName: "nodes__ItemFixed",
+  componentId: "sc-2jwtws-6"
+})(["background-color:rgb(187,189,191);width:", ";margin:", ";"], function (props) {
+  return props.isIncomplete ? "".concat(props.newWidth, "px") : "".concat(props.newWidthInPercent, "%");
+}, function (props) {
+  return props.rowLength === props.columnIndex + 1 ? "0 0 ".concat(props.gutterInPercent, "% 0") : "0 ".concat(props.gutterInPercent, "% ").concat(props.gutterInPercent, "% 0");
+});
+var DetailsContainer = styled.div.withConfig({
+  displayName: "nodes__DetailsContainer",
+  componentId: "sc-2jwtws-7"
+})(["height:", ";font-size:14px;visibility:", ";margin-bottom:", ";"], function (props) {
+  return props.visible ? "".concat(props.height, "px") : '0';
+}, function (props) {
+  return props.visible ? 'visible' : 'hidden';
+}, function (props) {
+  return props.visible ? "".concat(props.gutterInPercent, "%") : 0;
+});
+var DetailsImageWrapper = styled.div.withConfig({
+  displayName: "nodes__DetailsImageWrapper",
+  componentId: "sc-2jwtws-8"
+})(["display:flex;justify-content:center;"]);
+var DetailsImage = styled(Image).withConfig({
+  displayName: "nodes__DetailsImage",
+  componentId: "sc-2jwtws-9"
+})(["height:", ";width:", ";"], function (props) {
+  return "".concat(props.height, "px");
+}, function (props) {
+  return "".concat(props.width, "px");
+});
+
+var Image$1 = function Image$$1(_ref) {
+  var className = _ref.className,
+      src = _ref.src,
+      alt = _ref.alt,
+      visible = _ref.visible,
+      height = _ref.height,
+      width = _ref.width,
+      fixedBottom = _ref.fixedBottom,
+      specifyImageSizes = _ref.specifyImageSizes,
+      props = _objectWithoutProperties(_ref, ["className", "src", "alt", "visible", "height", "width", "fixedBottom", "specifyImageSizes"]);
+
+  if (specifyImageSizes) {
+    var ratio = width / height;
+    return React__default.createElement(ImageWithSizes, {
+      className: className,
+      src: visible ? src : null,
+      alt: alt,
+      ratio: ratio,
+      visible: visible,
+      height: height,
+      width: width,
+      fixedBottom: fixedBottom,
+      onClick: props.onClick
+    });
+  } else {
+    return React__default.createElement(ImageWithoutSizes, {
+      className: className,
+      src: visible ? src : null,
+      alt: alt,
+      visible: visible,
+      onClick: props.onClick
+    });
+  }
+};
+
+Image$1.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string,
+  visible: PropTypes.bool,
+  onClick: PropTypes.func
+};
+Image$1.defaultProps = {
+  alt: '',
+  visible: true,
+  onClick: function onClick() {}
+};
 
 var COLUMNS_MAX_COUNT = 5;
 var COLUMN_MAX_WIDTH = 200;
@@ -607,12 +623,10 @@ var defaultDetailsViewRenderer = function defaultDetailsViewRenderer(_ref) {
     visible: visible,
     height: DETAILS_IMAGE_HEIGHT,
     gutterInPercent: gutterInPercent
-  }, React__default.createElement(DetailsImageWrapper, null, visible && React__default.createElement(Image$1, {
-    style: {
-      height: DETAILS_IMAGE_HEIGHT,
-      width: selectedImage.width / selectedImage.height * DETAILS_IMAGE_HEIGHT
-    },
-    src: selectedImage.src
+  }, React__default.createElement(DetailsImageWrapper, null, visible && React__default.createElement(DetailsImage, {
+    src: selectedImage.src,
+    height: DETAILS_IMAGE_HEIGHT,
+    width: selectedImage.width / selectedImage.height * DETAILS_IMAGE_HEIGHT
   })));
 };
 
@@ -762,6 +776,18 @@ function (_Component) {
           selectedImageProps: {}
         });
       }
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "close", function () {
+      _this.setState({
+        selectedImageRow: null,
+        selectedImageRowPrev: null,
+        selectedImage: null,
+        selectedRowHeight: 0,
+        selectedImageId: null,
+        selectedImageIdPrev: null,
+        selectedImageProps: {}
+      });
     });
 
     _this.engine = new Engine();
