@@ -344,8 +344,8 @@ class Gallery extends Component {
             selectedImageId: null,
             selectedImageIdPrev: null,
             selectedImageProps: {},
-        }); 
-    }
+        });
+    };
 
     renderFixedGallery({
         className, fixedRows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
