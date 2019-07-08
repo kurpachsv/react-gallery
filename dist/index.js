@@ -439,17 +439,19 @@ function () {
     key: "buildRow",
     value: function buildRow(items) {
       var row = [];
+      var columnsCount = 0;
       var totalRowWidth = 0;
 
-      while (items.length > 0 && totalRowWidth < this.maxColumnsCount * this.columnMaxWidth) {
+      while (items.length > 0 && (totalRowWidth < this.maxColumnsCount * this.columnMaxWidth || columnsCount < this.maxColumnsCount)) {
         var column = items.shift();
         row.push(column);
+        columnsCount++;
         totalRowWidth += column.width;
       }
 
       return {
         row: row,
-        isIncomplete: totalRowWidth < this.maxColumnsCount * this.columnMaxWidth
+        isIncomplete: totalRowWidth < this.maxColumnsCount * this.columnMaxWidth || columnsCount < this.maxColumnsCount
       };
     }
   }, {

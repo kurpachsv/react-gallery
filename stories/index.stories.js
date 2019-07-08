@@ -11,7 +11,6 @@ stories.addDecorator(withKnobs);
 
 stories.add('with default layout', () => (
     <Gallery
-        columnMaxHeight={number('Max column height (for prevent pictures degradation, if last row is not filled)', 200)}
         columnsMaxCount={number('Max columns count', 5)}
         gutterInPercent={number('Gutter in %', 0.5)}
         disableObserver={boolean('Disable Intersection Observer', false)}
