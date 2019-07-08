@@ -121,7 +121,7 @@ class Engine {
         let totalRowWidth = 0;
         while (
             items.length > 0 && (totalRowWidth < this.maxColumnsCount * this.columnMaxWidth
-            || columnsCount < this.maxColumnsCount)
+            && columnsCount < this.maxColumnsCount)
         ) {
             const column = items.shift();
             row.push(column);
@@ -131,7 +131,7 @@ class Engine {
         return {
             row,
             isIncomplete: totalRowWidth < this.maxColumnsCount * this.columnMaxWidth
-                || columnsCount < this.maxColumnsCount,
+                && columnsCount < this.maxColumnsCount,
         };
     }
 
