@@ -117,15 +117,15 @@ class Engine {
 
     buildRow(items) {
         let row = [];
-        let columnsCount = 0;
-        while (items.length > 0 && columnsCount < this.maxColumnsCount) {
+        let totalRowWidth = 0;
+        while (items.length > 0 && totalRowWidth < this.maxColumnsCount * this.columnMaxWidth) {
             const column = items.shift();
             row.push(column);
-            columnsCount++;
+            totalRowWidth += column.width;
         }
         return {
             row,
-            isIncomplete: columnsCount < this.maxColumnsCount,
+            isIncomplete: totalRowWidth < this.maxColumnsCount * this.columnMaxWidth,
         };
     }
 
