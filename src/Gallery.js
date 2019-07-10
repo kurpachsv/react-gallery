@@ -8,6 +8,7 @@ import Engine, {
     GUTTER_IN_PERCENT,
     FIXED_BOTTOM,
     PLACEHOLDER_COLOR,
+    VIEWPORT_WIDTH,
 } from './Engine';
 import {
     defaultRenderer,
@@ -48,6 +49,7 @@ class Gallery extends Component {
         detailsViewRenderer: PropTypes.func,
         disableLastRowDetecting: PropTypes.bool,
         placeholderColor: PropTypes.string,
+        viewportWidth: PropTypes.number,
     };
 
     static defaultProps = {
@@ -68,6 +70,7 @@ class Gallery extends Component {
         detailsViewRenderer: defaultDetailsViewRenderer,
         disableLastRowDetecting: false,
         placeholderColor: PLACEHOLDER_COLOR,
+        viewportWidth: VIEWPORT_WIDTH,
     };
 
     state = {
@@ -101,6 +104,7 @@ class Gallery extends Component {
             enableDetailView,
             disableLastRowDetecting,
             placeholderColor,
+            viewportWidth,
         } = this.props;
 
         this.engine
@@ -108,7 +112,8 @@ class Gallery extends Component {
             .setMaxColumnsCount(columnsMaxCount)
             .setColumnMaxWidth(columnMaxWidth)
             .setColumnMaxHeight(columnMaxHeight)
-            .setGutterInPercent(gutterInPercent);
+            .setGutterInPercent(gutterInPercent)
+            .setViewportWidth(viewportWidth);
 
         this.setState({
             columns: this.engine.buildColumns(),
@@ -129,6 +134,7 @@ class Gallery extends Component {
             enableDetailView,
             disableLastRowDetecting,
             placeholderColor,
+            viewportWidth,
         });
     }
 
@@ -140,7 +146,8 @@ class Gallery extends Component {
                 .setMaxColumnsCount(nextProps.columnsMaxCount)
                 .setColumnMaxWidth(nextProps.columnMaxWidth)
                 .setColumnMaxHeight(nextProps.columnMaxHeight)
-                .setGutterInPercent(nextProps.gutterInPercent);
+                .setGutterInPercent(nextProps.gutterInPercent)
+                .setViewportWidth(nextProps.viewportWidth);
 
             this.setState({
                 columns: this.engine.buildColumns(),
@@ -161,6 +168,7 @@ class Gallery extends Component {
                 enableDetailView: nextProps.enableDetailView,
                 disableLastRowDetecting: nextProps.disableLastRowDetecting,
                 placeholderColor: nextProps.placeholderColor,
+                viewportWidth: nextProps.viewportWidth,
             });
         }
     }
@@ -215,7 +223,7 @@ class Gallery extends Component {
 
     renderGallery({
         className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
-        enableDetailView, detailsViewRenderer, disableLastRowDetecting, placeholderColor,
+        enableDetailView, detailsViewRenderer, disableLastRowDetecting, placeholderColor
     }) {
         const {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,

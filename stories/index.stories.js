@@ -17,6 +17,7 @@ stories.add('with default layout', () => (
         disableActualImage={boolean('Disable actual images', false)}
         enableDetailView={boolean('Enable detail view', false)}
         disableLastRowDetecting={boolean('Disable LastRow Detecting', false)}
+        viewportWidth={number('Viewport width', 1000)}
         images={images}
     />
 ));

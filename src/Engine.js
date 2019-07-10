@@ -4,6 +4,7 @@ export const COLUMN_MAX_HEIGHT = 200;
 export const GUTTER_IN_PERCENT = 0.5;
 export const FIXED_BOTTOM = 50;
 export const PLACEHOLDER_COLOR = '#f0f0f0';
+export const VIEWPORT_WIDTH = 1000;
 
 class Engine {
 
@@ -87,6 +88,11 @@ class Engine {
         return this;
     }
 
+    setViewportWidth(viewportWidth) {
+        this.viewportWidth = viewportWidth;
+        return this;
+    }
+
     normalizeByHeight(items) {
         const minHeight = Engine.getMinHeight(items);
         let result = [];
@@ -119,9 +125,14 @@ class Engine {
         let row = [];
         let columnsCount = 0;
         let totalRowWidth = 0;
+        const isIncompleteRow = () => {
+            if (!this.viewportWidth) {
+                return columnsCount < this.maxColumnsCount;
+            }
+            return totalRowWidth < this.viewportWidth;
+        };
         while (
-            items.length > 0 && (totalRowWidth < this.maxColumnsCount * this.columnMaxWidth
-            && columnsCount < this.maxColumnsCount)
+            items.length > 0 && isIncompleteRow()
         ) {
             const column = items.shift();
             row.push(column);
@@ -130,8 +141,7 @@ class Engine {
         }
         return {
             row,
-            isIncomplete: totalRowWidth < this.maxColumnsCount * this.columnMaxWidth
-                && columnsCount < this.maxColumnsCount,
+            isIncomplete: isIncompleteRow(),
         };
     }
 

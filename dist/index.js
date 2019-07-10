@@ -442,7 +442,7 @@ function () {
       var columnsCount = 0;
       var totalRowWidth = 0;
 
-      while (items.length > 0 && (totalRowWidth < this.maxColumnsCount * this.columnMaxWidth || columnsCount < this.maxColumnsCount)) {
+      while (items.length > 0 && totalRowWidth < this.maxColumnsCount * this.columnMaxWidth && columnsCount < this.maxColumnsCount) {
         var column = items.shift();
         row.push(column);
         columnsCount++;
@@ -451,7 +451,7 @@ function () {
 
       return {
         row: row,
-        isIncomplete: totalRowWidth < this.maxColumnsCount * this.columnMaxWidth || columnsCount < this.maxColumnsCount
+        isIncomplete: totalRowWidth < this.maxColumnsCount * this.columnMaxWidth && columnsCount < this.maxColumnsCount
       };
     }
   }, {
