@@ -1,6 +1,6 @@
 {
   "name": "@kurpachsv/react-gallery",
-  "version": "0.2.29",
+  "version": "0.2.30",
   "description": "A simple, fast and flexible image gallery.",
   "main": "dist/index.js",
   "scripts": {
