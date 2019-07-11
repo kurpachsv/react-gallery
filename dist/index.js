@@ -329,6 +329,7 @@ var COLUMN_MAX_HEIGHT = 200;
 var GUTTER_IN_PERCENT = 0.5;
 var FIXED_BOTTOM = 50;
 var PLACEHOLDER_COLOR = '#f0f0f0';
+var VIEWPORT_WIDTH = 0;
 
 var Engine =
 /*#__PURE__*/
@@ -403,6 +404,12 @@ function () {
       return this;
     }
   }, {
+    key: "setViewportWidth",
+    value: function setViewportWidth(viewportWidth) {
+      this.viewportWidth = viewportWidth;
+      return this;
+    }
+  }, {
     key: "normalizeByHeight",
     value: function normalizeByHeight(items) {
       var minHeight = Engine.getMinHeight(items);
@@ -438,11 +445,21 @@ function () {
   }, {
     key: "buildRow",
     value: function buildRow(items) {
+      var _this2 = this;
+
       var row = [];
       var columnsCount = 0;
       var totalRowWidth = 0;
 
-      while (items.length > 0 && totalRowWidth < this.maxColumnsCount * this.columnMaxWidth && columnsCount < this.maxColumnsCount) {
+      var isIncompleteRow = function isIncompleteRow() {
+        if (!_this2.viewportWidth) {
+          return columnsCount < _this2.maxColumnsCount;
+        }
+
+        return totalRowWidth < _this2.viewportWidth;
+      };
+
+      while (items.length > 0 && isIncompleteRow()) {
         var column = items.shift();
         row.push(column);
         columnsCount++;
@@ -451,7 +468,7 @@ function () {
 
       return {
         row: row,
-        isIncomplete: totalRowWidth < this.maxColumnsCount * this.columnMaxWidth && columnsCount < this.maxColumnsCount
+        isIncomplete: isIncompleteRow()
       };
     }
   }, {
@@ -818,8 +835,9 @@ function (_Component) {
           fixedBottom = _this$props.fixedBottom,
           enableDetailView = _this$props.enableDetailView,
           disableLastRowDetecting = _this$props.disableLastRowDetecting,
-          placeholderColor = _this$props.placeholderColor;
-      this.engine.setImages(images).setMaxColumnsCount(columnsMaxCount).setColumnMaxWidth(columnMaxWidth).setColumnMaxHeight(columnMaxHeight).setGutterInPercent(gutterInPercent);
+          placeholderColor = _this$props.placeholderColor,
+          viewportWidth = _this$props.viewportWidth;
+      this.engine.setImages(images).setMaxColumnsCount(columnsMaxCount).setColumnMaxWidth(columnMaxWidth).setColumnMaxHeight(columnMaxHeight).setGutterInPercent(gutterInPercent).setViewportWidth(viewportWidth);
       this.setState({
         columns: this.engine.buildColumns(),
         rows: this.engine.buildRows(),
@@ -838,14 +856,15 @@ function (_Component) {
         fixedBottom: fixedBottom,
         enableDetailView: enableDetailView,
         disableLastRowDetecting: disableLastRowDetecting,
-        placeholderColor: placeholderColor
+        placeholderColor: placeholderColor,
+        viewportWidth: viewportWidth
       });
     }
   }, {
     key: "componentWillReceiveProps",
     value: function componentWillReceiveProps(nextProps) {
       if (!equal(this.props, nextProps)) {
-        this.engine.setImages(nextProps.images).setMaxColumnsCount(nextProps.columnsMaxCount).setColumnMaxWidth(nextProps.columnMaxWidth).setColumnMaxHeight(nextProps.columnMaxHeight).setGutterInPercent(nextProps.gutterInPercent);
+        this.engine.setImages(nextProps.images).setMaxColumnsCount(nextProps.columnsMaxCount).setColumnMaxWidth(nextProps.columnMaxWidth).setColumnMaxHeight(nextProps.columnMaxHeight).setGutterInPercent(nextProps.gutterInPercent).setViewportWidth(nextProps.viewportWidth);
         this.setState({
           columns: this.engine.buildColumns(),
           rows: this.engine.buildRows(),
@@ -864,7 +883,8 @@ function (_Component) {
           fixedBottom: nextProps.fixedBottom,
           enableDetailView: nextProps.enableDetailView,
           disableLastRowDetecting: nextProps.disableLastRowDetecting,
-          placeholderColor: nextProps.placeholderColor
+          placeholderColor: nextProps.placeholderColor,
+          viewportWidth: nextProps.viewportWidth
         });
       }
     }
@@ -1153,7 +1173,8 @@ _defineProperty(Gallery, "propTypes", {
   enableDetailView: PropTypes.bool,
   detailsViewRenderer: PropTypes.func,
   disableLastRowDetecting: PropTypes.bool,
-  placeholderColor: PropTypes.string
+  placeholderColor: PropTypes.string,
+  viewportWidth: PropTypes.number
 });
 
 _defineProperty(Gallery, "defaultProps", {
@@ -1173,7 +1194,8 @@ _defineProperty(Gallery, "defaultProps", {
   enableDetailView: false,
   detailsViewRenderer: defaultDetailsViewRenderer,
   disableLastRowDetecting: false,
-  placeholderColor: PLACEHOLDER_COLOR
+  placeholderColor: PLACEHOLDER_COLOR,
+  viewportWidth: VIEWPORT_WIDTH
 });
 
 exports.Image = Image$1;
