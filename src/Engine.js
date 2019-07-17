@@ -94,7 +94,7 @@ class Engine {
     }
 
     normalizeByHeight(items) {
-        const minHeight = Engine.getMinHeight(items);
+        const minHeight = this.columnMaxHeight;
         let result = [];
         items.forEach(el => {
             result.push(Engine.resizeByHeight(el, minHeight));

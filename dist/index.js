@@ -412,7 +412,7 @@ function () {
   }, {
     key: "normalizeByHeight",
     value: function normalizeByHeight(items) {
-      var minHeight = Engine.getMinHeight(items);
+      var minHeight = this.columnMaxHeight;
       var result = [];
       items.forEach(function (el) {
         result.push(Engine.resizeByHeight(el, minHeight));
