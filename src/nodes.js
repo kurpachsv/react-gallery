@@ -27,8 +27,10 @@ export const ImageWithoutSizes = styled(Image)`
 `;
 
 export const Container = styled(Div)`
+    position: relative;
     display: block;
     font-size: 0;
+    opacity: ${props => props.withLoader ? '0.5' : false};
 `;
 
 export const Item = styled(Div)`

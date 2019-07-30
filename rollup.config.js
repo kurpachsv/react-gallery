@@ -14,6 +14,7 @@ export default {
             'prop-types': 'PropTypes',
             'fast-deep-equal': 'equal',
             'styled-components': 'styled',
+            'lodash.debounce': 'debounce',
         },
     },
     external: [
@@ -24,6 +25,7 @@ export default {
         '@researchgate/react-intersection-observer',
         'intersection-observer',
         'styled-components',
+        'lodash.debounce',
     ],
     plugins: [
         postcss({

@@ -10,6 +10,7 @@ var styled = _interopDefault(require('styled-components'));
 var PropTypes = _interopDefault(require('prop-types'));
 var Observer = _interopDefault(require('@researchgate/react-intersection-observer'));
 var equal = _interopDefault(require('fast-deep-equal'));
+var debounce = _interopDefault(require('lodash.debounce'));
 
 function _typeof(obj) {
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -220,7 +221,9 @@ var ImageWithoutSizes = styled(Image).withConfig({
 var Container = styled(Div).withConfig({
   displayName: "nodes__Container",
   componentId: "sc-2jwtws-2"
-})(["display:block;font-size:0;"]);
+})(["position:relative;display:block;font-size:0;opacity:", ";"], function (props) {
+  return props.withLoader ? '0.5' : false;
+});
 var Item = styled(Div).withConfig({
   displayName: "nodes__Item",
   componentId: "sc-2jwtws-3"
@@ -742,6 +745,8 @@ _defineProperty(ViewMonitor, "defaultProps", {
   tag: 'div'
 });
 
+var RESIZE_DEBOUNCE_TIME = 300;
+
 var Gallery =
 /*#__PURE__*/
 function (_Component) {
@@ -764,15 +769,39 @@ function (_Component) {
       selectedImageIdPrev: null,
       selectedImage: null,
       selectedRowHeight: 0,
-      selectedImageProps: {}
+      selectedImageProps: {},
+      withLoader: false
     });
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleSelectImage", function (_ref) {
-      var selectedImageRow = _ref.selectedImageRow,
-          selectedImageId = _ref.selectedImageId,
-          selectedRowHeight = _ref.selectedRowHeight,
-          selectedImage = _ref.selectedImage,
-          selectedImageProps = _ref.selectedImageProps;
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "updateGallery", function () {
+      _this.updateGalleryStart();
+
+      _this.updateGalleryDone();
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "updateGalleryStart", function () {
+      _this.setState({
+        withLoader: true
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "updateGalleryDone", function () {
+      _this.setState({
+        withLoader: false
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "renderLoader", function (_ref) {
+      var loader = _ref.loader;
+      return React__default.createElement(React__default.Fragment, null, loader);
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleSelectImage", function (_ref2) {
+      var selectedImageRow = _ref2.selectedImageRow,
+          selectedImageId = _ref2.selectedImageId,
+          selectedRowHeight = _ref2.selectedRowHeight,
+          selectedImage = _ref2.selectedImage,
+          selectedImageProps = _ref2.selectedImageProps;
       var _this$state = _this.state,
           selectedImageRowPrev = _this$state.selectedImageRowPrev,
           selectedImageIdPrev = _this$state.selectedImageIdPrev;
@@ -813,6 +842,7 @@ function (_Component) {
     });
 
     _this.engine = new Engine();
+    _this.updateGalleryDone = debounce(_this.updateGalleryDone, _this.props.resizeDebounceTime);
     return _this;
   }
 
@@ -836,7 +866,8 @@ function (_Component) {
           enableDetailView = _this$props.enableDetailView,
           disableLastRowDetecting = _this$props.disableLastRowDetecting,
           placeholderColor = _this$props.placeholderColor,
-          viewportWidth = _this$props.viewportWidth;
+          viewportWidth = _this$props.viewportWidth,
+          resizeDebounceTime = _this$props.resizeDebounceTime;
       this.engine.setImages(images).setMaxColumnsCount(columnsMaxCount).setColumnMaxWidth(columnMaxWidth).setColumnMaxHeight(columnMaxHeight).setGutterInPercent(gutterInPercent).setViewportWidth(viewportWidth);
       this.setState({
         columns: this.engine.buildColumns(),
@@ -857,7 +888,8 @@ function (_Component) {
         enableDetailView: enableDetailView,
         disableLastRowDetecting: disableLastRowDetecting,
         placeholderColor: placeholderColor,
-        viewportWidth: viewportWidth
+        viewportWidth: viewportWidth,
+        resizeDebounceTime: resizeDebounceTime
       });
     }
   }, {
@@ -884,25 +916,41 @@ function (_Component) {
           enableDetailView: nextProps.enableDetailView,
           disableLastRowDetecting: nextProps.disableLastRowDetecting,
           placeholderColor: nextProps.placeholderColor,
-          viewportWidth: nextProps.viewportWidth
+          viewportWidth: nextProps.viewportWidth,
+          resizeDebounceTime: nextProps.resizeDebounceTime
         });
       }
     }
   }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      window.addEventListener("resize", this.updateGallery);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      window.removeEventListener("resize", this.updateGallery);
+    }
+  }, {
     key: "renderMasonryGallery",
-    value: function renderMasonryGallery(_ref2) {
+    value: function renderMasonryGallery(_ref3) {
       var _this2 = this;
 
-      var className = _ref2.className,
-          columnClassName = _ref2.columnClassName,
-          imageRenderer = _ref2.imageRenderer,
-          disableObserver = _ref2.disableObserver,
-          disableActualImage = _ref2.disableActualImage,
-          columns = _ref2.columns,
-          placeholderColor = _ref2.placeholderColor;
+      var className = _ref3.className,
+          columnClassName = _ref3.columnClassName,
+          imageRenderer = _ref3.imageRenderer,
+          disableObserver = _ref3.disableObserver,
+          disableActualImage = _ref3.disableActualImage,
+          columns = _ref3.columns,
+          placeholderColor = _ref3.placeholderColor,
+          loader = _ref3.loader;
+      var withLoader = this.state.withLoader;
       return React__default.createElement(Container, {
-        className: className
-      }, columns.map(function (item, columnIndex) {
+        className: className,
+        withLoader: withLoader
+      }, withLoader && this.renderLoader({
+        loader: loader
+      }), columns.map(function (item, columnIndex) {
         return React__default.createElement(ItemMasonry
         /* eslint-disable-next-line react/no-array-index-key */
         , {
@@ -933,29 +981,34 @@ function (_Component) {
     }
   }, {
     key: "renderGallery",
-    value: function renderGallery(_ref3) {
+    value: function renderGallery(_ref4) {
       var _this3 = this;
 
-      var className = _ref3.className,
-          rows = _ref3.rows,
-          rowClassName = _ref3.rowClassName,
-          columnClassName = _ref3.columnClassName,
-          imageRenderer = _ref3.imageRenderer,
-          disableObserver = _ref3.disableObserver,
-          disableActualImage = _ref3.disableActualImage,
-          enableDetailView = _ref3.enableDetailView,
-          detailsViewRenderer = _ref3.detailsViewRenderer,
-          disableLastRowDetecting = _ref3.disableLastRowDetecting,
-          placeholderColor = _ref3.placeholderColor;
+      var className = _ref4.className,
+          rows = _ref4.rows,
+          rowClassName = _ref4.rowClassName,
+          columnClassName = _ref4.columnClassName,
+          imageRenderer = _ref4.imageRenderer,
+          disableObserver = _ref4.disableObserver,
+          disableActualImage = _ref4.disableActualImage,
+          enableDetailView = _ref4.enableDetailView,
+          detailsViewRenderer = _ref4.detailsViewRenderer,
+          disableLastRowDetecting = _ref4.disableLastRowDetecting,
+          placeholderColor = _ref4.placeholderColor,
+          loader = _ref4.loader;
       var _this$state2 = this.state,
           selectedImageRow = _this$state2.selectedImageRow,
           selectedImage = _this$state2.selectedImage,
           selectedRowHeight = _this$state2.selectedRowHeight,
           selectedImageId = _this$state2.selectedImageId,
-          selectedImageProps = _this$state2.selectedImageProps;
+          selectedImageProps = _this$state2.selectedImageProps,
+          withLoader = _this$state2.withLoader;
       return React__default.createElement(Container, {
-        className: className
-      }, rows.map(function (el, rowIndex) {
+        className: className,
+        withLoader: withLoader
+      }, withLoader && this.renderLoader({
+        loader: loader
+      }), rows.map(function (el, rowIndex) {
         var row = el.row;
         return (
           /* eslint-disable-next-line react/no-array-index-key */
@@ -1029,29 +1082,34 @@ function (_Component) {
     }
   }, {
     key: "renderFixedGallery",
-    value: function renderFixedGallery(_ref4) {
+    value: function renderFixedGallery(_ref5) {
       var _this4 = this;
 
-      var className = _ref4.className,
-          fixedRows = _ref4.fixedRows,
-          rowClassName = _ref4.rowClassName,
-          columnClassName = _ref4.columnClassName,
-          imageRenderer = _ref4.imageRenderer,
-          disableObserver = _ref4.disableObserver,
-          disableActualImage = _ref4.disableActualImage,
-          enableDetailView = _ref4.enableDetailView,
-          detailsViewRenderer = _ref4.detailsViewRenderer,
-          fixedBottom = _ref4.fixedBottom,
-          placeholderColor = _ref4.placeholderColor;
+      var className = _ref5.className,
+          fixedRows = _ref5.fixedRows,
+          rowClassName = _ref5.rowClassName,
+          columnClassName = _ref5.columnClassName,
+          imageRenderer = _ref5.imageRenderer,
+          disableObserver = _ref5.disableObserver,
+          disableActualImage = _ref5.disableActualImage,
+          enableDetailView = _ref5.enableDetailView,
+          detailsViewRenderer = _ref5.detailsViewRenderer,
+          fixedBottom = _ref5.fixedBottom,
+          placeholderColor = _ref5.placeholderColor,
+          loader = _ref5.loader;
       var _this$state3 = this.state,
           selectedImageRow = _this$state3.selectedImageRow,
           selectedImage = _this$state3.selectedImage,
           selectedRowHeight = _this$state3.selectedRowHeight,
           selectedImageId = _this$state3.selectedImageId,
-          selectedImageProps = _this$state3.selectedImageProps;
+          selectedImageProps = _this$state3.selectedImageProps,
+          withLoader = _this$state3.withLoader;
       return React__default.createElement(Container, {
-        className: className
-      }, fixedRows.map(function (el, rowIndex) {
+        className: className,
+        withLoader: withLoader
+      }, withLoader && this.renderLoader({
+        loader: loader
+      }), fixedRows.map(function (el, rowIndex) {
         var row = el.row;
         return (
           /* eslint-disable-next-line react/no-array-index-key */
@@ -1125,7 +1183,8 @@ function (_Component) {
     value: function render() {
       var _this$props2 = this.props,
           imageRenderer = _this$props2.imageRenderer,
-          detailsViewRenderer = _this$props2.detailsViewRenderer;
+          detailsViewRenderer = _this$props2.detailsViewRenderer,
+          props = _objectWithoutProperties(_this$props2, ["imageRenderer", "detailsViewRenderer"]);
 
       var _this$state4 = this.state,
           enableMasonry = _this$state4.enableMasonry,
@@ -1135,20 +1194,20 @@ function (_Component) {
       if (enableMasonry) {
         return this.renderMasonryGallery(_objectSpread({}, rest, {
           imageRenderer: imageRenderer
-        }));
+        }, props));
       }
 
       if (enableFixed) {
         return this.renderFixedGallery(_objectSpread({}, rest, {
           imageRenderer: imageRenderer,
           detailsViewRenderer: detailsViewRenderer
-        }));
+        }, props));
       }
 
       return this.renderGallery(_objectSpread({}, rest, {
         imageRenderer: imageRenderer,
         detailsViewRenderer: detailsViewRenderer
-      }));
+      }, props));
     }
   }]);
 
@@ -1174,7 +1233,10 @@ _defineProperty(Gallery, "propTypes", {
   detailsViewRenderer: PropTypes.func,
   disableLastRowDetecting: PropTypes.bool,
   placeholderColor: PropTypes.string,
-  viewportWidth: PropTypes.number
+  viewportWidth: PropTypes.number,
+  withLoader: PropTypes.bool,
+  loader: PropTypes.object,
+  resizeDebounceTime: PropTypes.number
 });
 
 _defineProperty(Gallery, "defaultProps", {
@@ -1195,7 +1257,10 @@ _defineProperty(Gallery, "defaultProps", {
   detailsViewRenderer: defaultDetailsViewRenderer,
   disableLastRowDetecting: false,
   placeholderColor: PLACEHOLDER_COLOR,
-  viewportWidth: VIEWPORT_WIDTH
+  viewportWidth: VIEWPORT_WIDTH,
+  withLoader: false,
+  loader: null,
+  resizeDebounceTime: RESIZE_DEBOUNCE_TIME
 });
 
 exports.Image = Image$1;

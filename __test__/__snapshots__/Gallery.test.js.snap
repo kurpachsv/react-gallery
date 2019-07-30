@@ -3,6 +3,7 @@
 exports[`Gallery should render correctly 1`] = `
 <nodes__Container
   className=""
+  withLoader={false}
 >
   <div
     className=""
