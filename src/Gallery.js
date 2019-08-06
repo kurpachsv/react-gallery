@@ -24,14 +24,11 @@ import {
     ItemFixed,
 } from './nodes';
 
-const RESIZE_DEBOUNCE_TIME = 300;
-
 class Gallery extends Component {
 
     constructor(props) {
         super(props);
         this.engine = new Engine();
-        this.updateGalleryDone = debounce(this.updateGalleryDone, this.props.resizeDebounceTime);
     }
 
     static propTypes = {
@@ -54,9 +51,6 @@ class Gallery extends Component {
         disableLastRowDetecting: PropTypes.bool,
         placeholderColor: PropTypes.string,
         viewportWidth: PropTypes.number,
-        withLoader: PropTypes.bool,
-        loader: PropTypes.object,
-        resizeDebounceTime: PropTypes.number,
     };
 
     static defaultProps = {
@@ -78,9 +72,6 @@ class Gallery extends Component {
         disableLastRowDetecting: false,
         placeholderColor: PLACEHOLDER_COLOR,
         viewportWidth: VIEWPORT_WIDTH,
-        withLoader: false,
-        loader: null,
-        resizeDebounceTime: RESIZE_DEBOUNCE_TIME,
     };
 
     state = {
@@ -94,7 +85,6 @@ class Gallery extends Component {
         selectedImage: null,
         selectedRowHeight: 0,
         selectedImageProps: {},
-        withLoader: false,
     };
 
     componentWillMount() {
@@ -116,7 +106,6 @@ class Gallery extends Component {
             disableLastRowDetecting,
             placeholderColor,
             viewportWidth,
-            resizeDebounceTime,
         } = this.props;
 
         this.engine
@@ -147,7 +136,6 @@ class Gallery extends Component {
             disableLastRowDetecting,
             placeholderColor,
             viewportWidth,
-            resizeDebounceTime,
         });
     }
 
@@ -182,55 +170,16 @@ class Gallery extends Component {
                 disableLastRowDetecting: nextProps.disableLastRowDetecting,
                 placeholderColor: nextProps.placeholderColor,
                 viewportWidth: nextProps.viewportWidth,
-                resizeDebounceTime: nextProps.resizeDebounceTime,
             });
         }
-    }
-
-    componentDidMount() {
-        window.addEventListener("resize", this.updateGallery);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.updateGallery);
-    }
-
-    updateGallery = () => {
-        this.updateGalleryStart();
-        this.updateGalleryDone();
-    };
-
-    updateGalleryStart = () => {
-        this.setState({
-            withLoader: true,
-        })
-    };
-
-    updateGalleryDone = () => {
-        this.setState({
-            withLoader: false,
-        })
-    };
-
-    renderLoader = ({loader}) => {
-        return (
-            <React.Fragment>
-                {loader}
-            </React.Fragment>
-        )
     }
 
     renderMasonryGallery({
         className, columnClassName, imageRenderer, disableObserver, disableActualImage, columns,
         placeholderColor,
-        loader,
     }) {
-        const {
-            withLoader,
-        } = this.state;
         return (
-            <Container className={className} withLoader={withLoader}>
-                {withLoader && this.renderLoader({loader})}
+            <Container className={className}>
                 {columns.map((item, columnIndex) => (
                     <ItemMasonry
                         /* eslint-disable-next-line react/no-array-index-key */
@@ -276,15 +225,12 @@ class Gallery extends Component {
     renderGallery({
         className, rows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
         enableDetailView, detailsViewRenderer, disableLastRowDetecting, placeholderColor,
-        loader,
     }) {
         const {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
-            withLoader,
         } = this.state;
         return (
-            <Container className={className} withLoader={withLoader}>
-                {withLoader && this.renderLoader({loader})}
+            <Container className={className}>
                 {rows.map((el, rowIndex) => {
                     const row = el.row;
                     return (
@@ -413,15 +359,12 @@ class Gallery extends Component {
     renderFixedGallery({
         className, fixedRows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
         enableDetailView, detailsViewRenderer, fixedBottom, placeholderColor,
-        loader,
     }) {
         const {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
-            withLoader,
         } = this.state;
         return (
-            <Container className={className} withLoader={withLoader}>
-                {withLoader && this.renderLoader({loader})}
+            <Container className={className}>
                 {fixedRows.map((el, rowIndex) => {
                     const row = el.row;
                     return (
