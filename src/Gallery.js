@@ -73,7 +73,7 @@ class Gallery extends Component {
         disableLastRowDetecting: false,
         placeholderColor: PLACEHOLDER_COLOR,
         viewportWidth: VIEWPORT_WIDTH,
-        fixedBottomBottomGutterInPecent: FIXED_BOTTOM_GUTTER_IN_PERCENT,
+        fixedBottomGutterInPecent: FIXED_BOTTOM_GUTTER_IN_PERCENT,
         fixedImagePlaceholderColor: FIXED_IMAGE_PLACEHOLDER_COLOR,
     };
 
@@ -109,7 +109,7 @@ class Gallery extends Component {
             disableLastRowDetecting,
             placeholderColor,
             viewportWidth,
-            fixedBottomBottomGutterInPecent,
+            fixedBottomGutterInPecent,
             fixedImagePlaceholderColor,
         } = this.props;
 
@@ -141,7 +141,7 @@ class Gallery extends Component {
             disableLastRowDetecting,
             placeholderColor,
             viewportWidth,
-            fixedBottomBottomGutterInPecent,
+            fixedBottomGutterInPecent,
             fixedImagePlaceholderColor
         });
     }
@@ -177,7 +177,7 @@ class Gallery extends Component {
                 disableLastRowDetecting: nextProps.disableLastRowDetecting,
                 placeholderColor: nextProps.placeholderColor,
                 viewportWidth: nextProps.viewportWidth,
-                fixedBottomBottomGutterInPecent: nextProps.fixedBottomBottomGutterInPecent,
+                fixedBottomGutterInPecent: nextProps.fixedBottomGutterInPecent,
                 fixedImagePlaceholderColor: nextProps.fixedImagePlaceholderColor,
             });
         }
@@ -368,7 +368,7 @@ class Gallery extends Component {
     renderFixedGallery({
         className, fixedRows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
         enableDetailView, detailsViewRenderer, fixedBottom, placeholderColor,
-        fixedBottomBottomGutterInPecent, fixedImagePlaceholderColor
+        fixedBottomGutterInPecent, fixedImagePlaceholderColor
     }) {
         const {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
@@ -404,7 +404,7 @@ class Gallery extends Component {
                                             rowLength={row.length}
                                             columnIndex={columnIndex}
                                             placeholderColor={placeholderColor}
-                                            fixedBottomBottomGutterInPecent={fixedBottomBottomGutterInPecent}
+                                            fixedBottomGutterInPecent={fixedBottomGutterInPecent}
                                         >
                                             <div
                                                 style={{

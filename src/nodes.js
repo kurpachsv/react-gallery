@@ -60,8 +60,8 @@ export const ItemFixed = styled(Item)`
     background-color: ${props => props.placeholderColor};
     width: ${props => props.isIncomplete ? `${props.newWidth}px` : `${props.newWidthInPercent}%`};
     margin: ${props => props.rowLength === props.columnIndex + 1
-        ? `0 0 ${props.gutterInPercent}% 0`
-        : `0 ${props.gutterInPercent}% ${props.fixedBottomBottomGutterInPecent}% 0`};
+        ? `0 0 ${props.fixedBottomGutterInPecent}% 0`
+        : `0 ${props.gutterInPercent}% ${props.fixedBottomGutterInPecent}% 0`};
 `;
 
 export const DetailsContainer = styled.div`
