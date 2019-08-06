@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import equal from 'fast-deep-equal';
-import debounce from 'lodash.debounce';
 import Engine, {
     COLUMN_MAX_HEIGHT,
     COLUMN_MAX_WIDTH,
@@ -10,6 +9,8 @@ import Engine, {
     FIXED_BOTTOM,
     PLACEHOLDER_COLOR,
     VIEWPORT_WIDTH,
+    FIXED_BOTTOM_GUTTER_IN_PERCENT,
+    FIXED_IMAGE_PLACEHOLDER_COLOR,
 } from './Engine';
 import {
     defaultRenderer,
@@ -72,6 +73,8 @@ class Gallery extends Component {
         disableLastRowDetecting: false,
         placeholderColor: PLACEHOLDER_COLOR,
         viewportWidth: VIEWPORT_WIDTH,
+        fixedBottomBottomGutterInPecent: FIXED_BOTTOM_GUTTER_IN_PERCENT,
+        fixedImagePlaceholderColor: FIXED_IMAGE_PLACEHOLDER_COLOR,
     };
 
     state = {
@@ -106,6 +109,8 @@ class Gallery extends Component {
             disableLastRowDetecting,
             placeholderColor,
             viewportWidth,
+            fixedBottomBottomGutterInPecent,
+            fixedImagePlaceholderColor,
         } = this.props;
 
         this.engine
@@ -136,6 +141,8 @@ class Gallery extends Component {
             disableLastRowDetecting,
             placeholderColor,
             viewportWidth,
+            fixedBottomBottomGutterInPecent,
+            fixedImagePlaceholderColor
         });
     }
 
@@ -170,6 +177,8 @@ class Gallery extends Component {
                 disableLastRowDetecting: nextProps.disableLastRowDetecting,
                 placeholderColor: nextProps.placeholderColor,
                 viewportWidth: nextProps.viewportWidth,
+                fixedBottomBottomGutterInPecent: nextProps.fixedBottomBottomGutterInPecent,
+                fixedImagePlaceholderColor: nextProps.fixedImagePlaceholderColor,
             });
         }
     }
@@ -359,6 +368,7 @@ class Gallery extends Component {
     renderFixedGallery({
         className, fixedRows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
         enableDetailView, detailsViewRenderer, fixedBottom, placeholderColor,
+        fixedBottomBottomGutterInPecent, fixedImagePlaceholderColor
     }) {
         const {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
@@ -394,6 +404,7 @@ class Gallery extends Component {
                                             rowLength={row.length}
                                             columnIndex={columnIndex}
                                             placeholderColor={placeholderColor}
+                                            fixedBottomBottomGutterInPecent={fixedBottomBottomGutterInPecent}
                                         >
                                             <div
                                                 style={{
@@ -421,6 +432,7 @@ class Gallery extends Component {
                                                         }),
                                                         fixedBottom,
                                                         specifyImageSizes: true,
+                                                        fixedImagePlaceholderColor,
                                                     })}
                                                 </ViewMonitor>
                                             </div>

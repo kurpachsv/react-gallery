@@ -2,8 +2,10 @@ export const COLUMNS_MAX_COUNT = 5;
 export const COLUMN_MAX_WIDTH = 200;
 export const COLUMN_MAX_HEIGHT = 200;
 export const GUTTER_IN_PERCENT = 0.5;
+export const FIXED_BOTTOM_GUTTER_IN_PERCENT = 2.5;
 export const FIXED_BOTTOM = 50;
 export const PLACEHOLDER_COLOR = '#f0f0f0';
+export const FIXED_IMAGE_PLACEHOLDER_COLOR = '#ffffff';
 export const VIEWPORT_WIDTH = 0;
 
 class Engine {

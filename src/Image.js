@@ -30,6 +30,7 @@ const Image = ({
                 width={width}
                 fixedBottom={fixedBottom}
                 onClick={props.onClick}
+                fixedImagePlaceholderColor={props.fixedImagePlaceholderColor}
             />
         );
     } else {

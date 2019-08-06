@@ -13,9 +13,12 @@ export const Div = ({className, children}) => (
 
 export const ImageWithSizes = styled(Image)`
     position: absolute;
-    display: ${props => props.visible ? null : 'none'};
-    width: ${props => props.ratio > 1 ? '100%' : 'auto'};
-    height: ${props => props.radio > 1 ? 'auto' : `calc(100% - ${props.fixedBottom || 0}px)`};
+    width: 100%;
+    height: ${props => props.ratio > 1 ? 'auto' : `calc(100% - ${props.fixedBottom}px)`};
+    left: 50%;
+    bottom: ${props => `${props.fixedBottom}px`};
+    transform: ${props => `translate(-50%, 0)`};
+    background-color: ${props => props.fixedImagePlaceholderColor};
     cursor: pointer;
 `;
 
@@ -58,7 +61,7 @@ export const ItemFixed = styled(Item)`
     width: ${props => props.isIncomplete ? `${props.newWidth}px` : `${props.newWidthInPercent}%`};
     margin: ${props => props.rowLength === props.columnIndex + 1
         ? `0 0 ${props.gutterInPercent}% 0`
-        : `0 ${props.gutterInPercent}% ${props.gutterInPercent}% 0`};
+        : `0 ${props.gutterInPercent}% ${props.fixedBottomBottomGutterInPecent}% 0`};
 `;
 
 export const DetailsContainer = styled.div`

@@ -46,23 +46,13 @@ const imageRendererForFixedLayout = imageProps => {
     return (
         <div
             style={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                justifyContent: 'center',
+                backgroundColor: '#ffffff',
             }}
         >
-            <div
-                style={{
-                    display: 'flex',
-                    alignItems: 'flex-end',
-                    justifyContent: 'center',
-                }}
-            >
-                <Image
-                    onClick={imageProps.onClick}
-                    {...imageProps}
-                />
-            </div>
+            <Image
+                onClick={imageProps.onClick}
+                {...imageProps}
+            />
             <div
                 style={{
                     paddingTop: '100%',

@@ -38,7 +38,8 @@ stories.add('with fixed layout', () => (
         enableFixed
         fixedBottom={number('Fixed bottom size', 50)}
         columnsMaxCount={number('Max columns count', 5)}
-        gutterInPercent={number('Gutter in %', 0.5)}
+        gutterInPercent={number('Horizontal gutter in %', 0.5)}
+        fixedBottomBottomGutterInPecent={number('Vertical gutter in %', 3)}
         disableObserver={boolean('Disable Intersection Observer', false)}
         disableActualImage={boolean('Disable actual images', false)}
         enableDetailView={boolean('Enable detail view', true)}
