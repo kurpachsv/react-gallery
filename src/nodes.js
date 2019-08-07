@@ -25,7 +25,7 @@ export const ImageWithSizes = styled(Image)`
 export const ImageWithoutSizes = styled(Image)`
     position: absolute;
     display: ${props => props.visible ? null : 'none'};
-    width: 100%;
+    width: auto;
     cursor: pointer;
 `;
 
