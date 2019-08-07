@@ -177,7 +177,7 @@ class Engine {
     }
 
     calculateFixedWidthInPercent(item, row) {
-        return 100 / row.length - this.getGutterInPercent();
+        return (100 + this.gutterInPercent) / row.length - this.gutterInPercent;
     }
 
     buildFixedRows() {
