@@ -512,7 +512,7 @@ function () {
   }, {
     key: "calculateFixedWidthInPercent",
     value: function calculateFixedWidthInPercent(item, row) {
-      return 100 / row.length - this.getGutterInPercent();
+      return (100 + this.gutterInPercent) / row.length - this.gutterInPercent;
     }
   }, {
     key: "buildFixedRows",
@@ -716,7 +716,7 @@ function (_Component) {
       var isVisible = this.state.isVisible;
 
       if (disableObserver) {
-        return React__default.createElement(Tag, null, children(true));
+        return React__default.createElement(Tag, null, children(isVisible));
       }
 
       if (!isBrowser) {
