@@ -33,12 +33,12 @@ class ViewMonitor extends Component {
     };
 
     render() {
-        const {disableObserver, tag: Tag, children, ...rest} = this.props;
+        const {disableObserver, disableActualImage, tag: Tag, children, ...rest} = this.props;
         const {isVisible} = this.state;
         if (disableObserver) {
             return (
                 <Tag>
-                    {children(disableObserver)}
+                    {children(disableActualImage)}
                 </Tag>
             );
         }

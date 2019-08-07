@@ -210,10 +210,8 @@ class Gallery extends Component {
                                             }% 0`,
                                         }}
                                     >
-                                        <ViewMonitor
-                                            disableObserver={disableObserver}
-                                        >
-                                            {isViewable => imageRenderer({
+                                        <ViewMonitor disableObserver={disableObserver} disableActualImage={disableActualImage}>
+                                        {isViewable => imageRenderer({
                                                 ...image,
                                                 placeholderHeight,
                                                 visible: !disableActualImage && isViewable,
@@ -274,7 +272,7 @@ class Gallery extends Component {
                                             rowLength={row.length}
                                             columnIndex={columnIndex}
                                         >
-                                            <ViewMonitor disableObserver={disableObserver}>
+                                            <ViewMonitor disableObserver={disableObserver} disableActualImage={disableActualImage}>
                                                 {isViewable => imageRenderer({
                                                     ...column,
                                                     newWidth,
@@ -412,7 +410,7 @@ class Gallery extends Component {
                                                     marginBottom: `${fixedBottom}px`,
                                                 }}
                                             >
-                                                <ViewMonitor disableObserver={disableObserver}>
+                                                <ViewMonitor disableObserver={disableObserver} disableActualImage={disableActualImage}>
                                                     {isViewable => imageRenderer({
                                                         ...column,
                                                         placeholderHeight,
