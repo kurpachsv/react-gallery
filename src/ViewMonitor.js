@@ -38,7 +38,7 @@ class ViewMonitor extends Component {
         if (disableObserver) {
             return (
                 <Tag>
-                    {children(disableActualImage)}
+                    {children(!disableActualImage)}
                 </Tag>
             );
         }
