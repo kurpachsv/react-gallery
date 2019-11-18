@@ -7,16 +7,19 @@ exports[`Gallery should render correctly 1`] = `
   <div
     className=""
   >
-    <nodes__ItemDefault
+    <div
       className=""
-      columnIndex={0}
-      disableLastRowDetecting={false}
-      gutterInPercent={0.5}
-      isIncomplete={true}
       key="column-https://dummyimage.com/100x100/eee/eee-0-0"
-      newWidth={200}
-      newWidthInPercent={20}
-      rowLength={1}
+      style={
+        Object {
+          "display": "inline-block",
+          "margin": "0 0 0.5% 0",
+          "maxWidth": null,
+          "position": "relative",
+          "verticalAlign": "top",
+          "width": "20%",
+        }
+      }
     >
       <ViewMonitor
         disableActualImage={false}
@@ -25,7 +28,7 @@ exports[`Gallery should render correctly 1`] = `
       >
         <Component />
       </ViewMonitor>
-    </nodes__ItemDefault>
+    </div>
   </div>
   <div />
 </nodes__Container>
