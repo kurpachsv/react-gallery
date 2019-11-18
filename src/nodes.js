@@ -36,34 +36,6 @@ export const Container = styled(Div)`
     opacity: ${props => props.withLoader ? '0.5' : false};
 `;
 
-export const Item = styled(Div)`
-    vertical-align: top;
-    position: relative;
-    display: inline-block;
-`;
-
-export const ItemMasonry = styled(Item)`
-    width: ${props => `${100 / props.columnsMaxCount - props.gutterInPercent}%`};
-    margin: ${props => `0 ${props.gutterInPercent}% 0 0`};
-`;
-
-export const ItemDefault = styled(Item)`
-    width: ${props => props.isIncomplete && !props.disableLastRowDetecting ? `${props.newWidth}px` : `${props.newWidthInPercent}%`};
-    max-width: ${props => props.isIncomplete && !props.disableLastRowDetecting ? `${props.newWidthInPercent}%` : 'auto'};
-    margin: ${props => props.rowLength === props.columnIndex + 1
-        ? `0 0 ${props.gutterInPercent}% 0`
-        : `0 ${props.gutterInPercent}% ${props.gutterInPercent}% 0`};
-`;
-
-
-export const ItemFixed = styled(Item)`
-    background-color: ${props => props.placeholderColor};
-    width: ${props => props.isIncomplete ? `${props.newWidth}px` : `${props.newWidthInPercent}%`};
-    margin: ${props => props.rowLength === props.columnIndex + 1
-        ? `0 0 ${props.fixedBottomGutterInPecent}% 0`
-        : `0 ${props.gutterInPercent}% ${props.fixedBottomGutterInPecent}% 0`};
-`;
-
 export const DetailsContainer = styled.div`
     height: ${props => props.visible ? `${props.height}px` : '0'};
     font-size: 14px;
