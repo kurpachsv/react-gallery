@@ -15,6 +15,8 @@ class ViewMonitor extends Component {
     static propTypes = {
         tag: PropTypes.node,
         children: PropTypes.func.isRequired,
+        disableActualImage: PropTypes.bool.isRequired,
+        disableObserver: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {

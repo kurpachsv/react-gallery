@@ -20,9 +20,6 @@ import ViewMonitor from './ViewMonitor';
 
 import {
     Container,
-    ItemMasonry,
-    ItemDefault,
-    ItemFixed,
 } from './nodes';
 
 class Gallery extends Component {
@@ -52,6 +49,8 @@ class Gallery extends Component {
         disableLastRowDetecting: PropTypes.bool,
         placeholderColor: PropTypes.string,
         viewportWidth: PropTypes.number,
+        fixedBottomGutterInPecent: PropTypes.number,
+        fixedImagePlaceholderColor: PropTypes.string,
     };
 
     static defaultProps = {
@@ -142,7 +141,7 @@ class Gallery extends Component {
             placeholderColor,
             viewportWidth,
             fixedBottomGutterInPecent,
-            fixedImagePlaceholderColor
+            fixedImagePlaceholderColor,
         });
     }
 
@@ -190,12 +189,17 @@ class Gallery extends Component {
         return (
             <Container className={className}>
                 {columns.map((item, columnIndex) => (
-                    <ItemMasonry
+                    <div
                         /* eslint-disable-next-line react/no-array-index-key */
                         key={`column-${columnIndex}`}
                         className={columnClassName}
-                        columnsMaxCount={this.engine.getMaxColumnsCount()}
-                        gutterInPercent={this.engine.getGutterInPercent()}
+                        style={{
+                            verticalAlign: 'top',
+                            position: 'relative',
+                            display: 'inline-block',
+                            width: `${100 / this.engine.getMaxColumnsCount() - this.engine.getGutterInPercent()}%`,
+                            margin: `0 ${this.engine.getGutterInPercent()}% 0 0`,
+                        }}
                     >
                         {
                             item.images.map((image, imageIndex) => {
@@ -211,7 +215,7 @@ class Gallery extends Component {
                                         }}
                                     >
                                         <ViewMonitor disableObserver={disableObserver} disableActualImage={disableActualImage}>
-                                        {isViewable => imageRenderer({
+                                            {isViewable => imageRenderer({
                                                 ...image,
                                                 placeholderHeight,
                                                 visible: !disableActualImage && isViewable,
@@ -223,7 +227,7 @@ class Gallery extends Component {
                                 );
                             })
                         }
-                    </ItemMasonry>
+                    </div>
                 ))}
             </Container>
         );
@@ -255,22 +259,23 @@ class Gallery extends Component {
                                         * this.engine.getColumnsMaxWidth());
                                     if (el.isIncomplete && disableLastRowDetecting) {
                                         newWidthInPercent = 100 * newWidth / (this.engine.getMaxColumnsCount()
-                                        // eslint-disable-next-line max-len
-                                        * this.engine.getColumnsMaxWidth()) * row.length / this.engine.getMaxColumnsCount();
+                                            // eslint-disable-next-line max-len
+                                            * this.engine.getColumnsMaxWidth()) * row.length / this.engine.getMaxColumnsCount();
                                     }
                                     const placeholderHeight = 100 * newHeight / newWidth;
                                     return (
-                                        <ItemDefault
+                                        <div
                                             /* eslint-disable-next-line react/no-array-index-key */
                                             key={`column-${column.src}-${rowIndex}-${columnIndex}`}
                                             className={columnClassName}
-                                            isIncomplete={el.isIncomplete}
-                                            disableLastRowDetecting={disableLastRowDetecting}
-                                            newWidth={newWidth}
-                                            newWidthInPercent={newWidthInPercent}
-                                            gutterInPercent={this.engine.getGutterInPercent()}
-                                            rowLength={row.length}
-                                            columnIndex={columnIndex}
+                                            style={{
+                                                verticalAlign: 'top',
+                                                position: 'relative',
+                                                display: 'inline-block',
+                                                width: el.isIncomplete && !el.isIncomplete ? `${newWidth}px` : `${newWidthInPercent}%`,
+                                                maxWidth: el.isIncomplete && !el.isIncomplete ? `${newWidthInPercent}%` : null,
+                                                margin: row.length === columnIndex + 1 ? `0 0 ${this.engine.getGutterInPercent()}% 0` : `0 ${this.engine.getGutterInPercent()}% ${this.engine.getGutterInPercent()}% 0`,
+                                            }}
                                         >
                                             <ViewMonitor disableObserver={disableObserver} disableActualImage={disableActualImage}>
                                                 {isViewable => imageRenderer({
@@ -297,7 +302,7 @@ class Gallery extends Component {
                                                     }),
                                                 })}
                                             </ViewMonitor>
-                                        </ItemDefault>
+                                        </div>
                                     );
                                 })}
                             </div>
@@ -366,7 +371,7 @@ class Gallery extends Component {
     renderFixedGallery({
         className, fixedRows, rowClassName, columnClassName, imageRenderer, disableObserver, disableActualImage,
         enableDetailView, detailsViewRenderer, fixedBottom, placeholderColor,
-        fixedBottomGutterInPecent, fixedImagePlaceholderColor
+        fixedBottomGutterInPecent, fixedImagePlaceholderColor,
     }) {
         const {
             selectedImageRow, selectedImage, selectedRowHeight, selectedImageId, selectedImageProps,
@@ -391,18 +396,20 @@ class Gallery extends Component {
                                     );
                                     const placeholderHeight = 100 * newHeight / newWidth;
                                     return (
-                                        <ItemFixed
+                                        <div
                                             /* eslint-disable-next-line react/no-array-index-key */
                                             key={`column-${column.src}-${rowIndex}-${columnIndex}`}
                                             className={columnClassName}
-                                            isIncomplete={el.isIncomplete}
-                                            newWidth={newWidth}
-                                            newWidthInPercent={newWidthInPercent}
-                                            gutterInPercent={this.engine.getGutterInPercent()}
-                                            rowLength={row.length}
-                                            columnIndex={columnIndex}
-                                            placeholderColor={placeholderColor}
-                                            fixedBottomGutterInPecent={fixedBottomGutterInPecent}
+                                            style={{
+                                                verticalAlign: 'top',
+                                                position: 'relative',
+                                                display: 'inline-block',
+                                                backgroundColor: placeholderColor,
+                                                width: el.isIncomplete ? `${newWidth}px` : `${newWidthInPercent}%`,
+                                                margin: row.length === columnIndex + 1
+                                                    ? `0 0 ${fixedBottomGutterInPecent}% 0`
+                                                    : `0 ${this.engine.getGutterInPercent()}% ${fixedBottomGutterInPecent}% 0`,
+                                            }}
                                         >
                                             <div
                                                 style={{
@@ -434,7 +441,7 @@ class Gallery extends Component {
                                                     })}
                                                 </ViewMonitor>
                                             </div>
-                                        </ItemFixed>
+                                        </div>
                                     );
                                 })}
                             </div>
