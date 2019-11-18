@@ -225,41 +225,9 @@ var Container = styled(Div).withConfig({
 })(["position:relative;display:block;font-size:0;opacity:", ";"], function (props) {
   return props.withLoader ? '0.5' : false;
 });
-var Item = styled(Div).withConfig({
-  displayName: "nodes__Item",
-  componentId: "sc-2jwtws-3"
-})(["vertical-align:top;position:relative;display:inline-block;"]);
-var ItemMasonry = styled(Item).withConfig({
-  displayName: "nodes__ItemMasonry",
-  componentId: "sc-2jwtws-4"
-})(["width:", ";margin:", ";"], function (props) {
-  return "".concat(100 / props.columnsMaxCount - props.gutterInPercent, "%");
-}, function (props) {
-  return "0 ".concat(props.gutterInPercent, "% 0 0");
-});
-var ItemDefault = styled(Item).withConfig({
-  displayName: "nodes__ItemDefault",
-  componentId: "sc-2jwtws-5"
-})(["width:", ";max-width:", ";margin:", ";"], function (props) {
-  return props.isIncomplete && !props.disableLastRowDetecting ? "".concat(props.newWidth, "px") : "".concat(props.newWidthInPercent, "%");
-}, function (props) {
-  return props.isIncomplete && !props.disableLastRowDetecting ? "".concat(props.newWidthInPercent, "%") : 'auto';
-}, function (props) {
-  return props.rowLength === props.columnIndex + 1 ? "0 0 ".concat(props.gutterInPercent, "% 0") : "0 ".concat(props.gutterInPercent, "% ").concat(props.gutterInPercent, "% 0");
-});
-var ItemFixed = styled(Item).withConfig({
-  displayName: "nodes__ItemFixed",
-  componentId: "sc-2jwtws-6"
-})(["background-color:", ";width:", ";margin:", ";"], function (props) {
-  return props.placeholderColor;
-}, function (props) {
-  return props.isIncomplete ? "".concat(props.newWidth, "px") : "".concat(props.newWidthInPercent, "%");
-}, function (props) {
-  return props.rowLength === props.columnIndex + 1 ? "0 0 ".concat(props.fixedBottomGutterInPecent, "% 0") : "0 ".concat(props.gutterInPercent, "% ").concat(props.fixedBottomGutterInPecent, "% 0");
-});
 var DetailsContainer = styled.div.withConfig({
   displayName: "nodes__DetailsContainer",
-  componentId: "sc-2jwtws-7"
+  componentId: "sc-2jwtws-3"
 })(["height:", ";font-size:14px;visibility:", ";margin-bottom:", ";"], function (props) {
   return props.visible ? "".concat(props.height, "px") : '0';
 }, function (props) {
@@ -269,11 +237,11 @@ var DetailsContainer = styled.div.withConfig({
 });
 var DetailsImageWrapper = styled.div.withConfig({
   displayName: "nodes__DetailsImageWrapper",
-  componentId: "sc-2jwtws-8"
+  componentId: "sc-2jwtws-4"
 })(["display:flex;justify-content:center;"]);
 var DetailsImage = styled(Image).withConfig({
   displayName: "nodes__DetailsImage",
-  componentId: "sc-2jwtws-9"
+  componentId: "sc-2jwtws-5"
 })(["height:", ";width:", ";"], function (props) {
   return "".concat(props.height, "px");
 }, function (props) {
@@ -735,7 +703,9 @@ function (_Component) {
 
 _defineProperty(ViewMonitor, "propTypes", {
   tag: PropTypes.node,
-  children: PropTypes.func.isRequired
+  children: PropTypes.func.isRequired,
+  disableActualImage: PropTypes.bool.isRequired,
+  disableObserver: PropTypes.bool.isRequired
 });
 
 _defineProperty(ViewMonitor, "defaultProps", {
@@ -909,13 +879,17 @@ function (_Component) {
       return React__default.createElement(Container, {
         className: className
       }, columns.map(function (item, columnIndex) {
-        return React__default.createElement(ItemMasonry
-        /* eslint-disable-next-line react/no-array-index-key */
-        , {
+        return React__default.createElement("div", {
+          /* eslint-disable-next-line react/no-array-index-key */
           key: "column-".concat(columnIndex),
           className: columnClassName,
-          columnsMaxCount: _this2.engine.getMaxColumnsCount(),
-          gutterInPercent: _this2.engine.getGutterInPercent()
+          style: {
+            verticalAlign: 'top',
+            position: 'relative',
+            display: 'inline-block',
+            width: "".concat(100 / _this2.engine.getMaxColumnsCount() - _this2.engine.getGutterInPercent(), "%"),
+            margin: "0 ".concat(_this2.engine.getGutterInPercent(), "% 0 0")
+          }
         }, item.images.map(function (image, imageIndex) {
           var placeholderHeight = 100 * image.height / image.width;
           return React__default.createElement("div", {
@@ -983,18 +957,18 @@ function (_Component) {
             }
 
             var placeholderHeight = 100 * newHeight / newWidth;
-            return React__default.createElement(ItemDefault
-            /* eslint-disable-next-line react/no-array-index-key */
-            , {
+            return React__default.createElement("div", {
+              /* eslint-disable-next-line react/no-array-index-key */
               key: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex),
               className: columnClassName,
-              isIncomplete: el.isIncomplete,
-              disableLastRowDetecting: disableLastRowDetecting,
-              newWidth: newWidth,
-              newWidthInPercent: newWidthInPercent,
-              gutterInPercent: _this3.engine.getGutterInPercent(),
-              rowLength: row.length,
-              columnIndex: columnIndex
+              style: {
+                verticalAlign: 'top',
+                position: 'relative',
+                display: 'inline-block',
+                width: el.isIncomplete && !el.isIncomplete ? "".concat(newWidth, "px") : "".concat(newWidthInPercent, "%"),
+                maxWidth: el.isIncomplete && !el.isIncomplete ? "".concat(newWidthInPercent, "%") : null,
+                margin: row.length === columnIndex + 1 ? "0 0 ".concat(_this3.engine.getGutterInPercent(), "% 0") : "0 ".concat(_this3.engine.getGutterInPercent(), "% ").concat(_this3.engine.getGutterInPercent(), "% 0")
+              }
             }, React__default.createElement(ViewMonitor, {
               disableObserver: disableObserver,
               disableActualImage: disableActualImage
@@ -1077,19 +1051,18 @@ function (_Component) {
             var newWidthInPercent = _this4.engine.calculateFixedWidthInPercent(column, row);
 
             var placeholderHeight = 100 * newHeight / newWidth;
-            return React__default.createElement(ItemFixed
-            /* eslint-disable-next-line react/no-array-index-key */
-            , {
+            return React__default.createElement("div", {
+              /* eslint-disable-next-line react/no-array-index-key */
               key: "column-".concat(column.src, "-").concat(rowIndex, "-").concat(columnIndex),
               className: columnClassName,
-              isIncomplete: el.isIncomplete,
-              newWidth: newWidth,
-              newWidthInPercent: newWidthInPercent,
-              gutterInPercent: _this4.engine.getGutterInPercent(),
-              rowLength: row.length,
-              columnIndex: columnIndex,
-              placeholderColor: placeholderColor,
-              fixedBottomGutterInPecent: fixedBottomGutterInPecent
+              style: {
+                verticalAlign: 'top',
+                position: 'relative',
+                display: 'inline-block',
+                backgroundColor: placeholderColor,
+                width: el.isIncomplete ? "".concat(newWidth, "px") : "".concat(newWidthInPercent, "%"),
+                margin: row.length === columnIndex + 1 ? "0 0 ".concat(fixedBottomGutterInPecent, "% 0") : "0 ".concat(_this4.engine.getGutterInPercent(), "% ").concat(fixedBottomGutterInPecent, "% 0")
+              }
             }, React__default.createElement("div", {
               style: {
                 // eslint-disable-next-line
@@ -1188,7 +1161,9 @@ _defineProperty(Gallery, "propTypes", {
   detailsViewRenderer: PropTypes.func,
   disableLastRowDetecting: PropTypes.bool,
   placeholderColor: PropTypes.string,
-  viewportWidth: PropTypes.number
+  viewportWidth: PropTypes.number,
+  fixedBottomGutterInPecent: PropTypes.number,
+  fixedImagePlaceholderColor: PropTypes.string
 });
 
 _defineProperty(Gallery, "defaultProps", {
