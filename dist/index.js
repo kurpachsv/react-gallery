@@ -787,8 +787,8 @@ function (_Component) {
   }
 
   _createClass(Gallery, [{
-    key: "componentWillMount",
-    value: function componentWillMount() {
+    key: "UNSAFE_componentWillMount",
+    value: function UNSAFE_componentWillMount() {
       var _this$props = this.props,
           images = _this$props.images,
           columnsMaxCount = _this$props.columnsMaxCount,
@@ -835,8 +835,8 @@ function (_Component) {
       });
     }
   }, {
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps(nextProps) {
+    key: "UNSAFE_componentWillReceiveProps",
+    value: function UNSAFE_componentWillReceiveProps(nextProps) {
       if (!equal(this.props, nextProps)) {
         this.engine.setImages(nextProps.images).setMaxColumnsCount(nextProps.columnsMaxCount).setColumnMaxWidth(nextProps.columnMaxWidth).setColumnMaxHeight(nextProps.columnMaxHeight).setGutterInPercent(nextProps.gutterInPercent).setViewportWidth(nextProps.viewportWidth);
         this.setState({

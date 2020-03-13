@@ -89,7 +89,7 @@ class Gallery extends Component {
         selectedImageProps: {},
     };
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         const {
             images,
             columnsMaxCount,
@@ -145,7 +145,7 @@ class Gallery extends Component {
         });
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (!equal(this.props, nextProps)) {
 
             this.engine
